@@ -84,6 +84,7 @@ class RoomsControllerTest < ActionController::TestCase
   end
 
   test "should get scores less than 20" do
+    skip("not implemented")
     set_scores(10, 11)
     get :score, id: @room
     binding.pry
