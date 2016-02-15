@@ -1,0 +1,14 @@
+%p#notice= notice
+
+%p
+  %h1= @room.name
+%p
+  %b Team a score:
+  = @room.team_a_score
+%p
+  %b Team b score:
+  = @room.team_b_score
+
+= link_to 'Edit', edit_room_path(@room)
+\|
+= link_to 'Back', rooms_path
