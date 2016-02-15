@@ -23,6 +23,7 @@ end
 group :test do
   gem "minitest-reporters"
   gem "connection_pool"
+  gem "rake"
 end
 
 group :test, :development do

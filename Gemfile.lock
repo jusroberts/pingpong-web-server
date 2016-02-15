@@ -179,6 +179,7 @@ DEPENDENCIES
   minitest-reporters
   pry-byebug
   rails (= 4.1.9)
+  rake
   sass-rails (~> 5.0.0)
   spring
   sqlite3
