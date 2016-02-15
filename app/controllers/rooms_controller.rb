@@ -10,6 +10,9 @@ class RoomsController < ApplicationController
   # GET /rooms/1
   # GET /rooms/1.json
   def show
+    game_logic = GameLogic.new(@room.team_a_score, @room.team_b_score)
+    @team_a_score = game_logic.showable_team_a_score
+    @team_b_score = game_logic.showable_team_b_score
   end
 
   # GET /rooms/new
