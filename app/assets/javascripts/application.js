@@ -14,5 +14,11 @@
 //= require jquery_ujs
 //= require foundation
 //= require_tree .
+//= require websocket_rails/main
 
 $(function(){ $(document).foundation(); });
+
+var dispatcher = new WebSocketRails('localhost:3000/websocket');
+dispatcher.bind('event_name', function(data) {
+  console.log(data.message); // would output 'this is a message'
+});

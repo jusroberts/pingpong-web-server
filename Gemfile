@@ -10,6 +10,7 @@ gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'hamlit-rails' #faster haml, uses slightly different syntax
 gem 'foundation-rails'
+gem 'websocket-rails'
 
 
 group :development do
@@ -29,4 +30,3 @@ end
 group :test, :development do
   gem 'pry-byebug'
 end
-

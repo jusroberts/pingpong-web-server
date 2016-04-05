@@ -74,6 +74,7 @@ class RoomsController < ApplicationController
       current_score = @room.method("team_#{team}_score".to_sym).call()
       @room.update_attribute("team_#{team}_score", current_score + 1)
     end
+    ApiController.new().test()
     render nothing: true
   end
 
