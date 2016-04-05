@@ -8,8 +8,9 @@
     %title= content_for?(:title) ? yield(:title) : "Untitled"
 
     = stylesheet_link_tag "application"
+    = javascript_include_tag "application"
     = csrf_meta_tag
 
-  %body
+  %body{class: "#{controller_name} #{action_name}"}
 
     = yield
