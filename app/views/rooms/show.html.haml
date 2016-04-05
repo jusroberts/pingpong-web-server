@@ -2,12 +2,13 @@
 
 %p
   %h1= @room.name
-%p
-  %b Team a score:
-  = @room.team_a_score
-%p
-  %b Team b score:
-  = @room.team_b_score
+.row
+  .columns.small-6
+    %h2.sf Team a score:
+    %h1.sf= @room.team_a_score
+  .columns.small-6
+    %h2.sf Team b score:
+    %h1.sf= @room.team_b_score
 
 = link_to 'Edit', edit_room_path(@room)
 \|

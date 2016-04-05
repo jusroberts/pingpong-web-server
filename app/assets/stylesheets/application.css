@@ -15,3 +15,33 @@
  *= require foundation_and_overrides
 
  */
+
+ @font-face {
+    font-family: 'street fighter';
+    src: url('/fonts/Joystix.ttf') format('truetype');
+}
+
+.sf {
+  font-family: 'street fighter';
+  font-weight: normal;
+  color: black;
+   -webkit-text-fill-color: black; /* Will override color (regardless of order) */
+   -webkit-text-stroke-width: 2px;
+   -webkit-text-stroke-color: white;
+}
+
+h1.sf {
+  font-size: 12em;
+}
+
+h2.sf {
+  font-size: 3em;
+}
+.panel-heading {
+  background-color: #B1B1B1;
+}
+.panel {
+  background-color: gray;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+}
