@@ -11,10 +11,5 @@ WebsocketRails::EventMap.describe do
   #     subscribe :new, :to => ProductController, :with_method => :new_product
   #   end
   # The above will handle an event triggered on the client like `product.new`.
-  namespace :tasks do
 
-    # using a Hash to specify the target
-    subscribe :create, :to => TaskController, :with_method => :create
-
-  end
 end

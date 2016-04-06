@@ -8,6 +8,4 @@ Rails.application.routes.draw do
   root 'rooms#index'
 
   get '/api/rooms/:id/team/:team/increment' => 'rooms#increment_score', as: :increment_score
-  get '/api/test' => 'api#test', as: :test
-
 end

@@ -5,6 +5,7 @@ $(function() {
   var roomId = $('#room-id').text();
   var dispatcher = new WebSocketRails(window.location.host + '/websocket');
   channel = dispatcher.subscribe('room' + roomId);
+  console.log(window.location.host + '/websocket');
   console.log('room' + roomId);
   channel.bind('team_a_score', function(score) {
     $("#team_a_score").text(score);
