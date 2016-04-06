@@ -1,16 +1,19 @@
 // # Place all the behaviors and hooks related to the matching controller here.
 // # All this logic will automatically be available in application.js.
 // # You can use CoffeeScript in this file: http://coffeescript.org/
-var roomId = $('#room-id').text();
-var dispatcher = new WebSocketRails('localhost:3000/websocket');
-channel = dispatcher.subscribe('room2');
-channel.bind('team_a_score', function(score) {
-  $("#team_a_score").text(score);
-  console.log(score);
-});
-channel.bind('team_b_score', function(score) {
-  $("#team_b_score").text(score);
-  console.log(score);
+$(function() {
+  var roomId = $('#room-id').text();
+  var dispatcher = new WebSocketRails('localhost:3000/websocket');
+  channel = dispatcher.subscribe('room' + roomId);
+  console.log('room' + roomId);
+  channel.bind('team_a_score', function(score) {
+    $("#team_a_score").text(score);
+    console.log(score);
+  });
+  channel.bind('team_b_score', function(score) {
+    $("#team_b_score").text(score);
+    console.log(score);
+  });
 });
 
 $(function() {
