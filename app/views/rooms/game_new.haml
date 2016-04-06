@@ -1,4 +1,4 @@
 game new
-.center.center-verticle
+.center{:style => "position: relative; top: 60%;"}
   =form_tag game_new_post_path(id: @id) do
-    =submit_tag "START QUICK GAME", class: "sf sf-button quick-game center"
+    =submit_tag "START QUICK GAME", class: "sf sf-button quick-game center", style: "width: 30em; height: 2em; font-size: 250%;"
