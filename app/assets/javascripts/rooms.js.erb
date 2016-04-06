@@ -3,7 +3,7 @@
 // # You can use CoffeeScript in this file: http://coffeescript.org/
 $(function() {
   var roomId = $('#room-id').text();
-  var dispatcher = new WebSocketRails('localhost:3000/websocket');
+  var dispatcher = new WebSocketRails(window.location.host + '/websocket');
   channel = dispatcher.subscribe('room' + roomId);
   console.log('room' + roomId);
   channel.bind('team_a_score', function(score) {
