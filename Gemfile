@@ -10,6 +10,7 @@ gem 'jbuilder', '~> 2.0'
 gem 'hamlit-rails' #faster haml, uses slightly different syntax
 gem 'foundation-rails'
 gem 'websocket-rails'
+gem 'faye-websocket', '0.10.0'
 
 
 group :development do

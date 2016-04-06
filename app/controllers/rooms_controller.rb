@@ -74,11 +74,18 @@ class RoomsController < ApplicationController
       current_score = @room.method("team_#{team}_score".to_sym).call()
       @room.update_attribute("team_#{team}_score", current_score + 1)
     end
-    ApiController.new().test()
+    send_scores
     render nothing: true
   end
 
   private
+
+    def send_scores
+      set_room
+      game_logic = GameLogic.new(@room.team_a_score, @room.team_b_score)
+      ::WebsocketRails[:"room#{params[:id]}"].trigger "team_a_score", game_logic.showable_team_a_score
+      ::WebsocketRails[:"room#{params[:id]}"].trigger "team_b_score", game_logic.showable_team_b_score
+    end
 
     def should_reset?
       return GameLogic.new(@room.team_a_score, @room.team_b_score).game_over?

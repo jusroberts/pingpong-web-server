@@ -18,22 +18,3 @@
 //= require_tree .
 
 $(function(){ $(document).foundation(); });
-
-var dispatcher = new WebSocketRails('localhost:3000/websocket');
-dispatcher.bind('event_name', function(data) {
-  console.log(data.message); // would output 'this is a message'
-});
-
-$(function() {
-  var background = "url(\"/match_backgrounds/bg_";
-  background += Math.floor(Math.random() * 121) + 1;
-  background += ".gif\")";
-  background += " no-repeat center center fixed";
-  $(".rooms.show").css({
-    "background": background,
-    "-webkit-background-size": "cover", /* For WebKit*/
-    "-moz-background-size": "cover",    /* Mozilla*/
-    "-o-background-size": "cover",      /* Opera*/
-    "background-size": "cover"         /* Generic*/
-  });
-});

@@ -3,6 +3,7 @@ class ApiController < WebsocketRails::BaseController
 
   end
 
+
   def test
     new_message = {:message => 'this is a message'}
     send_message :event_name, new_message
