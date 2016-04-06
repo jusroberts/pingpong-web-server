@@ -9,7 +9,7 @@ $(function() {
   console.log('room' + roomId);
   channel.bind('team_a_score', function(score) {
     if (score === 'W') {
-      $("#team_a_status").text("WINNER");
+      $("#team_a_status").text("WINNER!");
     } else {
       $("#team_a_status").text('\xa0');
     }
@@ -18,7 +18,7 @@ $(function() {
   });
   channel.bind('team_b_score', function(score) {
     if (score === 'W') {
-      $("#team_b_status").text("WINNER");
+      $("#team_b_status").text("WINNER!");
     } else {
       $("#team_b_status").text('\xa0');
     }

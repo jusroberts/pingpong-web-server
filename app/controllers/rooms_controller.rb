@@ -14,8 +14,8 @@ class RoomsController < ApplicationController
     @team_a_score = game_logic.showable_team_a_score
     @team_b_score = game_logic.showable_team_b_score
 
-    @team_a_status = @team_a_score == "W" ? "WINNER" : "&nbsp;".html_safe
-    @team_b_status = @team_b_score == "W" ? "WINNER" : "&nbsp;".html_safe
+    @team_a_status = @team_a_score == "W" ? "WINNER!" : "&nbsp;".html_safe
+    @team_b_status = @team_b_score == "W" ? "WINNER!" : "&nbsp;".html_safe
   end
 
   # GET /rooms/new
@@ -79,6 +79,23 @@ class RoomsController < ApplicationController
     end
     send_scores
     render nothing: true
+  end
+
+  def game_new
+  end
+
+  def game_new_post
+  end
+
+  def game_end_post
+  end
+
+  def game_view
+    #same as game_play (where the game is shown), but it can't reset the game. basically just the current show
+  end
+
+  def game_play
+    #current show, but with the buttons
   end
 
   private
