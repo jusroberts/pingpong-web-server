@@ -13,6 +13,9 @@ class RoomsController < ApplicationController
     game_logic = GameLogic.new(@room.team_a_score, @room.team_b_score)
     @team_a_score = game_logic.showable_team_a_score
     @team_b_score = game_logic.showable_team_b_score
+
+    @team_a_status = @team_a_score == "W" ? "WINNER" : "&nbsp;".html_safe
+    @team_b_status = @team_b_score == "W" ? "WINNER" : "&nbsp;".html_safe
   end
 
   # GET /rooms/new

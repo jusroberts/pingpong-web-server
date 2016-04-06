@@ -2,10 +2,27 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+.sf {
+  font-family: 'street fighter';
+  font-weight: normal;
+  color: black;
+   -webkit-text-fill-color: black; /* Will override color (regardless of order) */
+   -webkit-text-stroke-width: 2px;
+   -webkit-text-stroke-color: white;
+}
+
+h1.sf {
+  font-size: 20em;
+  -webkit-text-stroke-width: 6px;
+}
+
+h2.sf {
+  font-size: 5em;
+}
 #room-id {
   visibility: hidden;
 }
 
-.right {
-  text-align: right;
+.center {
+  text-align: center;
 }

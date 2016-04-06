@@ -21,23 +21,6 @@
     src: url('/fonts/Joystix.ttf') format('truetype');
 }
 
-.sf {
-  font-family: 'street fighter';
-  font-weight: normal;
-  color: black;
-   -webkit-text-fill-color: black; /* Will override color (regardless of order) */
-   -webkit-text-stroke-width: 2px;
-   -webkit-text-stroke-color: white;
-}
-
-h1.sf {
-  font-size: 20em;
-  -webkit-text-stroke-width: 6px;
-}
-
-h2.sf {
-  font-size: 3em;
-}
 .panel-heading {
   background-color: #B1B1B1;
 }

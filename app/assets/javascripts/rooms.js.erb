@@ -8,10 +8,20 @@ $(function() {
   console.log(window.location.host + '/websocket');
   console.log('room' + roomId);
   channel.bind('team_a_score', function(score) {
+    if (score === 'W') {
+      $("#team_a_status").text("WINNER");
+    } else {
+      $("#team_a_status").text('\xa0');
+    }
     $("#team_a_score").text(score);
     console.log(score);
   });
   channel.bind('team_b_score', function(score) {
+    if (score === 'W') {
+      $("#team_b_status").text("WINNER");
+    } else {
+      $("#team_b_status").text('\xa0');
+    }
     $("#team_b_score").text(score);
     console.log(score);
   });
