@@ -11,7 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160405172156) do
+ActiveRecord::Schema.define(version: 20160406204113) do
+
+  create_table "players", force: true do |t|
+    t.string   "rfid_hash"
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "players", ["rfid_hash"], name: "index_players_on_rfid_hash"
 
   create_table "rooms", force: true do |t|
     t.string   "client_token"
