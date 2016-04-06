@@ -1,7 +1,7 @@
 class RoomsController < ApplicationController
   before_action :set_room, only: [:show, :edit, :update,
                                   :destroy, :increment_score,
-                                  :game_new_post, :game_view, :game_play]
+                                  :game_new_post, :game_view, :game_play, :game_end_post]
 
   # GET /rooms
   # GET /rooms.json
@@ -83,12 +83,12 @@ class RoomsController < ApplicationController
   end
 
   def game_new_post
-    room.update_attributes(team_a_score: 0, team_b_score: 0, game: true)
+    @room.update_attributes(team_a_score: 0, team_b_score: 0, game: true)
     redirect_to :game_play
   end
 
   def game_end_post
-    room.update_attributes(team_a_score: 0, team_b_score: 0, game: false)
+    @room.update_attributes(team_a_score: 0, team_b_score: 0, game: false)
     redirect_to :game_new
   end
 
