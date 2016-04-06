@@ -31,7 +31,8 @@
 }
 
 h1.sf {
-  font-size: 12em;
+  font-size: 20em;
+  -webkit-text-stroke-width: 6px;
 }
 
 h2.sf {
