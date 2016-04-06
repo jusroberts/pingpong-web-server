@@ -6,18 +6,22 @@
   font-family: 'street fighter';
   font-weight: normal;
   color: black;
-   -webkit-text-fill-color: black; /* Will override color (regardless of order) */
-   -webkit-text-stroke-width: 2px;
-   -webkit-text-stroke-color: white;
 }
 
 h1.sf {
   font-size: 20em;
-  -webkit-text-stroke-width: 6px;
+  color: black;
+   -webkit-text-fill-color: black; /* Will override color (regardless of order) */
+   -webkit-text-stroke-width: 6px;
+   -webkit-text-stroke-color: white;
 }
 
 h2.sf {
   font-size: 5em;
+  color: black;
+   -webkit-text-fill-color: black; /* Will override color (regardless of order) */
+   -webkit-text-stroke-width: 2px;
+   -webkit-text-stroke-color: white;
 }
 #room-id {
   visibility: hidden;

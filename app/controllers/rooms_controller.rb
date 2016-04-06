@@ -82,6 +82,7 @@ class RoomsController < ApplicationController
   end
 
   def game_new
+    @id = params[:id]
   end
 
   def game_new_post
