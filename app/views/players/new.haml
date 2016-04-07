@@ -1,12 +1,15 @@
+%hr.players
 =form_tag room_game_new_player_post_path(id: @id) do
-  =label_tag :name
-  =text_field_tag :name, "", class: "player-name-input"
-
-  -alphabet.each do |letter|
-    =link_to letter, '#', class: 'button', onclick: "append_character('#{letter}')"
-  .button{onclick: "remove_character()"}="DEL"
-
-  =submit_tag "OK!", class: "player-submit"
+  %div{ class: 'player-name-input-container'}
+    =label_tag :name
+    =text_field_tag :name, "", class: "player-name-input"
+  %div{ class: 'keyboard keyboard-full'}
+    %div{ class: 'keyboard keyboard-characters'}
+      -alphabet.each do |letter|
+        =link_to letter, '#', class: 'button player-button', onclick: "append_character('#{letter}')"
+    %div{ class: 'keyboard lower-keyboard'}
+    =link_to "DEL", '#', class: 'button player-button', onclick: "remove_character()"
+    =submit_tag "OK!", class: "player-submit player-submit-button"
 
   :javascript
     function append_character(letter) {
