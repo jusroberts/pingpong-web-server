@@ -107,7 +107,13 @@ body.rooms.game_newfull {
 }
 
 .column {
-    flex: 1;
+    // flex: 1;
     border: 1px solid #e6e6e6;
     box-sizing: border-box;
+    margin: 1%;
+}
+
+.picturebox {
+  border: 1px solid #000000;
+   border-width: 5px;
 }
