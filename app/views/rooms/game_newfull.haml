@@ -1,16 +1,31 @@
+<<<<<<< Updated upstream
 .center{:style => "position: relative; top: 1%;"}
   =form_tag room_game_new_post_path(id: @id) do
     =submit_tag "START QUICK GAME", class: "sf sf-button quick-game center", style: "width: 30em; height: 2em; font-size: 120%;"
+=======
+game new full
+.center{:style => "position: relative; top: 1%; text-align: center"}
+  #startButton{:style => "width: 400px; margin: 0 auto; display: inline-block; height: 70px; background-size: 100% 100%"}
+>>>>>>> Stashed changes
 
 %div{:style => "bottom: 0%; width: 100%; position: absolute; height: 45em; display:flex; padding: 2%;"}
-  .column.left{:style => "height: 100%; width: 33%; padding: 2%;"}
-    .column.picturebox{:style => "height: 100%; width: 100%; background-color: rgba(254, 239, 190, 0.63)"}
-  .column.middle{:style => "height: 100%; width: 33%; padding: 2%;"}
-    .column.settingsbox{:style => "height: 100%; width: 100%; text-align:center; background-color: rgba(254, 239, 190, 0.63)"}
-      .column.gametype{:style => "margin: 10% auto; width: 100%"}
-        =form_tag game_new_post_path(id: @id) do
-          =submit_tag "Singles", class: "sf sf-button quick-game center", style: "width: 25%; height: 2em; font-size: 120%;"
-          =submit_tag "Doubles", class: "sf sf-button quick-game center", style: "width: 25%; height: 2em; font-size: 120%;"
-        =submit_tag "Doubles", class: "sf sf-button quick-game center", style: "width: 25%; height: 2em; font-size: 120%;"
-  .column.right{:style => "height: 100%; width: 33%; padding: 2%;"}
-    .column.picturebox{:style => "height: 100%; width: 100%; background-color: rgba(254, 239, 190, 0.63)"}
+  .left{:style => "height: 100%; width: 33%; padding: 5%;"}
+    .column.picturebox{:style => "height: 100%; width: 100%;"}
+      %img{:src => "/images/pong_assets/pong_avatar 1 doubles.png", :style => "height: 100%; width: 100%;"}
+
+  .middle{:style => "height: 100%; width: 33%; padding: 5%;"}
+    .column.settingsbox{:style => "height: 100%; width: 100%; text-align:center;"}
+      .column.gametype{:style => "position: relative; top: 1%; text-align: center"}
+        #singlesButton{:style => "width: 150px; height: 60px; margin: 10px auto; display: inline-block; background-size: 100% 100%"}
+          &nbsp;
+        #doublesButton{:style => "width: 150px; height: 60px; margin: 10px auto; display: inline-block; background-size: 100% 100%"}
+          &nbsp;
+        #confirmButton{:style => "width: 350px; height: 60px; margin: 10px auto; display: inline-block; background-size: 100% 100%"}
+          &nbsp;
+          -# %img{:src => "/images/pong_assets/pong_singles 0.png", :style => "height: 100%; width: 50%; float:left"}
+          -# %img{:src => "/images/pong_assets/pong_doubles 0.png", :style => "height: 100%; width: 50%; float:right"}
+          -# %img{:src => "/images/pong_assets/pong_start 0.png", :style => "height: 100%; width: 100%;"}
+
+  .right{:style => "height: 100%; width: 33%; padding: 5%;"}
+    .column.picturebox{:style => "height: 100%; width: 100%;"}
+      %img{:src => "/images/pong_assets/pong_avatar 2 doubles.png", :style => "height: 100%; width: 100%;"}

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160406204113) do
+ActiveRecord::Schema.define(version: 20160407183659) do
 
   create_table "players", force: true do |t|
     t.string   "rfid_hash"
@@ -32,5 +32,14 @@ ActiveRecord::Schema.define(version: 20160406204113) do
     t.datetime "updated_at"
     t.boolean  "game"
   end
+
+  create_table "rooms_players", force: true do |t|
+    t.integer "room_id"
+    t.integer "player_id"
+    t.string  "team",      limit: 5
+  end
+
+  add_index "rooms_players", ["player_id"], name: "index_rooms_players_on_player_id"
+  add_index "rooms_players", ["room_id"], name: "index_rooms_players_on_room_id"
 
 end
