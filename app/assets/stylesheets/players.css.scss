@@ -14,6 +14,11 @@ body.players {
 hr.players {
   border-color: white;
   border-width: 5px;
-  margin-left: 5em;
-  margin-right: 5em
+  margin: 2em 5em;
+}
+
+.center-vertical {
+  margin: 4em auto;
+  margin-left: auto;
+  margin-right: auto;
 }

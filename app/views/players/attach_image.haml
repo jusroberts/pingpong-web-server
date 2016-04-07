@@ -5,10 +5,10 @@
   .row
     .columns.small-6
       #my_camera.center-vertical
-      %canvas#canvas{:height => "240", :width => "320"}
-      #results
+      #results.center-vertical{style: "display:none; width: 320px; height: 240px;"}
     .columns.small-6
-      %input{:onclick => "take_snapshot()", :type => "button", :value => "Take Snapshot"}/
+      %input.take-snapshot{:onclick => "take_snapshot()", :type => "button", :value => "Take Snapshot"}
+      %input.retake-snapshot{:onclick => "retake_snapshot()", :type => "button", :value => "Retake Snapshot", :style => "display:none"}
       =submit_tag "Okay!"
 
 %hr.players
@@ -23,10 +23,19 @@
   Webcam.attach( '#my_camera' );
   function take_snapshot() {
     Webcam.snap( function(data_uri) {
-      item_image = data_uri.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
+      toggle_things();
       document.getElementById('results').innerHTML =
         '<img src="'+data_uri+'"/>' +
         "<input id=\"capture_image\" type=\"hidden\" value=\""+data_uri+"\" name=\"capture[image]\">";
-      $('#my_camera').css("display", "none");
     } );
+  }
+  function retake_snapshot() {
+    toggle_things();
+    document.getElementById('results').innerHTML = '';
+  }
+  function toggle_things() {
+    $(".take-snapshot").toggle();
+    $(".retake-snapshot").toggle();
+    $('#my_camera').toggle();
+    $('#results').toggle();
   }
