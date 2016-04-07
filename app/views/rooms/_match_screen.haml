@@ -1,13 +1,15 @@
-%p
-  %h1= @room.name
-  #room-id= @room.id
-.columns.small-6.center
-  .progress.success
-    .meter.color{style: "width:90%"}
-  %h2#team_a_status.sf= @team_a_status
-  %h1#team_a_score.sf= @team_a_score
-.columns.small-6.center
-  .progress
-    .meter.red{style: "width:10%"}
-  %h2#team_b_status.sf= @team_b_status
-  %h1#team_b_score.sf= @team_b_score
+.scoring
+  .game-column.center#left
+    .progress
+      .meter.orange#floatLeft &nbsp;
+    %h3#team_a_name.sf#floatLeft= (@team_a_name || "Sassy")
+    %h2#team_a_status.sf= @team_a_status
+    %h1#team_a_score.sf= @team_a_scoreg
+  .game-column.center#middle
+    %h3.sf vs
+  .game-column.center#right
+    .progress
+      .meter.blue#floatRight &nbsp;
+    %h3#team_a_name.sf#floatRight= (@team_b_name || "Chatty")
+    %h2#team_b_status.sf= @team_b_satus
+    %h1#team_b_score.sf= @team_b_score

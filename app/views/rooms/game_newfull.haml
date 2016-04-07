@@ -3,7 +3,15 @@ game new full
   =form_tag room_game_new_post_path(id: @id) do
     =submit_tag "START QUICK GAME", class: "sf sf-button quick-game center", style: "width: 30em; height: 2em; font-size: 120%;"
 
-%div{:style => "bottom: 0%; width: 100%; position: absolute; height: 45em; display:flex; background-color: rgba(255, 0, 0, 0.5);"}
-  .column.left{:style => "height: 100%; width: 33%;"} &nbsp
-  .column.middle{:style => "height: 100%; width: 33%;"} &nbsp
-  .column.right{:style => "height: 100%; width: 33%;"} &nbsp
+%div{:style => "bottom: 0%; width: 100%; position: absolute; height: 45em; display:flex; padding: 2%;"}
+  .column.left{:style => "height: 100%; width: 33%; padding: 2%;"}
+    .column.picturebox{:style => "height: 100%; width: 100%; background-color: rgba(254, 239, 190, 0.63)"}
+  .column.middle{:style => "height: 100%; width: 33%; padding: 2%;"}
+    .column.settingsbox{:style => "height: 100%; width: 100%; text-align:center; background-color: rgba(254, 239, 190, 0.63)"}
+      .column.gametype{:style => "margin: 10% auto; width: 100%"}
+        =form_tag game_new_post_path(id: @id) do
+          =submit_tag "Singles", class: "sf sf-button quick-game center", style: "width: 25%; height: 2em; font-size: 120%;"
+          =submit_tag "Doubles", class: "sf sf-button quick-game center", style: "width: 25%; height: 2em; font-size: 120%;"
+        =submit_tag "Doubles", class: "sf sf-button quick-game center", style: "width: 25%; height: 2em; font-size: 120%;"
+  .column.right{:style => "height: 100%; width: 33%; padding: 2%;"}
+    .column.picturebox{:style => "height: 100%; width: 100%; background-color: rgba(254, 239, 190, 0.63)"}

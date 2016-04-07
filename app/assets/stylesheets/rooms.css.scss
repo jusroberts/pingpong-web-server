@@ -11,17 +11,46 @@
 h1.sf {
   font-size: 20em;
   color: black;
-   -webkit-text-fill-color: black; /* Will override color (regardless of order) */
+   -webkit-text-fill-color: white; /* Will override color (regardless of order) */
    -webkit-text-stroke-width: 6px;
-   -webkit-text-stroke-color: white;
+   -webkit-text-stroke-color: black;
 }
 
 h2.sf {
   font-size: 5em;
   color: black;
    -webkit-text-fill-color: black; /* Will override color (regardless of order) */
-   -webkit-text-stroke-width: 2px;
+   -webkit-text-stroke-width: 3px;
    -webkit-text-stroke-color: white;
+}
+h3.sf{
+  font-size: 4em;
+  color: black;
+   -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+   -webkit-text-stroke-width: 3px;
+   -webkit-text-stroke-color: black;
+}
+#name {
+  text-align: left;
+}
+.scoring{
+  display: table;
+  width: 100%;
+}
+.game-column{
+  display: table-cell;
+}
+#middle{
+  width: 10%;
+  text-align: center;
+}
+#left{
+  width: 42%;
+  margin-left: 3%;
+}
+#right{
+  margin-right: 3%;
+  width: 42%;
 }
 #room-id {
   visibility: hidden;
@@ -30,7 +59,28 @@ h2.sf {
 .center {
   text-align: center;
 }
+.center-verticle {
+  position: relative;
+  top: 50%;
+}
+.progress{
+  align-content: center;
+  background: white;
+  border: 4px solid white;
+  height: 50px;
 
+}
+.meter{
+  height:100%;
+  width: 100%;
+  display: block;
+}
+#floatRight{
+  float: right;
+}
+#floatLeft{
+  float: left;
+}
 .meter.blue {
   background: cornflowerblue; }
 
@@ -55,21 +105,14 @@ body.rooms.game_newfull {
   background: url("/images/app_backgrounds/Stage-Select-Background.png");
   background-size: cover;
 }
-
 .column {
-    flex: 1;
+    // flex: 1;
     border: 1px solid #e6e6e6;
     box-sizing: border-box;
+    margin: 1%;
 }
 
-#container {
-    margin: 0px auto;
-    width: 500px;
-    height: 375px;
-    border: 10px #333 solid;
-}
-#videoElement {
-    width: 480px;
-    height: 355px;
-    background-color: #666;
+.picturebox {
+  border: 1px solid #000000;
+   border-width: 5px;
 }
