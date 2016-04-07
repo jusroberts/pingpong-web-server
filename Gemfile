@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-
 gem 'rails', '4.1.14.1'
 gem 'sass-rails', '~> 5.0.0'
 gem 'uglifier', '>= 1.3.0'
@@ -12,7 +11,6 @@ gem 'foundation-rails'
 gem 'websocket-rails'
 gem 'faye-websocket', '0.10.0'
 gem 'cloudinary'
-
 
 group :development do
   gem 'spring'

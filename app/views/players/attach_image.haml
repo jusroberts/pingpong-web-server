@@ -1,12 +1,17 @@
-game new player
 %script{:src => "/javascript/webcam.js"}
-#my_camera
-%canvas#canvas{:height => "240", :width => "320"}
+.title ADD player
+%hr.players
 =form_tag room_game_player_attach_image_post_path(room_id: @id) do
-  #results
-  %input{:onclick => "take_snapshot()", :type => "button", :value => "Take Snapshot"}/
-  =submit_tag "Okay!"
+  .row
+    .columns.small-6
+      #my_camera.center-vertical
+      %canvas#canvas{:height => "240", :width => "320"}
+      #results
+    .columns.small-6
+      %input{:onclick => "take_snapshot()", :type => "button", :value => "Take Snapshot"}/
+      =submit_tag "Okay!"
 
+%hr.players
 
 :javascript
   Webcam.set({
