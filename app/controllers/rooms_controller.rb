@@ -68,11 +68,17 @@ class RoomsController < ApplicationController
   def increment_score
     team = params[:team].downcase
     raise("invalid team") if params[:team].downcase != 'a' && params[:team].downcase != 'b'
-    if should_reset?
-      @room.update_attributes(team_a_score: 0, team_b_score: 0)
-    else
-      current_score = @room.method("team_#{team}_score".to_sym).call()
-      @room.update_attribute("team_#{team}_score", current_score + 1)
+    if @room.game
+      if should_reset?
+        @room.update_attributes(team_a_score: 0, team_b_score: 0)
+      else
+        current_score = @room.method("team_#{team}_score".to_sym).call()
+        @room.update_attribute("team_#{team}_score", current_score + 1)
+      end
+      set_room
+      if GameLogic.new(@room.team_a_score, @room.team_b_score).game_over?
+        @room.update_attribute(:game, false)
+      end
     end
     send_scores
     render nothing: true
@@ -80,6 +86,11 @@ class RoomsController < ApplicationController
 
   def game_new
     @id = params[:id]
+    @game_type = params[:game_type]
+    @p1 = params[:p1]
+    @p2 = params[:p2]
+    @p3 = params[:p3]
+    @p4 = params[:p4]
   end
 
   def game_new_post
