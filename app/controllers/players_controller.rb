@@ -1,6 +1,6 @@
 class PlayersController < ApplicationController
 
-  before
+  before_action :set_player, only: [:confirm, :delete]
 
   def new
   end
