@@ -1,6 +1,7 @@
 class PlayersController < ApplicationController
 
   before_action :set_player, only: [:confirm, :delete]
+  before_action :set_room_id
 
   def new
   end
@@ -25,6 +26,10 @@ class PlayersController < ApplicationController
 
   def set_player
     #@player = Player.find(params[:player_id])
+  end
+
+  def set_room_id
+    @id = Room.find(params[:room_id]).id
   end
 
 end
