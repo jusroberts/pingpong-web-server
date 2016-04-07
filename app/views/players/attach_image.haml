@@ -1,11 +1,12 @@
 game new player
 %script{:src => "/javascript/webcam.js"}
-#results Your captured image will appear here...
 #my_camera
-
+%canvas#canvas{:height => "240", :width => "320"}
 =form_tag room_game_player_attach_image_post_path(room_id: @id) do
-  %input#fileToUpload{:name => "fileToUpload", :type => "file"}/
+  #results
   %input{:onclick => "take_snapshot()", :type => "button", :value => "Take Snapshot"}/
+  =submit_tag "Okay!"
+
 
 :javascript
   Webcam.set({
@@ -17,9 +18,10 @@ game new player
   Webcam.attach( '#my_camera' );
   function take_snapshot() {
     Webcam.snap( function(data_uri) {
+      item_image = data_uri.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
       document.getElementById('results').innerHTML =
-        '<h2>Here is your image:</h2>' +
-        '<img src="'+data_uri+'"/>';
+        '<img src="'+data_uri+'"/>' +
+        "<input id=\"capture_image\" type=\"hidden\" value=\""+data_uri+"\" name=\"capture[image]\">";
       $('#my_camera').css("display", "none");
     } );
   }
