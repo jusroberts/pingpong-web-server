@@ -61,11 +61,19 @@ h3.sf{
   text-align: right;
   font-size: 3em;
 }
-#team_status{
+#team_a_status{
+  color: black;
+  -webkit-text-fill-color: #ED1C24; /* Will override color (regardless of order) */
+  -webkit-text-stroke-width: 3px;
+  -webkit-text-stroke-color: white;  
+  background-repeat: no-repeat;
+}
+#team_b_status{
   color: black;
   -webkit-text-fill-color: #ED1C24; /* Will override color (regardless of order) */
   -webkit-text-stroke-width: 3px;
   -webkit-text-stroke-color: white;
+  background-repeat: no-repeat;
 }
 #room-id {
   visibility: hidden;
