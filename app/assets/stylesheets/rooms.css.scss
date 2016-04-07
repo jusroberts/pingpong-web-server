@@ -47,5 +47,17 @@ h2.sf {
   background: #9b59b6; }
 
 body.rooms.game_new {
-  background: url("/images/app_backgrounds/Stage-Select-Background.png")
+  background: url("/images/app_backgrounds/Stage-Select-Background.png");
+  background-size: cover;
+}
+
+body.rooms.game_newfull {
+  background: url("/images/app_backgrounds/Stage-Select-Background.png");
+  background-size: cover;
+}
+
+.column {
+    flex: 1;
+    border: 1px solid #e6e6e6;
+    box-sizing: border-box;
 }

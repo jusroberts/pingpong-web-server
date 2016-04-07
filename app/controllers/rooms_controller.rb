@@ -1,7 +1,7 @@
 class RoomsController < ApplicationController
   before_action :set_room, only: [:show, :edit, :update,
                                   :destroy, :increment_score,
-                                  :game_new_post, :game_view, :game_play, :game_end_post]
+                                  :game_new_post, :game_view, :game_play, :game_end_post, :game_newfull]
 
   # GET /rooms
   # GET /rooms.json
@@ -91,6 +91,10 @@ class RoomsController < ApplicationController
     @p2 = params[:p2]
     @p3 = params[:p3]
     @p4 = params[:p4]
+  end
+
+  def game_newfull
+    @id = params[:id]
   end
 
   def game_new_post
