@@ -99,12 +99,12 @@ class RoomsController < ApplicationController
 
   def game_new_post
     @room.update_attributes(team_a_score: 0, team_b_score: 0, game: true)
-    redirect_to :game_play
+    redirect_to :room_game_play
   end
 
   def game_end_post
     @room.update_attributes(team_a_score: 0, team_b_score: 0, game: false)
-    redirect_to :game_new
+    redirect_to :room_game_new
   end
 
   def game_view
@@ -113,12 +113,6 @@ class RoomsController < ApplicationController
 
   def game_play
     set_current_game_status
-  end
-
-  def game_new_player
-  end
-
-  def game_new_player_post
   end
 
   private
@@ -148,7 +142,7 @@ class RoomsController < ApplicationController
 
     # Use callbacks to share common setup or constraints between actions.
     def set_room
-      @room = Room.find(params[:id])
+      @room = Room.find(params[:id]) rescue Room.find(params[:room_id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
