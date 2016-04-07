@@ -35,10 +35,13 @@ h3.sf{
 }
 .scoring{
   display: table;
-  width: 100%;
+  width: 92%;
+  margin-left: 4%;
+  margin-right: 4%;
 }
 .game-column{
   display: table-cell;
+  vertical-align: top;
 }
 #middle{
   width: 10%;
@@ -54,8 +57,8 @@ h3.sf{
 }
 #room-id {
   visibility: hidden;
+  height: 0px;
 }
-
 .center {
   text-align: center;
 }
@@ -65,15 +68,16 @@ h3.sf{
 }
 .progress{
   align-content: center;
-  background: white;
-  border: 4px solid white;
-  height: 50px;
-
+  background: #FFF200;
+  outline: 4px solid white;
+  border: 4px solid #2B3990;
+  height: 45px;
 }
 .meter{
   height:100%;
-  width: 100%;
+  width: 85%;
   display: block;
+  background: #2B3990;
 }
 #floatRight{
   float: right;
@@ -81,20 +85,6 @@ h3.sf{
 #floatLeft{
   float: left;
 }
-.meter.blue {
-  background: cornflowerblue; }
-
-.meter.red {
-  background: #e74c3c; }
-
-.meter.orange {
-  background: #e67e22; }
-
-.meter.green {
-  background: #2ecc71; }
-
-.meter.purple {
-  background: #9b59b6; }
 
 body.rooms.game_new {
   background: url("/images/app_backgrounds/Stage-Select-Background.png");
