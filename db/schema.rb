@@ -16,6 +16,7 @@ ActiveRecord::Schema.define(version: 20160406204113) do
   create_table "players", force: true do |t|
     t.string   "rfid_hash"
     t.string   "name"
+    t.string   "image_url"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
