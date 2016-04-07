@@ -3,15 +3,15 @@
 .scoring
   .game-column.center#left
     .progress
-      .meter#floatLeft &nbsp;
-    %h3#team_a_name.sf#floatLeft= (@team_a_name || "Sassy")
-    %h2#team_a_status.sf= @team_a_status
-    %h1#team_a_score.sf.center= @team_a_score
+      .meter#a_meter &nbsp;
+    %h3.sf#team_a_name= (@team_a_name || "Sassy")
+    %h2.sf#team_status= @team_a_status
+    %h1.sf#team_a_score.center= @team_a_score
   .game-column.center#middle
     %h3.sf vs
   .game-column.center#right
     .progress
-      .meter#floatRight &nbsp;
-    %h3#team_a_name.sf#floatRight= (@team_b_name || "Chatty")
-    %h2#team_b_status.sf= @team_b_status
-    %h1#team_b_score.sf.center= @team_b_score
+      .meter#b_meter &nbsp;
+    %h3.sf#team_b_name= (@team_b_name || "Chatty")
+    %h2.sf#team_status= @team_b_status
+    %h1.sf#team_b_score.center= @team_b_score
