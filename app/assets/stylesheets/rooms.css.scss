@@ -61,3 +61,15 @@ body.rooms.game_newfull {
     border: 1px solid #e6e6e6;
     box-sizing: border-box;
 }
+
+#container {
+    margin: 0px auto;
+    width: 500px;
+    height: 375px;
+    border: 10px #333 solid;
+}
+#videoElement {
+    width: 480px;
+    height: 355px;
+    background-color: #666;
+}
