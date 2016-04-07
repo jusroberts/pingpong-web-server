@@ -1,7 +1,7 @@
 %script{:src => "/javascript/webcam.js"}
 .title ADD player
 %hr.players
-=form_tag room_game_player_attach_image_post_path(room_id: @id) do
+=form_tag room_game_player_attach_image_post_path(player_id: @player.id, room_id: @id) do
   .row
     .columns.small-6
       #my_camera.center-vertical
