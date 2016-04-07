@@ -7,20 +7,97 @@ $(function() {
   channel = dispatcher.subscribe('room' + roomId);
   console.log(window.location.host + '/websocket');
   console.log('room' + roomId);
+
+
+
+// for updating bars on pageload
+  console.log($("#team_a_score").text());
+  if ($("#team_a_score").text() === 'W') {
+    $("#team_a_status").text("WINNER!");
+    $("#b_meter").width("0%");
+  } else if ($("#team_a_score").text() === 'G') {
+    console.log("TEAM A SCORE = G")
+    $("#b_meter").width((100/21) + "%");
+  } else if ($("#team_a_score").text() === 'D') {
+    console.log("TEAM A SCORE = D")
+    $("#b_meter").width("100%");
+    $("#b_meter").css({"background" : "#BE1E2D"});
+  } else if ($("#team_a_score").text() === 'ADV') {
+    console.log("TEAM A SCORE = ADV")
+    $("#a_meter").width("100%");
+    $("#b_meter").width("50%");
+    $("#a_meter").css({"background" : "#BE1E2D"});
+    $("#b_meter").css({"background" : "#BE1E2D"});
+  } else {
+    $("#team_a_status").text('\xa0');
+    $("#b_meter").width(((21- $("#team_a_score").text())*100 /21)+ "%");
+  }
+
+  if ($("#team_b_score").text() === 'W') {
+    $("#team_a_status").text("WINNER!");
+    $("#a_meter").width("0%");
+  } else if ($("#team_b_score").text() === 'G') {
+    console.log("TEAM B SCORE = G")
+    $("#a_meter").width((100/21) + "%");
+  } else if ($("#team_b_score").text() === 'D') {
+    console.log("TEAM B SCORE = D")
+    $("#a_meter").width("100%");
+    $("#a_meter").css({"background" : "#BE1E2D"});
+  } else if ($("#team_b_score").text() === 'ADV') {
+    console.log("TEAM B SCORE = ADV")
+    $("#b_meter").width("100%");
+    $("#a_meter").width("50%");
+    $("#a_meter").css({"background" : "#BE1E2D"});
+    $("#b_meter").css({"background" : "#BE1E2D"});
+  } else {
+    $("#team_b_status").text('\xa0');
+    $("#a_meter").width(((21- $("#team_b_score").text())*100 /21)+ "%");
+  }
+
+
+
+
   channel.bind('team_a_score', function(score) {
     if (score === 'W') {
       $("#team_a_status").text("WINNER!");
+      $("#b_meter").width("0%");
+    } else if (score === 'G') {
+      console.log("TEAM A SCORE = G")
+      $("#b_meter").width((100/21) + "%");
+    } else if (score === 'D') {
+      console.log("TEAM A SCORE = D")
+      $("#b_meter").width("100%");
+      $("#b_meter").css({"background" : "#BE1E2D"});
+    } else if (score === 'ADV') {
+      console.log("TEAM A SCORE = ADV")
+      $("#a_meter").width("100%");
+      $("#b_meter").width("50%");
+      $("#a_meter").css({"background" : "#BE1E2D"});
+      $("#b_meter").css({"background" : "#BE1E2D"});
     } else {
       $("#team_a_status").text('\xa0');
+      $("#b_meter").width(((21- score)*100 /21)+ "%");
     }
     $("#team_a_score").text(score);
     console.log(score);
   });
   channel.bind('team_b_score', function(score) {
     if (score === 'W') {
-      $("#team_b_status").text("WINNER!");
+      $("#team_a_status").text("WINNER!");
+      $("#a_meter").width("0%");
+    } else if (score === 'G') {
+      $("#a_meter").width((100/21) + "%");
+    } else if (score === 'D') {
+      $("#a_meter").width("100%");
+      $("#a_meter").css({"background" : "#BE1E2D"});
+    } else if (score === 'ADV') {
+      $("#b_meter").width("100%");
+      $("#a_meter").width("50%");
+      $("#a_meter").css({"background" : "#BE1E2D"});
+      $("#b_meter").css({"background" : "#BE1E2D"});
     } else {
       $("#team_b_status").text('\xa0');
+      $("#a_meter").width(((21- score)*100 /21)+ "%");
     }
     $("#team_b_score").text(score);
     console.log(score);
