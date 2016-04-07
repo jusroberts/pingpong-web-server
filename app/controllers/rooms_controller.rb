@@ -115,6 +115,12 @@ class RoomsController < ApplicationController
     set_current_game_status
   end
 
+  def game_new_player
+  end
+
+  def game_new_player_post
+  end
+
   private
 
     def set_current_game_status
