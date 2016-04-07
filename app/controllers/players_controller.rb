@@ -17,10 +17,10 @@ class PlayersController < ApplicationController
 
   def attach_image_post
     image = params[:capture][:image]
-    hash = Cloudinary::upload(image)
+    hash = Cloudinary::Uploader.upload(image)
     image_url = hash['secure_url']
-    @player.
-    a = :a
+    @player.update_attribute(:image_url, image_url)
+    redirect_to room_game_new_path(room_id: @id, p1: @player.id)
   end
 
   def confirm
