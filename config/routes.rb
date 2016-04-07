@@ -14,4 +14,8 @@ Rails.application.routes.draw do
   get '/rooms/:id/game/' => 'rooms#game_view', as: :game_view
   get '/rooms/:id/game/play' => 'rooms#game_play', as: :game_play
   post '/rooms/:id/game/end' => 'rooms#game_end_post', as: :game_end
+  get '/rooms/:id/game/newfull' => 'rooms#game_newfull', as: :game_newfull
+  
+  get '/rooms/:id/game/new/player/create' => 'rooms#game_new_player', as: :game_new_player
+  post '/rooms/:id/game/new/player/create' => 'rooms#game_new_player_post', as: :game_new_player_post
 end

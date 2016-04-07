@@ -11,6 +11,7 @@ gem 'hamlit-rails' #faster haml, uses slightly different syntax
 gem 'foundation-rails'
 gem 'websocket-rails'
 gem 'faye-websocket', '0.10.0'
+gem 'cloudinary'
 
 
 group :development do
@@ -19,6 +20,7 @@ group :development do
   gem 'binding_of_caller'
   gem 'guard'
   gem 'guard-minitest'
+  gem 'dotenv'
 end
 
 group :test do
