@@ -1,12 +1,17 @@
-game new player
 %script{:src => "/javascript/webcam.js"}
-#results Your captured image will appear here...
-%h1 WebcamJS Test Page
-%h3 Demonstrates simple 320x240 capture &amp; display
-#my_camera
+.title ADD player
+%hr.players
+=form_tag room_game_player_attach_image_post_path(room_id: @id) do
+  .row
+    .columns.small-6
+      #my_camera.center-vertical
+      %canvas#canvas{:height => "240", :width => "320"}
+      #results
+    .columns.small-6
+      %input{:onclick => "take_snapshot()", :type => "button", :value => "Take Snapshot"}/
+      =submit_tag "Okay!"
 
-%form
-%input{:onclick => "take_snapshot()", :type => "button", :value => "Take Snapshot"}/
+%hr.players
 
 :javascript
   Webcam.set({
@@ -18,9 +23,10 @@ game new player
   Webcam.attach( '#my_camera' );
   function take_snapshot() {
     Webcam.snap( function(data_uri) {
+      item_image = data_uri.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
       document.getElementById('results').innerHTML =
-        '<h2>Here is your image:</h2>' +
-        '<img src="'+data_uri+'"/>';
-      $('#my_camera').css("visibility", "hidden");
+        '<img src="'+data_uri+'"/>' +
+        "<input id=\"capture_image\" type=\"hidden\" value=\""+data_uri+"\" name=\"capture[image]\">";
+      $('#my_camera').css("display", "none");
     } );
   }
