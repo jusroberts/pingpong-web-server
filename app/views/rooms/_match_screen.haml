@@ -1,13 +1,13 @@
 .scoring
-  .column.center#left
+  .game-column.center#left
     .progress
       .meter.orange#floatLeft &nbsp;
     %h3#team_a_name.sf#floatLeft= (@team_a_name || "Sassy")
     %h2#team_a_status.sf= @team_a_status
     %h1#team_a_score.sf= @team_a_scoreg
-  .column.center#middle
+  .game-column.center#middle
     %h3.sf vs
-  .column.center#right
+  .game-column.center#right
     .progress
       .meter.blue#floatRight &nbsp;
     %h3#team_a_name.sf#floatRight= (@team_b_name || "Chatty")

@@ -37,7 +37,7 @@ h3.sf{
   display: table;
   width: 100%;
 }
-.column{
+.game-column{
   display: table-cell;
 }
 #middle{
@@ -104,4 +104,15 @@ body.rooms.game_new {
 body.rooms.game_newfull {
   background: url("/images/app_backgrounds/Stage-Select-Background.png");
   background-size: cover;
+}
+.column {
+    // flex: 1;
+    border: 1px solid #e6e6e6;
+    box-sizing: border-box;
+    margin: 1%;
+}
+
+.picturebox {
+  border: 1px solid #000000;
+   border-width: 5px;
 }
