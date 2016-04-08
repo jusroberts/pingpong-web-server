@@ -18,8 +18,8 @@ game new full
       #scan_section{:style => "padding: 2%"}
         #scan_player1{:style => "width: 400px; margin: 10px auto; display: inline-block; height: 70px; background-size: 100% 100%"}
 
-        =link_to room_game_new_post_path(id: @id) do
-          #startButton{:style => "width: 400px; margin: 0 auto; display: inline-block; height: 70px; background-size: 100% 100%"}
+        =form_tag room_game_new_post_path(id: @id) do
+          =submit_tag "", id: "startButton", style: "width: 400px; margin: 0 auto; display: inline-block; height: 70px; background-size: 100% 100%"
 
   .right{:style => "height: 100%; width: 33%; padding: 5%;"}
     .picturebox{:style => "height: 100%; width: 100%;"}
