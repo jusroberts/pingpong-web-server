@@ -7,9 +7,15 @@
       #my_camera.center-vertical
       #results.center-vertical{style: "display:none; width: 320px; height: 240px;"}
     .columns.small-6
-      %input.take-snapshot{:onclick => "take_snapshot()", :type => "button", :value => "Take Snapshot"}
-      %input.retake-snapshot{:onclick => "retake_snapshot()", :type => "button", :value => "Retake Snapshot", :style => "display:none"}
-      =submit_tag "Okay!"
+      .row.top.camera
+        .center-vertical
+          %input.take-snapshot.player-button.player-button-border{:onclick => "take_snapshot()", :type => "button", :value => "Take Snapshot"}
+          %input.retake-snapshot.player-button.player-button-border{:onclick => "retake_snapshot()", :type => "button", :value => "Retake Snapshot", :style => "display:none"}
+          .top-text
+      .row.bottom.camera
+        .center-vertical
+          #timer
+          =submit_tag "Okay!", class: 'submit-image center player-button player-button-border'
 
 %hr.players
 
@@ -22,20 +28,53 @@
   });
   Webcam.attach( '#my_camera' );
   function take_snapshot() {
-    Webcam.snap( function(data_uri) {
-      toggle_things();
-      document.getElementById('results').innerHTML =
-        '<img src="'+data_uri+'"/>' +
-        "<input id=\"capture_image\" type=\"hidden\" value=\""+data_uri+"\" name=\"capture[image]\">";
-    } );
+    $(".take-snapshot").css({"display":"none"});
+    $(".top-text").text("Say Cheese!");
+    var counter = 5;
+    var id;
+    id = setInterval(function() {
+        counter--;
+        if(counter < 0) {
+          $("#timer").text('');
+          $(".top-text").text('');
+          Webcam.snap( function(data_uri) {
+          toggle_things();
+          document.getElementById('results').innerHTML =
+            '<img src="'+data_uri+'"/>' +
+            "<input id=\"capture_image\" type=\"hidden\" value=\""+data_uri+"\" name=\"capture[image]\">";
+          } );
+          clearInterval(id);
+        } else {
+          $("#timer").text('[' + counter + ']');
+        }
+    }, 1000);
   }
   function retake_snapshot() {
     toggle_things();
     document.getElementById('results').innerHTML = '';
+    take_snapshot();
   }
   function toggle_things() {
-    $(".take-snapshot").toggle();
+    $("#timer").toggle();
+    $(".submit-image").toggle();
     $(".retake-snapshot").toggle();
     $('#my_camera').toggle();
     $('#results').toggle();
   }
+  var downloadButton = document.getElementById("download");
+  var counter = 10;
+  var newElement = document.createElement("p");
+  newElement.innerHTML = "You can download the file in 10 seconds.";
+  var id;
+
+  downloadButton.parentNode.replaceChild(newElement, downloadButton);
+
+  id = setInterval(function() {
+    counter--;
+    if(counter < 0) {
+        newElement.parentNode.replaceChild(downloadButton, newElement);
+        clearInterval(id);
+    } else {
+        newElement.innerHTML = "You can download the file in " + counter.toString() + " seconds.";
+    }
+  }, 1000);

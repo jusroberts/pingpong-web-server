@@ -31,6 +31,10 @@ hr.players {
   padding: 0;
 }
 
+.player-button-border {
+  border: 1px solid gray;
+}
+
 .player-submit-button {
   font-size: 2em;
   color: white;
@@ -51,4 +55,34 @@ hr.players {
 }
 
 .keyboard-characters {
+}
+
+.submit-image {
+  display:none;
+  text-align: center;
+  margin: 1em auto;
+}
+
+#timer {
+  color: white;
+  font-size: 10em;
+  text-align: center;
+  margin: 1em auto;
+}
+
+.top.camera {
+  height: 5em;
+  width: 100%;
+  text-align: center;
+}
+.bottom.camera {
+  height: 15em;
+  width: 100%;
+  text-align: center;
+}
+
+.top-text {
+  color: white;
+  text-align: center;
+  font-size: 3em;
 }
