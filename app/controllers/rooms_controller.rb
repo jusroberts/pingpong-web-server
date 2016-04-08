@@ -132,7 +132,7 @@ class RoomsController < ApplicationController
       set_current_game_status
       render :game_view
     else
-      redirect_to :index
+      redirect_to :rooms
     end
   end
 
