@@ -1,5 +1,5 @@
 =render "match_screen"
 
 =form_tag room_game_end_path(id: @room.id) do
-  .row.center=submit_tag "", name: 'continue', class: "sf transparent-bg", id: "continueButton"
-  .row=submit_tag "", name: 'quit', class: "sf sf-quit transparent-bg"
+  .row.center=submit_tag "continue", name: 'continue', class: "sf transparent-bg", id: "continueButton"
+  .row=submit_tag "quit", name: 'quit', class: "sf sf-quit transparent-bg"

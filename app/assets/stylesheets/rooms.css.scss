@@ -172,6 +172,7 @@ body.rooms.game_newfull {
 }
 
 #continueButton {
+  color: transparent;
   background-image: url('/images/pong_assets/pong_continue 10.png');
   background-repeat: no-repeat;
   width: 575px;
@@ -181,6 +182,7 @@ body.rooms.game_newfull {
 }
 
 .sf-quit {
+  color: transparent;
   background-image: url('/images/pong_assets/pong_quit game 1.png');
   background-repeat: no-repeat;
   width: 303px;
@@ -197,4 +199,12 @@ body.rooms.game_newfull {
 .transparent-bg {
   background-color: transparent;
   border: none;
+}
+
+.sf-button.quick-game {
+  color: transparent;
+  background-image: url('/images/pong_assets/pong_quick game big.png');
+  /* background-size: cover; */
+  width: 1471px;
+  height: 178px;
 }
