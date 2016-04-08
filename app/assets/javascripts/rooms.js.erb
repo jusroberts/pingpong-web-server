@@ -69,11 +69,12 @@ $(function() {
 
 function scoreA(score) {
   if (score === 'W') {
+    console.log("TEAM A SCORE = W")
     $("#team_a_status").css({"background" : 'url("/images/pong_assets/winner-animation.gif")',
                               "background-size": "75%",
                               "background-position": "center",
                               "background-repeat": "no-repeat"});
-    ("#b_meter").animate({ width:"0%"});
+    $("#b_meter").animate({ width:"0%"});
     startContinueCountdown();
   } else if (score === 'G') {
     console.log("TEAM A SCORE = G")
