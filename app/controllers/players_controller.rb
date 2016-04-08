@@ -30,6 +30,7 @@ class PlayersController < ApplicationController
   end
 
   def new
+    @name = ''
     if params[:player_id].nil?
       # Grab the latest player added that doesn't have a name, we'll edit them
       @player = Player.where(name: nil).last
@@ -38,6 +39,7 @@ class PlayersController < ApplicationController
       # If we're adding/editing a specific player
       @player = Player.find_by id: params[:player_id]
       raise("Failed to find player for id #{params[:player_id]}") if @player.nil?
+      @name = @player.name
     end
 
     add_new_player(@id, @player)
