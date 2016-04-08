@@ -12,9 +12,10 @@ h1.sf {
   font-size: 20em;
   color: black;
    -webkit-text-fill-color: white; /* Will override color (regardless of order) */
-   -webkit-text-stroke-width: 8px;
+   -webkit-text-stroke-width: 2px;
    -webkit-text-stroke-color: #0089CF;
   line-height: 100%;
+  text-shadow: 10px 0px rgba(0,137,207, 0.5);
 }
 
 h2.sf {
@@ -28,8 +29,9 @@ h3.sf{
   font-size: 4em;
   color: black;
    -webkit-text-fill-color: white; /* Will override color (regardless of order) */
-   -webkit-text-stroke-width: 2px;
+   -webkit-text-stroke-width: 1px;
    -webkit-text-stroke-color: black;
+    text-shadow: 2px 2px;
 }
 .scoring{
   display: table;
@@ -167,4 +169,32 @@ body.rooms.game_newfull {
 #confirmButton:hover {
   background-image: url('/images/pong_assets/pong_start hover.png');
   background-repeat: no-repeat;
+}
+
+#continueButton {
+  background-image: url('/images/pong_assets/pong_continue 10.png');
+  background-repeat: no-repeat;
+  width: 575px;
+  height: 91px;
+  display:none;
+  margin:auto;
+}
+
+.sf-quit {
+  background-image: url('/images/pong_assets/pong_quit game 1.png');
+  background-repeat: no-repeat;
+  width: 303px;
+  height: 41px;
+  position: fixed;
+  left: 2em;
+  bottom: 2em;
+}
+
+.sf-quit:hover {
+  background-image: url('/images/pong_assets/pong_quit game 0.png');
+}
+
+.transparent-bg {
+  background-color: transparent;
+  border: none;
 }

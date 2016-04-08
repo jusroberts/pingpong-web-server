@@ -57,9 +57,9 @@ function scoreA(score) {
     $("#team_a_status").css({"background" : 'url("/images/pong_assets/winner-animation.gif")',
                               "background-size": "75%",
                               "background-position": "center",
-                              "background-repeat": "no-repeat"});    
+                              "background-repeat": "no-repeat"});
     ("#b_meter").animate({ width:"0%"});
-
+    startContinueCountdown();
   } else if (score === 'G') {
     console.log("TEAM A SCORE = G")
     $("#b_meter").animate({ width:(100/21) + "%"});
@@ -90,7 +90,7 @@ function scoreB(score) {
                               "background-position": "center",
                               "background-repeat": "no-repeat"});
     $("#a_meter").animate({ width:"0%"});
-
+    startContinueCountdown();
   } else if (score === 'G') {
     $("#a_meter").animate({ width:(100/21) + "%"});
 
@@ -111,3 +111,21 @@ function scoreB(score) {
 
 };
 
+function startContinueCountdown() {
+  $("#continueButton").css({"display": "block"});
+  $("#continueButton").focus();
+  var counter = 10;
+  var id;
+  id = setInterval(function() {
+      counter--;
+      if(counter <= 0) {
+        var backgroundUrl = "url('/images/pong_assets/pong_continue 01.png')"
+        $("#continueButton").css("background-image", backgroundUrl);
+        clearInterval(id);
+        $(".sf-quit").trigger('click');
+      } else {
+        var backgroundUrl = "url('/images/pong_assets/pong_continue 0" + counter + ".png')"
+        $("#continueButton").css("background-image", backgroundUrl);
+      }
+  }, 1000);
+}

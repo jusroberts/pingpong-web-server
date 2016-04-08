@@ -104,7 +104,12 @@ class RoomsController < ApplicationController
 
   def game_end_post
     @room.update_attributes(team_a_score: 0, team_b_score: 0, game: false)
-    redirect_to :room_game_new
+    # binding.pry
+    if params[:quit].present?
+      redirect_to :room_game_new
+    else
+      redirect_to :room_game_new_post
+    end
   end
 
   def game_view
