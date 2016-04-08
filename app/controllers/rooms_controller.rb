@@ -1,6 +1,6 @@
 class RoomsController < ApplicationController
   before_action :set_room, only: [:show, :edit, :update,
-                                  :destroy, :increment_score,
+                                  :destroy, :increment_score, :room_status,
                                   :game_new_post, :game_view, :game_play, :game_end_post, :game_newfull,
                                   :interstitial]
 
@@ -83,6 +83,15 @@ class RoomsController < ApplicationController
     end
     send_scores
     render nothing: true
+  end
+
+  def room_status
+    render :json => {
+        :team_a_score => @room.team_a_score,
+        :team_b_score => @room.team_b_score,
+        :name => @room.name,
+        :has_active_game => @room.game
+    }
   end
 
   def game_new
