@@ -14,49 +14,14 @@ body.players {
 hr.players {
   border-color: white;
   border-width: 5px;
-  margin: 2em 5em;
+  margin: 2em 0em 3em 0em;
+  max-width: 100%;
 }
 
 .center-vertical {
   margin: 4em auto;
   margin-left: auto;
   margin-right: auto;
-}
-
-.player-button {
-  color: white;
-  font-size: 2em;
-  border: none;
-  background: none;
-  padding: 0;
-}
-
-.player-button-border {
-  border: 1px solid gray;
-}
-
-.player-submit-button {
-  font-size: 2em;
-  color: white;
-  text-align: center;
-  border: none;
-  background: none;
-}
-
-.player-name-input {
-  width: 15em;
-  background: none;
-  color: white;
-}
-
-.keyboard-full {
-  margin-left:auto;
-  width: 40em;
-}
-
-.keyboard-characters {
-  margin-left: 5em;
-  margin-right: 5em
 }
 
 .submit-image {
@@ -87,4 +52,134 @@ hr.players {
   color: white;
   text-align: center;
   font-size: 3em;
+}
+
+#question-mark-square {
+  width: 30%;
+  padding: 5%;
+}
+
+.square {
+  color: white;
+  font-size: 15em;
+  vertical-align: center;
+  border-style: solid;
+  border-color: white;
+  width: 100%;
+  height: 50%;
+  align-content: center;
+  padding:50% 20%;
+}
+
+#name-input-section {
+  // margin-left:auto;
+  width:40em;
+  height: 20em;
+  padding-right: 2em;
+  border-style: solid;
+  border-color: white;
+}
+
+#block-inline {
+  display: inline-block;
+  padding-left: 5%;
+  height: 100%;
+}
+
+.name-text {
+  color: white;
+  font-size: 3em;
+  display: inline-block;
+}
+
+.player-name-text-input {
+  width: 56%;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom-style: dashed;
+  border-width: medium;;
+  color: white;
+  font-size: 275%;
+  letter-spacing: 0.25em;
+  display: inline;
+}
+
+.player-name-text-input:focus {
+  background: none;
+  background-color: none;
+  border: none;
+}
+
+.player-button {
+  color: white;
+  font-size: 2em;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+.player-button-border {
+  border: 1px solid gray;
+}
+
+.keyboard {
+  width: 100%;
+  height: 100%;
+}
+
+.keyboard-buttons {
+  background: none;
+  font-size: 4em;
+}
+
+.characters {
+  width: 100%;
+}
+
+.keyboard-buttons.character {
+  background: none;
+  line-height: 150%;
+}
+
+.keyboard-buttons.characters:hover {
+  background: none;
+}
+
+.delete {
+  // background: none;
+  font-size: 3em;
+  width: 15;
+}
+
+.delete:hover {
+  background: none;
+}
+
+.submit {
+  width: 85%;
+  border: none;
+  color: rgb(102, 102, 102);
+  text-align: right;
+}
+
+.submit:hover {
+  color: white;
+}
+
+.cancel-button-container {
+  padding-left: 10%;
+}
+
+.cancel-button {
+  font-size: 4em;
+  background: none;
+  color: white;
+  border-style: solid;
+  border-width: thick;
+}
+
+.cancel-button:hover {
+  background: none;
 }
