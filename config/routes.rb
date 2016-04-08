@@ -21,7 +21,7 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'rooms#index'
+  root 'rooms#home'
 
   get '/api/rooms/:id/team/:team/increment' => 'rooms#increment_score', as: :increment_score
   get '/api/rooms/:room_id/players/add' => 'players#handle_player_hash', as: :handle_player_hash

@@ -126,6 +126,16 @@ class RoomsController < ApplicationController
     @id = @room.id
   end
 
+  def home
+    @room = Room.all.first rescue nil
+    if @room
+      set_current_game_status
+      render :game_view
+    else
+      redirect_to :index
+    end
+  end
+
   private
 
     def set_current_game_status
