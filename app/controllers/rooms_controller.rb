@@ -121,6 +121,7 @@ class RoomsController < ApplicationController
 
   def game_end_post
     @room.update_attributes(team_a_score: 0, team_b_score: 0, game: false)
+    @room.room_players.delete_all
     # binding.pry
     if params[:quit].present?
       redirect_to :room_game_interstitial
