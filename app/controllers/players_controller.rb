@@ -1,5 +1,5 @@
 class PlayersController < ApplicationController
-  TEAM_SIZE = 2
+  TEAM_SIZE = 1
   TEAM_A_ID = 'a'
   TEAM_B_ID = 'b'
   TEAM_IDS = [TEAM_A_ID, TEAM_B_ID]
