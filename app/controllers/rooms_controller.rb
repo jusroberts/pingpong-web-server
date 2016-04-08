@@ -1,7 +1,8 @@
 class RoomsController < ApplicationController
   before_action :set_room, only: [:show, :edit, :update,
                                   :destroy, :increment_score,
-                                  :game_new_post, :game_view, :game_play, :game_end_post, :game_newfull]
+                                  :game_new_post, :game_view, :game_play, :game_end_post, :game_newfull,
+                                  :interstitial]
 
   # GET /rooms
   # GET /rooms.json
@@ -106,9 +107,10 @@ class RoomsController < ApplicationController
     @room.update_attributes(team_a_score: 0, team_b_score: 0, game: false)
     # binding.pry
     if params[:quit].present?
-      redirect_to :room_game_new
+      redirect_to :room_game_interstitial
     else
-      redirect_to :room_game_new_post
+      @room.update_attributes(team_a_score: 0, team_b_score: 0, game: true)
+      redirect_to :room_game_play
     end
   end
 
@@ -118,6 +120,10 @@ class RoomsController < ApplicationController
 
   def game_play
     set_current_game_status
+  end
+
+  def interstitial
+    @id = @room.id
   end
 
   private

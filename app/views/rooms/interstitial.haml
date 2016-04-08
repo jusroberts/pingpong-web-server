@@ -1,0 +1,10 @@
+:javascript
+  var counter = 5;
+  var id;
+  id = setInterval(function() {
+      counter--;
+      if(counter <= 0) {
+        window.location.href="/rooms/#{@id}/game/new";
+        clearInterval(id);
+      }
+  }, 1000);

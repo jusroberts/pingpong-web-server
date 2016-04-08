@@ -208,3 +208,8 @@ body.rooms.game_newfull {
   width: 1471px;
   height: 178px;
 }
+
+body.interstitial {
+  background-image: url('/images/pong_assets/winners-dont-use-drugs.png');
+  background-size: cover;
+}

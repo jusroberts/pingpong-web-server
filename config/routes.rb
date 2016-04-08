@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :rooms do
-
+      get 'game/interstitial' => 'rooms#interstitial', as: :game_interstitial
       get 'game/new' => 'rooms#game_new', as: :game_new
       post 'game/new' => 'rooms#game_new_post', as: :game_new_post
       get 'game/' => 'rooms#game_view', as: :game_view
