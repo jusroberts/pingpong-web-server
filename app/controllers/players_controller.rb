@@ -1,11 +1,11 @@
 class PlayersController < ApplicationController
-  TEAM_SIZE = 2
+  TEAM_SIZE = 1
   TEAM_A_ID = 'a'
   TEAM_B_ID = 'b'
   TEAM_IDS = [TEAM_A_ID, TEAM_B_ID]
 
   before_action :set_player, only: [:new_post, :confirm, :delete, :attach_image, :attach_image_post]
-  before_action :set_room_id, except: [:handle_player_hash]
+  before_action :set_room_id
 
   def handle_player_hash
     # @type [String]
@@ -16,7 +16,11 @@ class PlayersController < ApplicationController
     # Lookup or create a player record for this player
     player = Player.find_by rfid_hash: hash
     if player.nil?
+      # If a player with this hash doesn't exist, create a new one
       Player.create(rfid_hash: hash)
+    else
+      # Otherwise this player exists, so add them to this room's current players
+      add_new_player(@id, player)
     end
 
     render nothing: true
@@ -27,34 +31,7 @@ class PlayersController < ApplicationController
     @player = Player.where(name: nil).last
     raise("No unregistered players found") if @player.nil?
 
-    # Pull the room object
-    room = Room.find_by id: @id
-    raise("Invalid room id #{@id}") if room.nil?
-
-    # Grab the players for this room to find where to put this player
-    room_players = room.room_players
-
-    # If this player is already playing, we're done here
-
-    team_a_players = room_players.select do |room_player|
-      room_player.team == TEAM_A_ID
-    end
-    team_b_players = room_players.select {|room_player| room_player.team == TEAM_B_ID}
-
-    # Add to team A first
-    if team_a_players.length < TEAM_SIZE
-      room_player = RoomPlayer.new(room_id: @id, player_id: @player.id, team: TEAM_A_ID, player_number: team_a_players.length + 1)
-    elsif team_b_players.length < TEAM_SIZE
-      # If team B isn't full, add to it
-      room_player = RoomPlayer.new(room_id: @id, player_id: @player.id, team: TEAM_B_ID, player_number: team_a_players.length + 1)
-    else
-      # Failing that, add to the last player slot
-      room_player = RoomPlayer.find_by room_id: @id, team: TEAM_B_ID, player_number: TEAM_SIZE
-      raise("Failed to find player number #{TEAM_SIZE} for team #{TEAM_B_ID} and room #{@id} when trying to overwrite last player") if room_player.nil?
-      room_player.player_id = player.id
-    end
-
-    room_player.save
+    add_new_player(@id, @player)
   end
 
   def new_post
@@ -85,6 +62,39 @@ class PlayersController < ApplicationController
   end
 
   private
+
+  def add_new_player(room_id, player)
+    # Pull the room object
+    room = Room.find_by id: room_id
+    raise("Invalid room id #{room_id}") if room.nil?
+
+    # Grab the players for this room to find where to put this player
+    room_players = room.room_players
+
+    # If this player is already playing, we're done here
+    self_players = room_players.select {|room_player| room_player.player_id == player.id}
+    if self_players.length > 0
+      return
+    end
+
+    team_a_players = room_players.select {|room_player| room_player.team == TEAM_A_ID}
+    team_b_players = room_players.select {|room_player| room_player.team == TEAM_B_ID}
+
+    # Add to team A first
+    if team_a_players.length < TEAM_SIZE
+      room_player = RoomPlayer.new(room_id: room_id, player_id: player.id, team: TEAM_A_ID, player_number: team_a_players.length + 1)
+    elsif team_b_players.length < TEAM_SIZE
+      # If team B isn't full, add to it
+      room_player = RoomPlayer.new(room_id: room_id, player_id: player.id, team: TEAM_B_ID, player_number: team_a_players.length + 1)
+    else
+      # Failing that, add to the last player slot
+      room_player = RoomPlayer.find_by room_id: room_id, team: TEAM_B_ID, player_number: TEAM_SIZE
+      raise("Failed to find player number #{TEAM_SIZE} for team #{TEAM_B_ID} and room #{room_id} when trying to overwrite last player") if room_player.nil?
+      room_player.player_id = player.id
+    end
+
+    room_player.save
+  end
 
   def set_player
     @player = Player.find(params[:player_id])
