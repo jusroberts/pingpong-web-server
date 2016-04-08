@@ -17,7 +17,7 @@ class PlayersController < ApplicationController
     player = Player.find_by rfid_hash: hash
     if player.nil?
       # If a player with this hash doesn't exist, create a new one
-      Player.new(rfid_hash: hash)
+      Player.create(rfid_hash: hash)
     else
       # Otherwise this player exists, so add them to this room's current players
       add_new_player(@id, player)
