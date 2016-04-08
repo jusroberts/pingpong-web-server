@@ -23,7 +23,7 @@ class PlayersController < ApplicationController
     else
       # Otherwise this player exists, so add them to this room's current players
       add_new_player(@id, player)
-      ::WebsocketRails[:"room#{@id}"].trigger 'user_scan_existing', player.id
+      ::WebsocketRails[:"room#{@id}"].trigger 'user_scan_existing', { :player_id => player.id, :image_url => player.image_url}
     end
 
     render nothing: true

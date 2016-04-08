@@ -33,6 +33,14 @@ h3.sf{
    -webkit-text-stroke-color: black;
     text-shadow: 2px 2px;
 }
+
+h4.sf{
+  font-size: 2.1em;
+  color: black;
+   -webkit-text-fill-color: white; /* Will override color (regardless of order) */
+   -webkit-text-stroke-width: 1px;
+   -webkit-text-stroke-color: black;
+}
 .scoring{
   display: table;
   width: 92%;
@@ -212,4 +220,19 @@ body.rooms.game_newfull {
 body.interstitial {
   background-image: url('/images/pong_assets/winners-dont-use-drugs.png');
   background-size: cover;
+}
+
+#scan_player1 {
+  background-image: url('/images/pong_assets/pong_scan player 1.png');
+  background-repeat: no-repeat;
+}
+
+#scan_player2 {
+  background-image: url('/images/pong_assets/pong_scan player 2.png');
+  background-repeat: no-repeat;
+}
+
+#okay_start_game {
+  background-image: url('/images/pong_assets/pong_start hover.png');
+  background-repeat: no-repeat;
 }
