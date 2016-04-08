@@ -27,7 +27,6 @@ $(function() {
     console.log("Redirecting to create player " + player_id);
   });
   channel.bind('user_scan_existing', function(playerData) {
-    debugger;
     console.log(playerData.image_url);
     if (playerData.team == "a") {
       $("#player1img").attr("src", playerData.image_url);
