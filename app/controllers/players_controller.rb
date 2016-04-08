@@ -22,8 +22,13 @@ class PlayersController < ApplicationController
       ::WebsocketRails[:"room#{@id}"].trigger 'user_scan_new', player.id
     else
       # Otherwise this player exists, so add them to this room's current players
-      add_new_player(@id, player)
-      ::WebsocketRails[:"room#{@id}"].trigger 'user_scan_existing', { :player_id => player.id, :image_url => player.image_url}
+      room_player = add_new_player(@id, player)
+      ::WebsocketRails[:"room#{@id}"].trigger 'user_scan_existing', {
+          :player_id => player.id,
+          :image_url => player.image_url,
+          :team => room_player.team,
+          :player_number => room_player.player_number
+      }
     end
 
     render nothing: true
@@ -85,7 +90,7 @@ class PlayersController < ApplicationController
     # If this player is already playing, we're done here
     self_players = room_players.select {|room_player| room_player.player_id == player.id}
     if self_players.length > 0
-      return
+      RoomPlayer.find_by player_id: player.id, room_id: room_id
     end
 
     team_a_players = room_players.select {|room_player| room_player.team == TEAM_A_ID}
@@ -105,6 +110,7 @@ class PlayersController < ApplicationController
     end
 
     room_player.save
+    room_player
   end
 
   def set_player
