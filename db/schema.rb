@@ -23,6 +23,16 @@ ActiveRecord::Schema.define(version: 20160407183659) do
 
   add_index "players", ["rfid_hash"], name: "index_players_on_rfid_hash"
 
+  create_table "room_players", force: true do |t|
+    t.integer "room_id"
+    t.integer "player_id"
+    t.string  "team",          limit: 5
+    t.integer "player_number"
+  end
+
+  add_index "room_players", ["player_id"], name: "index_room_players_on_player_id"
+  add_index "room_players", ["room_id"], name: "index_room_players_on_room_id"
+
   create_table "rooms", force: true do |t|
     t.string   "client_token"
     t.integer  "team_a_score"
@@ -32,14 +42,5 @@ ActiveRecord::Schema.define(version: 20160407183659) do
     t.datetime "updated_at"
     t.boolean  "game"
   end
-
-  create_table "rooms_players", force: true do |t|
-    t.integer "room_id"
-    t.integer "player_id"
-    t.string  "team",      limit: 5
-  end
-
-  add_index "rooms_players", ["player_id"], name: "index_rooms_players_on_player_id"
-  add_index "rooms_players", ["room_id"], name: "index_rooms_players_on_room_id"
 
 end

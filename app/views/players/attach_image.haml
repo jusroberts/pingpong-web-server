@@ -1,7 +1,7 @@
 %script{:src => "/javascript/webcam.js"}
 .title ADD player
 %hr.players
-=form_tag room_game_player_attach_image_post_path(room_id: @id) do
+=form_tag room_game_player_attach_image_post_path(player_id: @player.id, room_id: @id) do
   .row
     .columns.small-6
       #my_camera.center-vertical
@@ -16,6 +16,7 @@
         .center-vertical
           #timer
           =submit_tag "Okay!", class: 'submit-image center player-button player-button-border'
+
 
 %hr.players
 
@@ -61,20 +62,3 @@
     $('#my_camera').toggle();
     $('#results').toggle();
   }
-  var downloadButton = document.getElementById("download");
-  var counter = 10;
-  var newElement = document.createElement("p");
-  newElement.innerHTML = "You can download the file in 10 seconds.";
-  var id;
-
-  downloadButton.parentNode.replaceChild(newElement, downloadButton);
-
-  id = setInterval(function() {
-    counter--;
-    if(counter < 0) {
-        newElement.parentNode.replaceChild(downloadButton, newElement);
-        clearInterval(id);
-    } else {
-        newElement.innerHTML = "You can download the file in " + counter.toString() + " seconds.";
-    }
-  }, 1000);

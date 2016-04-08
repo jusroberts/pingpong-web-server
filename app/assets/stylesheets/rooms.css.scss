@@ -10,7 +10,6 @@
 
 h1.sf {
   font-size: 20em;
-  letter-spacing: -.12em;
   color: black;
    -webkit-text-fill-color: white; /* Will override color (regardless of order) */
    -webkit-text-stroke-width: 8px;
@@ -29,7 +28,7 @@ h3.sf{
   font-size: 4em;
   color: black;
    -webkit-text-fill-color: white; /* Will override color (regardless of order) */
-   -webkit-text-stroke-width: 1px;
+   -webkit-text-stroke-width: 2px;
    -webkit-text-stroke-color: black;
 }
 .scoring{
@@ -126,7 +125,7 @@ body.rooms.game_newfull {
 }
 
 .picturebox {
-  border: 1px solid #000000;
+  border: 1px solid #FFFFFF;
   border-width: 5px;
 }
 
