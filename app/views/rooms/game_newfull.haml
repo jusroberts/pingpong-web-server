@@ -1,22 +1,30 @@
 game new full
 .center{:style => "position: relative; top: 1%; text-align: center"}
-  #startButton{:style => "width: 400px; margin: 0 auto; display: inline-block; height: 70px; background-size: 100% 100%"}
 
 %div{:style => "bottom: 0%; width: 100%; position: absolute; height: 45em; display:flex; padding: 2%;"}
   .left{:style => "height: 100%; width: 33%; padding: 5%;"}
-    .column.picturebox{:style => "height: 100%; width: 100%;"}
-      %img{:src => "/images/pong_assets/pong_avatar 1 doubles.png", :style => "height: 100%; width: 100%;"}
+    .picturebox{:style => "height: 100%; width: 100%;"}
+      %img{:src => "/images/pong_assets/pong_avatar 1 doubles.png", :style => "height: 100%; width: 100%;", :id => "player1img"}
 
   .middle{:style => "height: 100%; width: 33%; padding: 5%;"}
+
     .column.settingsbox{:style => "height: 100%; width: 100%; text-align:center;"}
+      %h4.sf Select Play Mode:
       .column.gametype{:style => "position: relative; top: 1%; text-align: center"}
-        #singlesButton{:style => "width: 150px; height: 60px; margin: 10px auto; display: inline-block; background-size: 100% 100%"}
-          &nbsp;
-        #doublesButton{:style => "width: 150px; height: 60px; margin: 10px auto; display: inline-block; background-size: 100% 100%"}
-          &nbsp;
-        #confirmButton{:style => "width: 350px; height: 60px; margin: 10px auto; display: inline-block; background-size: 100% 100%"}
-          &nbsp;
+        #singlesButton{:style => "width: 177px; height: 60px; margin: 10px auto; display: inline-block; background-size: 100% 100%; float: left"}
+        #doublesButton{:style => "width: 177px; height: 60px; margin: 10px auto; display: inline-block; background-size: 100% 100%; float: right"}
+
+      #scan_section{:style => "padding: 2%"}
+        #scan_player1{:style => "width: 400px; margin: 10px auto; display: inline-block; height: 70px; background-size: 100% 100%"}
+
+        =link_to room_game_play_path() do
+          #startButton{:style => "width: 400px; margin: 0 auto; display: inline-block; height: 70px; background-size: 100% 100%"}
 
   .right{:style => "height: 100%; width: 33%; padding: 5%;"}
-    .column.picturebox{:style => "height: 100%; width: 100%;"}
-      %img{:src => "/images/pong_assets/pong_avatar 2 doubles.png", :style => "height: 100%; width: 100%;"}
+    .picturebox{:style => "height: 100%; width: 100%;"}
+      %img{:src => "/images/pong_assets/pong_avatar 2 doubles.png", :style => "height: 100%; width: 100%;", :id => "player2img"}
+:javascript
+    $(document).ready( function() {
+    console.log('hello!!!');
+      $('body').addClass( 'test' );
+    } );

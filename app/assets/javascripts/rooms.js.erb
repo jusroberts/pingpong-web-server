@@ -22,6 +22,14 @@ $(function() {
     $("#team_b_score").text(score);
     console.log(score);
   });
+  channel.bind('user_scan_new', function(player_id) {
+    window.location.replace("/rooms/" + roomId + "/game/new/players/create?player_id=" + player_id);
+    console.log("Redirecting to create player " + player_id);
+  });
+  channel.bind('user_scan_existing', function(player_id) {
+    $("#player1img").attr("src", "path/to/newImage.jpg");
+    console.log("Nick change this ");
+  });
 });
 
 $(function() {
