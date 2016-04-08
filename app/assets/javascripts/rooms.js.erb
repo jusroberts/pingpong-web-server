@@ -27,13 +27,13 @@ $(function() {
     console.log("Redirecting to create player " + player_id);
   });
   channel.bind('user_scan_existing', function(playerData) {
-    // debugger;
+    console.log(playerData.image_url);
     if (playerData.team == "a") {
       $("#player1img").attr("src", playerData.image_url);
+      $('#scan_player1').attr('id','scan_player2');
     } else {
       $("#player2img").attr("src", playerData.image_url);
     }
-    console.log("Nick change this ");
   });
 });
 
