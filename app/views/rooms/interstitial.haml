@@ -4,7 +4,7 @@
   id = setInterval(function() {
       counter--;
       if(counter <= 0) {
-        window.location.href="/rooms/#{@id}/game/new";
+        window.location.href="/rooms/#{@id}/game/newfull";
         clearInterval(id);
       }
   }, 1000);
