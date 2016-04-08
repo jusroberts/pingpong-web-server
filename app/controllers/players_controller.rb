@@ -17,19 +17,28 @@ class PlayersController < ApplicationController
     player = Player.find_by rfid_hash: hash
     if player.nil?
       # If a player with this hash doesn't exist, create a new one
-      Player.create(rfid_hash: hash)
+      player = Player.create(rfid_hash: hash)
+      # Send a message to the client to redirect to the create page
+      ::WebsocketRails[:"room#{@id}"].trigger 'user_scan_new', player.id
     else
       # Otherwise this player exists, so add them to this room's current players
       add_new_player(@id, player)
+      ::WebsocketRails[:"room#{@id}"].trigger 'user_scan_existing', player.id
     end
 
     render nothing: true
   end
 
   def new
-    # Grab the latest player added that doesn't have a name, we'll edit them
-    @player = Player.where(name: nil).last
-    raise("No unregistered players found") if @player.nil?
+    if params[:player_id].nil?
+      # Grab the latest player added that doesn't have a name, we'll edit them
+      @player = Player.where(name: nil).last
+      raise("No unregistered players found") if @player.nil?
+    else
+      # If we're adding/editing a specific player
+      @player = Player.find_by id: params[:player_id]
+      raise("Failed to find player for id #{params[:player_id]}") if @player.nil?
+    end
 
     add_new_player(@id, @player)
   end
@@ -88,7 +97,7 @@ class PlayersController < ApplicationController
       room_player = RoomPlayer.new(room_id: room_id, player_id: player.id, team: TEAM_B_ID, player_number: team_a_players.length + 1)
     else
       # Failing that, add to the last player slot
-      room_player = RoomPlayer.find_by room_id: room_id, team: TEAM_B_ID, player_number: TEAM_SIZE
+      room_player = RoomPlayer.find_by room_id: room_id, team: TEAM_B_ID, player_number: (TEAM_SIZE * 2)
       raise("Failed to find player number #{TEAM_SIZE} for team #{TEAM_B_ID} and room #{room_id} when trying to overwrite last player") if room_player.nil?
       room_player.player_id = player.id
     end

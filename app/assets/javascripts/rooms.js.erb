@@ -22,6 +22,13 @@ $(function() {
     $("#team_b_score").text(score);
     console.log(score);
   });
+  channel.bind('user_scan_new', function(player_id) {
+    window.location.replace("/game/new/players/create?player_id=" + player_id);
+    console.log("Redirecting to create player " + player_id);
+  });
+  channel.bind('user_scan_existing', function(player_id) {
+    console.log("Nick change this ");
+  });
 });
 
 $(function() {
