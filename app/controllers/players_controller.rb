@@ -90,7 +90,7 @@ class PlayersController < ApplicationController
     # If this player is already playing, we're done here
     self_players = room_players.select {|room_player| room_player.player_id == player.id}
     if self_players.length > 0
-      return
+      RoomPlayer.find_by player_id: player.id, room_id: room_id
     end
 
     team_a_players = room_players.select {|room_player| room_player.team == TEAM_A_ID}
