@@ -5,7 +5,7 @@ game new full
 %div{:style => "bottom: 0%; width: 100%; position: absolute; height: 45em; display:flex; padding: 2%;"}
   .left{:style => "height: 100%; width: 33%; padding: 5%;"}
     .picturebox{:style => "height: 100%; width: 100%;"}
-      %img{:src => "/images/pong_assets/pong_avatar 1 doubles.png", :style => "height: 100%; width: 100%;", :id => "player1img"}
+      %img{:src => @player_1_url, :style => "height: 100%; width: 100%;", :id => "player1img"}
 
   .middle{:style => "height: 100%; width: 33%; padding: 5%;"}
 
@@ -23,7 +23,7 @@ game new full
 
   .right{:style => "height: 100%; width: 33%; padding: 5%;"}
     .picturebox{:style => "height: 100%; width: 100%;"}
-      %img{:src => "/images/pong_assets/pong_avatar 2 doubles.png", :style => "height: 100%; width: 100%;", :id => "player2img"}
+      %img{:src => @player_2_url, :style => "height: 100%; width: 100%;", :id => "player2img"}
 :javascript
     $(document).ready( function() {
     console.log('hello!!!');

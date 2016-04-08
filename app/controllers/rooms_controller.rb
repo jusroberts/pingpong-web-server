@@ -96,6 +96,22 @@ class RoomsController < ApplicationController
 
   def game_newfull
     @id = params[:id] || params[:room_id]
+    @player_1_url = nil
+    @player_2_url = nil
+
+    # Crappy logic to load existing players
+    @room.room_players.each do |room_player|
+      if @player_1_url.nil? and room_player.team == PlayersController::TEAM_A_ID
+        player = Player.find_by id: room_player.player_id
+        @player_1_url = player.image_url
+      elsif @player_2_url.nil? and room_player.team == PlayersController::TEAM_B_ID
+        player = Player.find_by id: room_player.player_id
+        @player_2_url = player.image_url
+      end
+    end
+
+    @player_1_url ||= "/images/pong_assets/pong_avatar 1 doubles.png"
+    @player_2_url ||= "/images/pong_assets/pong_avatar 2 doubles.png"
   end
 
   def game_new_post
