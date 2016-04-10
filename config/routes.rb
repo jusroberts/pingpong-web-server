@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       get 'game/play' => 'rooms#game_play', as: :game_play
       post 'game/end' => 'rooms#game_end_post', as: :game_end
       get 'game/newfull' => 'rooms#game_newfull', as: :game_newfull
+      post 'game/player_count' => 'rooms#game_player_count_post', as: :game_player_count_post
 
 
       get 'game/new/players/create' => 'players#new', as: :game_new_player

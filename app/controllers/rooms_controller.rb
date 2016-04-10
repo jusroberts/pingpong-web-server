@@ -1,8 +1,10 @@
 class RoomsController < ApplicationController
   before_action :set_room, only: [:show, :edit, :update,
                                   :destroy, :increment_score, :room_status,
-                                  :game_new_post, :game_view, :game_play, :game_end_post, :game_newfull,
+                                  :game_new_post, :game_view, :game_play, :game_end_post, :game_newfull, :game_player_count_post,
                                   :interstitial]
+
+  VALID_PLAYER_COUNTS = [2, 4]
 
   # GET /rooms
   # GET /rooms.json
@@ -101,6 +103,21 @@ class RoomsController < ApplicationController
     @p2 = params[:p2]
     @p3 = params[:p3]
     @p4 = params[:p4]
+  end
+
+  # Change to singles or doubles mode
+  def game_player_count_post
+    # Validate that we have a player count and it's sane
+    raise("Invalid player count") if (params[:player_count].nil? ||
+        !(Integer(params[:player_count]) rescue false) ||
+        !VALID_PLAYER_COUNTS.include?(params[:player_count].to_i))
+
+    count = params[:player_count].to_i
+    @room.player_count = count
+    @room.save
+    render :json => {
+        :player_count => count
+    }
   end
 
   def game_newfull

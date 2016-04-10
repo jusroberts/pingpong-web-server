@@ -29,3 +29,22 @@ game new full
     console.log('hello!!!');
       $('body').addClass( 'test' );
     } );
+
+    function updatePlayerCount(count, selectedElement, unselectedElement) {
+      $.post("#{ j(room_game_player_count_post_path(id: @id)) }", { player_count: count })
+      .done(function() {
+        console.log("Player mode change to " + count + " succeeded");
+        selectedElement.addClass("selectedButton");
+        unselectedElement.removeClass("selectedButton");
+      })
+      .fail(function() {
+        console.log("Player mode change POST failed");
+      })
+    }
+
+    $("#singlesButton").click(function () {
+      updatePlayerCount(2, $("#singlesButton"), $("#doublesButton"));
+    })
+    $("#doublesButton").click(function () {
+      updatePlayerCount(4, $("#doublesButton"), $("#singlesButton"));
+    })

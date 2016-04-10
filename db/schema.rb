@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160407183659) do
+ActiveRecord::Schema.define(version: 20160410202917) do
 
   create_table "players", force: true do |t|
     t.string   "rfid_hash"
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20160407183659) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "game"
+    t.integer  "player_count", default: 4, null: false
   end
 
 end
