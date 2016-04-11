@@ -4,8 +4,10 @@ game new full
 
 %div{:style => "bottom: 0%; width: 100%; position: absolute; height: 45em; display:flex; padding: 2%;"}
   .left{:style => "height: 100%; width: 33%; padding: 5%;"}
-    .picturebox{:style => "height: 100%; width: 100%;"}
-      %img{:src => @player_1_url, :style => "height: 100%; width: 100%;", :id => "player1img"}
+    .picturebox{:style => "height: 75%; width: 75%;"}
+      %img{:src => @player_a_1_url, :style => "height: 100%; width: 100%;", :id => "player_a_1_img"}
+    .picturebox{:style => "height: 75%; width: 75%; position: relative; left: 5em; top: -5em;"}
+      %img{:src => @player_a_2_url, :style => "height: 100%; width: 100%;", :id => "player_a_2_img"}
 
   .middle{:style => "height: 100%; width: 33%; padding: 5%;"}
 
@@ -22,8 +24,10 @@ game new full
           =submit_tag "", id: "startButton", style: "width: 400px; margin: 0 auto; display: inline-block; height: 70px; background-size: 100% 100%"
 
   .right{:style => "height: 100%; width: 33%; padding: 5%;"}
-    .picturebox{:style => "height: 100%; width: 100%;"}
-      %img{:src => @player_2_url, :style => "height: 100%; width: 100%;", :id => "player2img"}
+    .picturebox{:style => "height: 75%; width: 75%;"}
+      %img{:src => @player_b_1_url, :style => "height: 100%; width: 100%;", :id => "player_b_1_img"}
+    .picturebox{:style => "height: 75%; width: 75%; position: relative; left: 5em; top: -5em;"}
+      %img{:src => @player_b_2_url, :style => "height: 100%; width: 100%;", :id => "player_b_2_img"}
 :javascript
     $(document).ready( function() {
     console.log('hello!!!');

@@ -122,22 +122,37 @@ class RoomsController < ApplicationController
 
   def game_newfull
     @id = params[:id] || params[:room_id]
-    @player_1_url = nil
-    @player_2_url = nil
+    @player_count = @room.player_count
+    # Team A.1
+    @player_a_1_url = nil
+    # Team A.2
+    @player_a_2_url = nil
+    # Team B.1
+    @player_b_1_url = nil
+    # Team B.2
+    @player_b_2_url = nil
 
-    # Crappy logic to load existing players
-    @room.room_players.each do |room_player|
-      if @player_1_url.nil? and room_player.team == PlayersController::TEAM_A_ID
-        player = Player.find_by id: room_player.player_id
-        @player_1_url = player.image_url
-      elsif @player_2_url.nil? and room_player.team == PlayersController::TEAM_B_ID
-        player = Player.find_by id: room_player.player_id
-        @player_2_url = player.image_url
-      end
+    room_players_by_id = @room.room_players.to_a.index_by {|rp| "#{rp.team}_#{rp.player_number}"}
+
+    if @player_count == 2
+      # Singles
+      load_indexed_player_image_url(room_players_by_id, 'a_1')
+      load_indexed_player_image_url(room_players_by_id, 'b_1')
+    elsif @player_count == 4
+      # Doubles
+      load_indexed_player_image_url(room_players_by_id, 'a_1')
+      load_indexed_player_image_url(room_players_by_id, 'a_2')
+      load_indexed_player_image_url(room_players_by_id, 'b_1')
+      load_indexed_player_image_url(room_players_by_id, 'b_2')
+    else
+      # Wat
+      raise("Invalid player count #{@player_count}")
     end
 
-    @player_1_url ||= "/images/pong_assets/pong_avatar 1 doubles.png"
-    @player_2_url ||= "/images/pong_assets/pong_avatar 2 doubles.png"
+    @player_a_1_url ||= "/images/pong_assets/pong_avatar 1 doubles.png"
+    @player_a_2_url ||= "/images/pong_assets/pong_avatar 1 doubles.png"
+    @player_b_1_url ||= "/images/pong_assets/pong_avatar 2 doubles.png"
+    @player_b_2_url ||= "/images/pong_assets/pong_avatar 2 doubles.png"
   end
 
   def game_new_post
@@ -180,6 +195,13 @@ class RoomsController < ApplicationController
   end
 
   private
+
+    def load_indexed_player_image_url(room_players_by_id, key)
+      if room_players_by_id.has_key?(key)
+        player = Player.find_by id: room_players_by_id[key].player_id
+        instance_variable_set("@player_#{key}_url", player.image_url)
+      end
+    end
 
     def set_current_game_status
       game_logic = GameLogic.new(@room.team_a_score, @room.team_b_score)

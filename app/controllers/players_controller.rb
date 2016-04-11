@@ -101,7 +101,7 @@ class PlayersController < ApplicationController
       room_player = RoomPlayer.new(room_id: room_id, player_id: player.id, team: TEAM_A_ID, player_number: team_a_players.length + 1)
     elsif team_b_players.length < TEAM_SIZE
       # If team B isn't full, add to it
-      room_player = RoomPlayer.new(room_id: room_id, player_id: player.id, team: TEAM_B_ID, player_number: team_a_players.length + 1)
+      room_player = RoomPlayer.new(room_id: room_id, player_id: player.id, team: TEAM_B_ID, player_number: team_b_players.length + 1)
     else
       # Failing that, add to the last player slot
       room_player = RoomPlayer.find_by room_id: room_id, team: TEAM_B_ID, player_number: (TEAM_SIZE * 2)
