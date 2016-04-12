@@ -1,32 +1,36 @@
 game new full
 #room-id=@id
+-player_box_size='65%'
+-player_box_padding='2%'
+-player_box_inset_height='10vh'
+-player_box_inset_width='5vw'
 .center{:style => "position: relative; top: 1%; text-align: center"}
 
 %div{:style => "bottom: 0%; width: 100%; position: absolute; height: 45em; display:flex; padding: 2%;"}
-  .left{:style => "height: 100%; width: 33%; padding: 5%;"}
-    .picturebox{:style => "height: 75%; width: 75%;"}
+  .left{:style => "height: 100%; width: 33%; padding: #{player_box_padding};"}
+    .picturebox{:style => "height: #{player_box_size}; width: #{player_box_size};"}
       %img{:src => @player_a_1_url, :style => "height: 100%; width: 100%;", :id => "player_a_1_img"}
-    .picturebox{:style => "height: 75%; width: 75%; position: relative; left: 5em; top: -5em;"}
+    .picturebox{:style => "height: #{player_box_size}; width: #{player_box_size}; position: relative; left: #{player_box_inset_width}; top: -#{player_box_inset_height};"}
       %img{:src => @player_a_2_url, :style => "height: 100%; width: 100%;", :id => "player_a_2_img"}
 
-  .middle{:style => "height: 100%; width: 33%; padding: 5%;"}
+  .middle{:style => "height: 100%; width: 33%; padding: 4%;"}
 
     .column.settingsbox{:style => "height: 100%; width: 100%; text-align:center;"}
       %h4.sf Select Play Mode:
-      .column.gametype{:style => "position: relative; top: 1%; text-align: center"}
+      .column.gametype{:style => "position: relative; margin: auto; top: 1%; text-align: center"}
         #singlesButton{:style => "width: 177px; height: 60px; margin: 10px auto; display: inline-block; background-size: 100% 100%; float: left"}
         #doublesButton{:style => "width: 177px; height: 60px; margin: 10px auto; display: inline-block; background-size: 100% 100%; float: right"}
 
-      #scan_section{:style => "padding: 2%"}
+      #scan_section{:style => "padding: 2%;"}
         #scan_player1{:style => "width: 400px; margin: 10px auto; display: inline-block; height: 70px; background-size: 100% 100%"}
 
         =form_tag room_game_new_post_path(id: @id) do
           =submit_tag "", id: "startButton", style: "width: 400px; margin: 0 auto; display: inline-block; height: 70px; background-size: 100% 100%"
 
-  .right{:style => "height: 100%; width: 33%; padding: 5%;"}
-    .picturebox{:style => "height: 75%; width: 75%;"}
+  .right{:style => "height: 100%; width: 33%; padding: #{player_box_padding};"}
+    .picturebox{:style => "height: #{player_box_size}; width: #{player_box_size}; float: right;"}
       %img{:src => @player_b_1_url, :style => "height: 100%; width: 100%;", :id => "player_b_1_img"}
-    .picturebox{:style => "height: 75%; width: 75%; position: relative; left: 5em; top: -5em;"}
+    .picturebox{:style => "height: #{player_box_size}; width: #{player_box_size}; float: right; position: relative; left: -#{player_box_inset_width}; top: -#{player_box_inset_height};"}
       %img{:src => @player_b_2_url, :style => "height: 100%; width: 100%;", :id => "player_b_2_img"}
 :javascript
     $(document).ready( function() {
@@ -34,12 +38,14 @@ game new full
       $('body').addClass( 'test' );
     } );
 
+    var playerCount = #{@player_count};
     function updatePlayerCount(count, selectedElement, unselectedElement) {
       $.post("#{ j(room_game_player_count_post_path(id: @id)) }", { player_count: count })
       .done(function() {
         console.log("Player mode change to " + count + " succeeded");
-        selectedElement.addClass("selectedButton");
-        unselectedElement.removeClass("selectedButton");
+        //selectedElement.addClass("selectedButton");
+        //unselectedElement.removeClass("selectedButton");
+        playerCount = count;
       })
       .fail(function() {
         console.log("Player mode change POST failed");

@@ -154,7 +154,7 @@ body.rooms.game_newfull {
    background-repeat: no-repeat;
 }
 
-#singlesButton.selectedButton, #singlesButton:hover {
+#singlesButton:hover {
   background-image: url('/images/pong_assets/pong_singles 1.png');
   background-repeat: no-repeat;
 }
@@ -164,7 +164,7 @@ body.rooms.game_newfull {
    background-repeat: no-repeat;
 }
 
-#doublesButton.selectedButton, #doublesButton:hover {
+#doublesButton:hover {
   background-image: url('/images/pong_assets/pong_doubles 1.png');
   background-repeat: no-repeat;
 }
