@@ -1,5 +1,97 @@
+%script{:src => "/javascript/webcam.js"}
+
 =render "match_screen"
 
 =form_tag room_game_end_path(id: @room.id) do
   .row.center=submit_tag "continue", name: 'continue', class: "sf transparent-bg", id: "continueButton"
   .row=submit_tag "quit", name: 'quit', class: "sf sf-quit transparent-bg"
+
+:javascript 
+  videoRecording = false;
+  console.log("setting webcam");
+  Webcam.set({
+    width: 480,
+    height: 320,
+    image_format: 'jpeg',
+    jpeg_quality: 90
+  });
+  Webcam.attach(".video");
+  console.log("Webcam Set");
+  $(".video").hide();
+  $(".replay").hide();
+  setTimeout(function(){game_ongoing()},1000);
+
+  function game_ongoing(){
+    if (($("#team_a_score").text() != "W") && ($("#team_b_score").text() != "W") && (videoRecording == false)){
+        videoRecording = true;
+        console.log("conditions met to startrecording ");
+        take_video(game_ongoing);
+    }
+    console.log("exiting")
+  }
+  function take_video(callback) {
+    console.log("start recording");
+    videoRecording = true;
+    var startScoreA = $("#team_a_score").text();
+    var startScoreB = $("#team_b_score").text();
+    var counter = 0;
+    var id;
+    var pictures = [];
+    var replayEnd = 1;
+    var replayCounter = 0;
+    id = setInterval(function(){
+      if (($("#team_a_score").text() == startScoreA) && ($("#team_b_score").text() == startScoreB)){
+        if (Webcam.loaded){
+          Webcam.snap(function(data_uri){
+            pictures[counter%250] = data_uri;
+            counter++;
+          });
+        }
+        else{
+          clearInterval(id);
+        }
+        if (counter >=250){
+          replayEnd = counter%250; 
+          replayCounter = (counter+1)%250;
+        }
+        else{
+          replayEnd = counter;
+          replayCounter = 0;
+        }
+      }
+      else{
+        $(".replay").show();
+        $(".replay").css({"visibility":"visibile",
+                         "background" : 'url('+pictures[replayCounter]+') no-repeat center',
+                         "z-index": "1",
+                         "position": "absolute"});
+        replayCounter = (replayCounter+1)%250;
+        if (replayCounter == replayEnd){
+          console.log("end record/playback");
+          $(".replay").hide();
+          videoRecording = false;
+          clearInterval(id);
+          callback();
+        }
+
+      }
+      // if(counter > 0){
+      //   counter --;
+      //   Webcam.snap(function(data_uri){
+      //     pictures.push(data_uri);
+      //   });
+      // }
+
+  // if((counter == 0) && (counter1 > 1)){
+  //   counter1 --;
+  //   console.log(counter1);
+  //   $(".replay").show();
+  //   $(".replay").css({"visibility":"visibile",
+  //                    "background" : 'url('+pictures[400-counter1]+') no-repeat center',
+  //                    "z-index": "1",
+  //                    "position": "absolute"});
+  // }
+
+
+    }, 30);
+  }

@@ -9,7 +9,7 @@
     .columns.small-6
       .row.top.camera
         .center-vertical
-          %input.take-snapshot.player-button.player-button-border{:onclick => "take_snapshot()", :type => "button", :value => "Take Snapshot"}
+          %input.take-snapshot.player-button.player-button-border{:onclick => "take_video()", :type => "button", :value => "Take Snapshot"}
           %input.retake-snapshot.player-button.player-button-border{:onclick => "retake_snapshot()", :type => "button", :value => "Retake Snapshot", :style => "display:none"}
           .top-text
       .row.bottom.camera
@@ -61,4 +61,37 @@
     $(".retake-snapshot").toggle();
     $('#my_camera').toggle();
     $('#results').toggle();
+  }
+  function take_video() {
+    console.log("start video");
+    var counter = 150;
+    var id;
+    var pictures = [];
+    var counter1 = 150;
+    id = setInterval(function(){
+      if(counter > 0){
+        counter --;
+        $('#timer').text(counter);
+        Webcam.snap(function(data_uri){
+          pictures.push(data_uri);
+        });
+      }
+      if (counter==0 && counter1 == 150){
+        toggle_things();
+      }
+      if((counter == 0) && (counter1 > 0)){
+        document.getElementById('results').innerHTML = '';
+        counter1--;
+        $('#timer').text(counter1);
+        document.getElementById('results').innerHTML =
+          '<img src="'+pictures[150-counter1]+'"/>' +
+          "<input id=\"capture_image\" type=\"hidden\" value=\""+pictures[150-counter1]+"\" name=\"capture[image]\">";
+      }
+      console.log(counter, counter1);
+      if (counter<=0 && counter1<=0) {
+        clearInterval(id);
+      }
+
+      
+    }, 100);
   }

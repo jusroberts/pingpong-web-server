@@ -235,4 +235,15 @@ body.interstitial {
 #okay_start_game {
   background-image: url('/images/pong_assets/pong_start hover.png');
   background-repeat: no-repeat;
+.video{
 }
+.replay{
+  z-index: 1;
+  position: absolute;
+  left: 50%;
+  margin-left: -240px;
+  top: 50%;
+  margin-top: -160px;
+  width: 480px;
+  height: 320px;
+
