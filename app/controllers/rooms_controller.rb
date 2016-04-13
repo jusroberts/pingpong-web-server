@@ -128,7 +128,7 @@ class RoomsController < ApplicationController
     @room.player_count = count
     @room.save
     # Delete players that no longer fit in this game
-    RoomPlayer.all.where('room_id = ? AND player_number > ', @room.id, (count / 2).to_i).delete_all
+    RoomPlayer.all.where('room_id = ? AND player_number > ?', @room.id, (count / 2).to_i).delete_all
     render :json => {
         :player_count => count
     }
