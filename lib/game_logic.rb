@@ -1,3 +1,4 @@
+require 'time'
 class GameLogic
 
   def initialize(team_a_score, team_b_score)
