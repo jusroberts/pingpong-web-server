@@ -1,3 +1,5 @@
+require 'time'
+
 class RoomsController < ApplicationController
   before_action :set_room, only: [:show, :edit, :update,
                                   :destroy, :increment_score, :room_status,
@@ -70,6 +72,15 @@ class RoomsController < ApplicationController
   # /rooms/1/team/a/increment
   def increment_score
     team = params[:team].downcase
+
+  # logic to prevent double scoring
+    if @room.increment_at && @room.increment_at > 1.seconds.ago
+      raise("Double Score")
+    end
+
+
+
+
     raise("invalid team") if params[:team].downcase != 'a' && params[:team].downcase != 'b'
     if @room.game
       if should_reset?
@@ -84,6 +95,7 @@ class RoomsController < ApplicationController
       end
     end
     send_scores
+    @room.update_attribute(:increment_at, Time.now)
     render nothing: true
   end
 

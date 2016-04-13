@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160413023518) do
+ActiveRecord::Schema.define(version: 20160413143446) do
 
   create_table "game_histories", force: true do |t|
     t.integer  "room_id"
@@ -61,6 +61,7 @@ ActiveRecord::Schema.define(version: 20160413023518) do
     t.boolean  "game"
     t.integer  "player_count",    default: 4, null: false
     t.string   "game_session_id"
+    t.datetime "increment_at"
   end
 
 end
