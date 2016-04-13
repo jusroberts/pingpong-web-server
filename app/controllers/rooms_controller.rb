@@ -127,6 +127,8 @@ class RoomsController < ApplicationController
     count = params[:player_count].to_i
     @room.player_count = count
     @room.save
+    # Delete players that no longer fit in this game
+    RoomPlayer.all.where('room_id = ? AND player_number > ', @room.id, (count / 2).to_i).delete_all
     render :json => {
         :player_count => count
     }
@@ -134,34 +136,54 @@ class RoomsController < ApplicationController
 
   def game_newfull
     @id = params[:id] || params[:room_id]
-    @player_1_url = nil
-    @player_2_url = nil
+    @player_count = @room.player_count
+    ## Load player image URLs
+    # Team A.1
+    @player_a_1_url = nil
+    # Team A.2
+    @player_a_2_url = nil
+    # Team B.1
+    @player_b_1_url = nil
+    # Team B.2
+    @player_b_2_url = nil
 
-    # Crappy logic to load existing players
-    @room.room_players.each do |room_player|
-      if @player_1_url.nil? and room_player.team == PlayersController::TEAM_A_ID
-        player = Player.find_by id: room_player.player_id
-        @player_1_url = player.image_url
-      elsif @player_2_url.nil? and room_player.team == PlayersController::TEAM_B_ID
-        player = Player.find_by id: room_player.player_id
-        @player_2_url = player.image_url
-      end
+    room_players_by_id = @room.room_players.to_a.index_by {|rp| "#{rp.team}_#{rp.player_number}"}
+
+    if @player_count == 2
+      # Singles
+      load_indexed_player_image_url(room_players_by_id, 'a_1')
+      load_indexed_player_image_url(room_players_by_id, 'b_1')
+    elsif @player_count == 4
+      # Doubles
+      load_indexed_player_image_url(room_players_by_id, 'a_1')
+      load_indexed_player_image_url(room_players_by_id, 'a_2')
+      load_indexed_player_image_url(room_players_by_id, 'b_1')
+      load_indexed_player_image_url(room_players_by_id, 'b_2')
+    else
+      # Wat
+      raise("Invalid player count #{@player_count}")
     end
 
-    @player_1_url ||= "/images/pong_assets/pong_avatar 1 doubles.png"
-    @player_2_url ||= "/images/pong_assets/pong_avatar 2 doubles.png"
+    @player_a_1_url ||= "/images/pong_assets/pong_avatar 1 doubles.png"
+    @player_a_2_url ||= "/images/pong_assets/pong_avatar 1 doubles.png"
+    @player_b_1_url ||= "/images/pong_assets/pong_avatar 2 doubles.png"
+    @player_b_2_url ||= "/images/pong_assets/pong_avatar 2 doubles.png"
   end
 
   def game_new_post
     @room.update_attributes(team_a_score: 0, team_b_score: 0, game: true)
     redirect_to :room_game_play
+
+    # Generate a new game session id
+    @room.update_attributes(game_session_id: SecureRandom.base64(16))
   end
 
   def game_end_post
+    save_history(@room)
     @room.update_attributes(team_a_score: 0, team_b_score: 0, game: false)
     @room.room_players.delete_all
-    # binding.pry
     if params[:quit].present?
+      @room.update_attribute(:game_session_id, nil)
       redirect_to :room_game_interstitial
     else
       @room.update_attributes(team_a_score: 0, team_b_score: 0, game: true)
@@ -193,6 +215,13 @@ class RoomsController < ApplicationController
 
   private
 
+    def load_indexed_player_image_url(room_players_by_id, key)
+      if room_players_by_id.has_key?(key)
+        player = Player.find_by id: room_players_by_id[key].player_id
+        instance_variable_set("@player_#{key}_url", player.image_url)
+      end
+    end
+
     def set_current_game_status
       game_logic = GameLogic.new(@room.team_a_score, @room.team_b_score)
       @team_a_score = game_logic.showable_team_a_score
@@ -209,6 +238,69 @@ class RoomsController < ApplicationController
       game_logic = GameLogic.new(@room.team_a_score, @room.team_b_score)
       ::WebsocketRails[:"room#{params[:id]}"].trigger "team_a_score", game_logic.showable_team_a_score
       ::WebsocketRails[:"room#{params[:id]}"].trigger "team_b_score", game_logic.showable_team_b_score
+    end
+
+    # @param room [Room]
+    def save_history(room)
+      room_players = @room.room_players
+
+      # @type [Array<RoomPlayer>]
+      team_a_players = room_players.select {|room_player| room_player.team == PlayersController::TEAM_A_ID}
+      # @type [Array<RoomPlayer>]
+      team_b_players = room_players.select {|room_player| room_player.team == PlayersController::TEAM_B_ID}
+
+      # We should batch this but ActiveRecord makes it a pain in the ass and I don't care that much
+      # @type [Array<GameHistory>]
+      histories = []
+      if room.team_a_score > room.team_b_score
+        # Yay for team A
+        team_a_players.each do |room_player|
+          history = new_game_history(room, room_player, true)
+          histories << history
+        end
+        team_b_players.each do |room_player|
+          history = new_game_history(room, room_player, false)
+          histories << history
+        end
+      else
+        team_a_players.each do |room_player|
+          history = new_game_history(room, room_player, false)
+          histories << history
+        end
+        # All glory to team B
+        team_b_players.each do |room_player|
+          history = new_game_history(room, room_player, true)
+          histories << history
+        end
+      end
+
+      # Use the first player's history PK as the game ID because it's an easy way to generate a unique, sequential integer
+      game_id = histories[0].id
+      histories.each do |history|
+        history.update_attributes(game_id: game_id)
+      end
+    end
+
+    # @param room [Room]
+    # @param room_player [RoomPlayer]
+    # @param win [boolean]
+    # @return [GameHistory]
+    def new_game_history(room, room_player, win)
+      game_history = GameHistory.new(
+          room_id: @room.id,
+          player_id: room_player.player_id,
+          game_session_id: room.game_session_id,
+          player_count: room.player_count,
+          win: win
+      )
+      if room_player.team == PlayersController::TEAM_A_ID
+        game_history.player_team_score = room.team_a_score
+        game_history.opponent_team_score = room.team_b_score
+      else
+        game_history.player_team_score = room.team_b_score
+        game_history.opponent_team_score = room.team_a_score
+      end
+      game_history.save
     end
 
     def should_reset?

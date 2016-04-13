@@ -1,5 +1,4 @@
 class PlayersController < ApplicationController
-  TEAM_SIZE = 1
   TEAM_A_ID = 'a'
   TEAM_B_ID = 'b'
   TEAM_IDS = [TEAM_A_ID, TEAM_B_ID]
@@ -81,9 +80,11 @@ class PlayersController < ApplicationController
 
   def add_new_player(room_id, player)
     # Pull the room object
+    # @type [Room]
     room = Room.find_by id: room_id
     raise("Invalid room id #{room_id}") if room.nil?
 
+    team_size = (room.player_count / 2).to_i
     # Grab the players for this room to find where to put this player
     room_players = room.room_players
 
@@ -93,19 +94,21 @@ class PlayersController < ApplicationController
       return RoomPlayer.find_by player_id: player.id, room_id: room_id
     end
 
+    # @type [Array<RoomPlayer>]
     team_a_players = room_players.select {|room_player| room_player.team == TEAM_A_ID}
+    # @type [Array<RoomPlayer>]
     team_b_players = room_players.select {|room_player| room_player.team == TEAM_B_ID}
 
     # Add to team A first
-    if team_a_players.length < TEAM_SIZE
+    if team_a_players.length < team_size
       room_player = RoomPlayer.new(room_id: room_id, player_id: player.id, team: TEAM_A_ID, player_number: team_a_players.length + 1)
-    elsif team_b_players.length < TEAM_SIZE
+    elsif team_b_players.length < team_size
       # If team B isn't full, add to it
-      room_player = RoomPlayer.new(room_id: room_id, player_id: player.id, team: TEAM_B_ID, player_number: team_a_players.length + 1)
+      room_player = RoomPlayer.new(room_id: room_id, player_id: player.id, team: TEAM_B_ID, player_number: team_b_players.length + 1)
     else
       # Failing that, add to the last player slot
-      room_player = RoomPlayer.find_by room_id: room_id, team: TEAM_B_ID, player_number: (TEAM_SIZE * 2)
-      raise("Failed to find player number #{TEAM_SIZE} for team #{TEAM_B_ID} and room #{room_id} when trying to overwrite last player") if room_player.nil?
+      room_player = RoomPlayer.find_by room_id: room_id, team: TEAM_B_ID, player_number: team_size
+      raise("Failed to find player number #{team_size} for team #{TEAM_B_ID} and room #{room_id} when trying to overwrite last player") if room_player.nil?
       room_player.player_id = player.id
     end
 

@@ -13,6 +13,24 @@
 
 ActiveRecord::Schema.define(version: 20160413143446) do
 
+  create_table "game_histories", force: true do |t|
+    t.integer  "room_id"
+    t.integer  "player_id"
+    t.integer  "game_id"
+    t.string   "game_session_id"
+    t.integer  "player_count"
+    t.integer  "player_team_score"
+    t.integer  "opponent_team_score"
+    t.boolean  "win"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "game_histories", ["game_id", "game_session_id"], name: "index_game_histories_on_game_id_and_game_session_id"
+  add_index "game_histories", ["player_id", "win", "player_count"], name: "index_game_histories_on_player_id_and_win_and_player_count"
+  add_index "game_histories", ["player_id"], name: "index_game_histories_on_player_id"
+  add_index "game_histories", ["room_id"], name: "index_game_histories_on_room_id"
+
   create_table "players", force: true do |t|
     t.string   "rfid_hash"
     t.string   "name"
@@ -41,7 +59,8 @@ ActiveRecord::Schema.define(version: 20160413143446) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "game"
-    t.integer  "player_count", default: 4, null: false
+    t.integer  "player_count",    default: 4, null: false
+    t.string   "game_session_id"
     t.datetime "increment_at"
   end
 
