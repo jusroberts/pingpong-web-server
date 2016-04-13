@@ -10,13 +10,13 @@ game new full
 %div{:style => "bottom: 0%; width: 100%; position: absolute; height: 45em; display:flex; padding: 2%;"}
   .left{:style => "height: 100%; width: 33%; padding: #{player_box_padding};"}
     -#Doubles#
-    .picturebox{:class => 'doubles-picturebox', :style => "display: none; height: #{doubles_player_box_size}; width: #{doubles_player_box_size};"}
-      %img{:src => @player_a_1_url, :style => "height: 100%; width: 100%;", :id => "player_a_1_img"}
-    .picturebox{:class => 'doubles-picturebox', :style => "display: none; height: #{doubles_player_box_size}; width: #{doubles_player_box_size}; position: relative; left: #{player_box_inset_width}; top: -#{player_box_inset_height};"}
-      %img{:src => @player_a_2_url, :style => "height: 100%; width: 100%;", :id => "player_a_2_img"}
+    .picturebox.doubles-picturebox{:style => "display: none; height: #{doubles_player_box_size}; width: #{doubles_player_box_size};"}
+      %img.player_a_1_img{:src => @player_a_1_url, :style => "height: 100%; width: 100%;"}
+    .picturebox.doubles-picturebox{:style => "display: none; height: #{doubles_player_box_size}; width: #{doubles_player_box_size}; position: relative; left: #{player_box_inset_width}; top: -#{player_box_inset_height};"}
+      %img.player_a_2_img{:src => @player_a_2_url, :style => "height: 100%; width: 100%;"}
     -#Singles#
-    .picturebox{:class => 'singles-picturebox', :style => "display: none; height: #{singles_player_box_size}; width: #{singles_player_box_size}; position: relative; top: 10%"}
-      %img{:src => @player_a_1_url, :style => "height: 100%; width: 100%;", :id => "player_a_1_img"}
+    .picturebox.singles-picturebox{:style => "display: none; height: #{singles_player_box_size}; width: #{singles_player_box_size}; position: relative; top: 10%"}
+      %img.player_a_1_img{:src => @player_a_1_url, :style => "height: 100%; width: 100%;"}
 
   .middle{:style => "height: 100%; width: 33%; padding: 4%;"}
 
@@ -34,13 +34,13 @@ game new full
 
   .right{:style => "height: 100%; width: 33%; padding: #{player_box_padding};"}
     -#Doubles#
-    .picturebox{:class => 'doubles-picturebox', :style => "display: none; height: #{doubles_player_box_size}; width: #{doubles_player_box_size}; float: right;"}
-      %img{:src => @player_b_1_url, :style => "height: 100%; width: 100%;", :id => "player_b_1_img"}
-    .picturebox{:class => 'doubles-picturebox', :style => "display: none; height: #{doubles_player_box_size}; width: #{doubles_player_box_size}; float: right; position: relative; left: -#{player_box_inset_width}; top: -#{player_box_inset_height};"}
-      %img{:src => @player_b_2_url, :style => "height: 100%; width: 100%;", :id => "player_b_2_img"}
+    .picturebox.doubles-picturebox{:style => "display: none; height: #{doubles_player_box_size}; width: #{doubles_player_box_size}; float: right;"}
+      %img.player_b_1_img{:src => @player_b_1_url, :style => "height: 100%; width: 100%;"}
+    .picturebox.doubles-picturebox{:style => "display: none; height: #{doubles_player_box_size}; width: #{doubles_player_box_size}; float: right; position: relative; left: -#{player_box_inset_width}; top: -#{player_box_inset_height};"}
+      %img.player_b_2_img{:src => @player_b_2_url, :style => "height: 100%; width: 100%;"}
     -#Singles#
-    .picturebox{:class => 'singles-picturebox', :style => "display: none; height: #{singles_player_box_size}; width: #{singles_player_box_size}; float: right; position: relative; top: 10%"}
-      %img{:src => @player_b_1_url, :style => "height: 100%; width: 100%;", :id => "player_b_1_img"}
+    .picturebox.singles-picturebox{:style => "display: none; height: #{singles_player_box_size}; width: #{singles_player_box_size}; float: right; position: relative; top: 10%"}
+      %img.player_b_1_img{:src => @player_b_1_url, :style => "height: 100%; width: 100%;"}
 :javascript
     var playerCount;
     $(document).ready( function() {

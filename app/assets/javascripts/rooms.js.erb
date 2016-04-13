@@ -28,8 +28,8 @@ $(function() {
   });
   channel.bind('user_scan_existing', function(playerData) {
     console.log(playerData.image_url);
-    var imageId = "#player_" + playerData.team + "_" + playerData.player_number + "_img";
-    $(imageId).attr("src", playerData.image_url);
+    var imageSelector = ".player_" + playerData.team + "_" + playerData.player_number + "_img";
+    $(imageSelector).attr("src", playerData.image_url);
     if (playerData.team == "a") {
       $('#scan_player1').attr('id','scan_player2');
     } else {
