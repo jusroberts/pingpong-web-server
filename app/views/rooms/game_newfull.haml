@@ -1,6 +1,7 @@
 game new full
 #room-id=@id
--player_box_size='65%'
+-doubles_player_box_size='65%'
+-singles_player_box_size='85%'
 -player_box_padding='2%'
 -player_box_inset_height='10vh'
 -player_box_inset_width='5vw'
@@ -8,10 +9,14 @@ game new full
 
 %div{:style => "bottom: 0%; width: 100%; position: absolute; height: 45em; display:flex; padding: 2%;"}
   .left{:style => "height: 100%; width: 33%; padding: #{player_box_padding};"}
-    .picturebox{:style => "height: #{player_box_size}; width: #{player_box_size};"}
+    -#Doubles#
+    .picturebox{:class => 'doubles-picturebox', :style => "display: none; height: #{doubles_player_box_size}; width: #{doubles_player_box_size};"}
       %img{:src => @player_a_1_url, :style => "height: 100%; width: 100%;", :id => "player_a_1_img"}
-    .picturebox{:style => "height: #{player_box_size}; width: #{player_box_size}; position: relative; left: #{player_box_inset_width}; top: -#{player_box_inset_height};"}
+    .picturebox{:class => 'doubles-picturebox', :style => "display: none; height: #{doubles_player_box_size}; width: #{doubles_player_box_size}; position: relative; left: #{player_box_inset_width}; top: -#{player_box_inset_height};"}
       %img{:src => @player_a_2_url, :style => "height: 100%; width: 100%;", :id => "player_a_2_img"}
+    -#Singles#
+    .picturebox{:class => 'singles-picturebox', :style => "display: none; height: #{singles_player_box_size}; width: #{singles_player_box_size}; position: relative; top: 10%"}
+      %img{:src => @player_a_1_url, :style => "height: 100%; width: 100%;", :id => "player_a_1_img"}
 
   .middle{:style => "height: 100%; width: 33%; padding: 4%;"}
 
@@ -28,28 +33,45 @@ game new full
           =submit_tag "", id: "startButton", style: "width: 400px; margin: 0 auto; display: inline-block; height: 70px; background-size: 100% 100%"
 
   .right{:style => "height: 100%; width: 33%; padding: #{player_box_padding};"}
-    .picturebox{:style => "height: #{player_box_size}; width: #{player_box_size}; float: right;"}
+    -#Doubles#
+    .picturebox{:class => 'doubles-picturebox', :style => "display: none; height: #{doubles_player_box_size}; width: #{doubles_player_box_size}; float: right;"}
       %img{:src => @player_b_1_url, :style => "height: 100%; width: 100%;", :id => "player_b_1_img"}
-    .picturebox{:style => "height: #{player_box_size}; width: #{player_box_size}; float: right; position: relative; left: -#{player_box_inset_width}; top: -#{player_box_inset_height};"}
+    .picturebox{:class => 'doubles-picturebox', :style => "display: none; height: #{doubles_player_box_size}; width: #{doubles_player_box_size}; float: right; position: relative; left: -#{player_box_inset_width}; top: -#{player_box_inset_height};"}
       %img{:src => @player_b_2_url, :style => "height: 100%; width: 100%;", :id => "player_b_2_img"}
+    -#Singles#
+    .picturebox{:class => 'singles-picturebox', :style => "display: none; height: #{singles_player_box_size}; width: #{singles_player_box_size}; float: right; position: relative; top: 10%"}
+      %img{:src => @player_b_1_url, :style => "height: 100%; width: 100%;", :id => "player_b_1_img"}
 :javascript
+    var playerCount;
     $(document).ready( function() {
-    console.log('hello!!!');
-      $('body').addClass( 'test' );
+      console.log('game_newfull JS init');
+
+      playerCount = #{@player_count};
+      displayForPlayerCount(playerCount);
     } );
 
-    var playerCount = #{@player_count};
     function updatePlayerCount(count, selectedElement, unselectedElement) {
       $.post("#{ j(room_game_player_count_post_path(id: @id)) }", { player_count: count })
       .done(function() {
         console.log("Player mode change to " + count + " succeeded");
-        //selectedElement.addClass("selectedButton");
-        //unselectedElement.removeClass("selectedButton");
         playerCount = count;
+        displayForPlayerCount(playerCount);
       })
       .fail(function() {
         console.log("Player mode change POST failed");
       })
+    }
+
+    function displayForPlayerCount(count) {
+      if (count == 2) {
+        $(".doubles-picturebox").hide();
+        $(".singles-picturebox").show();
+      } else if (count == 4) {
+        $(".doubles-picturebox").show();
+        $(".singles-picturebox").hide();
+      } else {
+        console.log("Invalid player count " + count + " passed to displayForPlayerCount");
+      }
     }
 
     $("#singlesButton").click(function () {

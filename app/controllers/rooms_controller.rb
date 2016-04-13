@@ -115,6 +115,8 @@ class RoomsController < ApplicationController
     count = params[:player_count].to_i
     @room.player_count = count
     @room.save
+    # Delete players that no longer fit in this game
+    ActiveRecord::Base.connection.execute("DELETE FROM room_players where room_id = #{@room.id} AND player_number > #{(count / 2).to_i}")
     render :json => {
         :player_count => count
     }
