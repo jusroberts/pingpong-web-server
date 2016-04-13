@@ -183,8 +183,7 @@ class RoomsController < ApplicationController
     @room.update_attributes(team_a_score: 0, team_b_score: 0, game: false)
     @room.room_players.delete_all
     if params[:quit].present?
-      @room.game_session_id = nil
-      @room.save
+      @room.update_attribute(:game_session_id, nil)
       redirect_to :room_game_interstitial
     else
       @room.update_attributes(team_a_score: 0, team_b_score: 0, game: true)
