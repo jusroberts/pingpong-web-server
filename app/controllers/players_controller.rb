@@ -94,9 +94,9 @@ class PlayersController < ApplicationController
       return RoomPlayer.find_by player_id: player.id, room_id: room_id
     end
 
-    # @type [Array<RoomPlayer]
+    # @type [Array<RoomPlayer>]
     team_a_players = room_players.select {|room_player| room_player.team == TEAM_A_ID}
-    # @type [Array<RoomPlayer]
+    # @type [Array<RoomPlayer>]
     team_b_players = room_players.select {|room_player| room_player.team == TEAM_B_ID}
 
     # Add to team A first

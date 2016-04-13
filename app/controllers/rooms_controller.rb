@@ -162,9 +162,8 @@ class RoomsController < ApplicationController
     @room.update_attributes(team_a_score: 0, team_b_score: 0, game: true)
     redirect_to :room_game_play
 
-    ## Generate a new game session id
-    @room.game_session_id = SecureRandom.base64(16)
-    @room.save
+    # Generate a new game session id
+    @room.update_attributes(game_session_id: SecureRandom.base64(16))
   end
 
   def game_end_post
@@ -234,9 +233,9 @@ class RoomsController < ApplicationController
     def save_history(room)
       room_players = @room.room_players
 
-      # @type [Array<RoomPlayer]
+      # @type [Array<RoomPlayer>]
       team_a_players = room_players.select {|room_player| room_player.team == PlayersController::TEAM_A_ID}
-      # @type [Array<RoomPlayer]
+      # @type [Array<RoomPlayer>]
       team_b_players = room_players.select {|room_player| room_player.team == PlayersController::TEAM_B_ID}
 
       # We should batch this but ActiveRecord makes it a pain in the ass and I don't care that much
@@ -247,32 +246,27 @@ class RoomsController < ApplicationController
         team_a_players.each do |room_player|
           history = new_game_history(room, room_player, true)
           histories << history
-          history.save
         end
         team_b_players.each do |room_player|
           history = new_game_history(room, room_player, false)
           histories << history
-          history.save
         end
       else
         team_a_players.each do |room_player|
           history = new_game_history(room, room_player, false)
           histories << history
-          history.save
         end
         # All glory to team B
         team_b_players.each do |room_player|
           history = new_game_history(room, room_player, true)
           histories << history
-          history.save
         end
       end
 
       # Use the first player's history PK as the game ID because it's an easy way to generate a unique, sequential integer
       game_id = histories[0].id
       histories.each do |history|
-        history.game_id = game_id
-        history.save
+        history.update_attributes(game_id: game_id)
       end
     end
 
@@ -295,7 +289,7 @@ class RoomsController < ApplicationController
         game_history.player_team_score = room.team_b_score
         game_history.opponent_team_score = room.team_a_score
       end
-      game_history
+      game_history.save
     end
 
     def should_reset?
