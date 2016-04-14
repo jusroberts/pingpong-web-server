@@ -1,10 +1,6 @@
 require 'time'
 
 class RoomsController < ApplicationController
-  # before_action :set_room, only: [:show, :edit, :update,
-  #                                 :destroy, :increment_score, :room_status,
-  #                                 :game_new_post, :game_view, :game_play, :game_end_post, :game_newfull, :game_player_count_post,
-  #                                 :interstitial]
   before_action :set_room, except: [:index, :new, :home]
 
   VALID_PLAYER_COUNTS = [2, 4]
