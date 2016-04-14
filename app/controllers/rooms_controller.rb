@@ -1,10 +1,7 @@
 require 'time'
 
 class RoomsController < ApplicationController
-  before_action :set_room, only: [:show, :edit, :update,
-                                  :destroy, :increment_score, :room_status,
-                                  :game_new_post, :game_view, :game_play, :game_end_post, :game_newfull, :game_player_count_post,
-                                  :interstitial]
+  before_action :set_room, except: [:index, :new, :home]
 
   VALID_PLAYER_COUNTS = [2, 4]
 
@@ -69,19 +66,13 @@ class RoomsController < ApplicationController
     end
   end
 
-  # /rooms/1/team/a/increment
+  # /api/rooms/1/team/a/increment
   def increment_score
     team = params[:team].downcase
 
-  # logic to prevent double scoring
-    if @room.increment_at && @room.increment_at > 1.seconds.ago
-      raise("Double Score")
-    end
-
-
-
-
+    raise("Double Score") if @room.increment_at && @room.increment_at > 1.seconds.ago
     raise("invalid team") if params[:team].downcase != 'a' && params[:team].downcase != 'b'
+
     if @room.game
       if should_reset?
         @room.update_attributes(team_a_score: 0, team_b_score: 0)
@@ -97,6 +88,12 @@ class RoomsController < ApplicationController
     send_scores
     @room.update_attribute(:increment_at, Time.now)
     render nothing: true
+  end
+
+# /api/rooms/1/send_current_scores
+  def send_current_scores
+    send_scores
+    render text: 'OK'
   end
 
   def room_status
@@ -229,15 +226,13 @@ class RoomsController < ApplicationController
 
       @team_b_status = @team_b_score == "W" ? "WINNER!" : "&nbsp;".html_safe
       @team_a_status = @team_a_score == "W" ? "WINNER!" : "&nbsp;".html_safe
-
-
     end
 
     def send_scores
       set_room
       game_logic = GameLogic.new(@room.team_a_score, @room.team_b_score)
-      ::WebsocketRails[:"room#{params[:id]}"].trigger "team_a_score", game_logic.showable_team_a_score
-      ::WebsocketRails[:"room#{params[:id]}"].trigger "team_b_score", game_logic.showable_team_b_score
+      ::WebsocketRails[:"room#{@room.id}"].trigger "team_a_score", game_logic.showable_team_a_score
+      ::WebsocketRails[:"room#{@room.id}"].trigger "team_b_score", game_logic.showable_team_b_score
     end
 
     # @param room [Room]

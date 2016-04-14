@@ -3,44 +3,66 @@
 // # You can use CoffeeScript in this file: http://coffeescript.org/
 $(function() {
   var roomId = $('#room-id').text();
-  var dispatcher = new WebSocketRails(window.location.host + '/websocket');
-  channel = dispatcher.subscribe('room' + roomId);
-  console.log(window.location.host + '/websocket');
-  console.log('room' + roomId);
-
+  window.dispatcher = new WebSocketRails(window.location.host + '/websocket');
+  startListening();
   // update bars on page load
   scoreA($("#team_a_score").text());
   scoreB($("#team_b_score").text());
 
-  channel.bind('team_a_score', function(score) {
-    scoreA(score);
-    $("#team_a_score").text(score);
-    console.log(score);
-  });
-  channel.bind('team_b_score', function(score) {
-    scoreB(score);
-    $("#team_b_score").text(score);
-    console.log(score);
-  });
-  channel.bind('user_scan_new', function(player_id) {
-    window.location.replace("/rooms/" + roomId + "/game/new/players/create?player_id=" + player_id);
-    console.log("Redirecting to create player " + player_id);
-  });
-  channel.bind('user_scan_existing', function(playerData) {
-    console.log(playerData.image_url);
-    var imageSelector = ".player_" + playerData.team + "_" + playerData.player_number + "_img";
-    $(imageSelector).attr("src", playerData.image_url);
-    if (playerData.team == "a") {
-      $('#scan_player1').attr('id','scan_player2');
-    } else {
-      $("#player2img").attr("src", playerData.image_url);
-    }
-  });
+  function startListening() {
+    channel = window.dispatcher.subscribe('room' + roomId);
+    console.log(window.location.host + '/websocket');
+    console.log('room' + roomId);
+
+    dispatcher.bind('connection_closed', function() {
+      console.log('Connection Lost!');
+      reconnect = setInterval(function(){
+        if (window.dispatcher.state === 'connected') {
+          console.log('Reconnected.');
+          startListening();
+          console.log('Requesting latest scores...');
+          $.get('/api/rooms/' + roomId + '/send_current_scores'), function ( data ) {
+            console.log(data);
+          }
+          clearInterval(reconnect);
+        } else {
+          console.log('Attempting to reconnect...');
+          window.dispatcher = new WebSocketRails(window.location.host + '/websocket');
+        }
+      }, 5000);
+    });
+
+    channel.bind('team_a_score', function(score) {
+      scoreA(score);
+      $("#team_a_score").text(score);
+      console.log(score);
+    });
+    channel.bind('team_b_score', function(score) {
+      scoreB(score);
+      $("#team_b_score").text(score);
+      console.log(score);
+    });
+    channel.bind('user_scan_new', function(player_id) {
+      window.location.replace("/rooms/" + roomId + "/game/new/players/create?player_id=" + player_id);
+      console.log("Redirecting to create player " + player_id);
+    });
+    channel.bind('user_scan_existing', function(playerData) {
+      console.log(playerData.image_url);
+      var imageSelector = ".player_" + playerData.team + "_" + playerData.player_number + "_img";
+      $(imageSelector).attr("src", playerData.image_url);
+      if (playerData.team == "a") {
+        $('#scan_player1').attr('id','scan_player2');
+      } else {
+        $("#player2img").attr("src", playerData.image_url);
+      }
+    });
+  }
+
 });
 
 $(function() {
   var background = "url(\"/images/match_backgrounds/bg_";
-  background += Math.floor(Math.random() * 121) + 1;
+  background += Math.floor(Math.random() * 120) + 1;
   background += ".gif\")";
   background += " no-repeat center center fixed";
   $(".rooms.show").css({
