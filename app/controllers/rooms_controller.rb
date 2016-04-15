@@ -296,6 +296,7 @@ class RoomsController < ApplicationController
         game_history.opponent_team_score = room.team_a_score
       end
       game_history.save
+      game_history
     end
 
     def should_reset?
