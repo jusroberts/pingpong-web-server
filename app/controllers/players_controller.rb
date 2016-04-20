@@ -66,7 +66,7 @@ class PlayersController < ApplicationController
       image_url = hash['secure_url']
       @player.update_attribute(:image_url, image_url)
     end
-    redirect_to room_game_new_path
+    redirect_to room_game_newfull_path
   end
 
   def confirm
