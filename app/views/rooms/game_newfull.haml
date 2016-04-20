@@ -18,7 +18,7 @@ game new full
     .picturebox.singles-picturebox{:style => "display: none; height: #{singles_player_box_size}; width: #{singles_player_box_size}; position: relative; top: 10%"}
       %img.player_a_1_img{:src => @player_a_1_url, :style => "height: 100%; width: 100%;"}
 
-  .middle{:style => "height: 100%; width: 33%; padding: 4%;"}
+  .middle{:style => "height: 100%; width: 33%; padding: 2%;"}
 
     .column.settingsbox{:style => "height: 100%; width: 100%; text-align:center;"}
       %h4.sf Select Play Mode:
@@ -29,8 +29,12 @@ game new full
       #scan_section{:style => "padding: 2%;"}
         #scan_player1{:style => "width: 400px; margin: 10px auto; display: inline-block; height: 70px; background-size: 100% 100%"}
 
-        =form_tag room_game_new_post_path(id: @id) do
+        =form_tag room_game_new_post_path(id: @id), :style => 'margin: 10px' do
           =submit_tag "", id: "startButton", style: "width: 400px; margin: 0 auto; display: inline-block; height: 70px; background-size: 100% 100%"
+        =form_tag room_game_players_clear_post_path(id: @id), :style => 'margin: 10px' do
+          -#=submit_tag '', id: 'clearButton', style: "width: 400px; margin: 0 auto; display: inline-block; height: 70px; background-size: 100% 100%"
+          =submit_tag 'CLEAR PLAYERS', id: 'clearButton', class: 'sf-button', style: "margin: 0 auto; display: inline-block; background-size: 100% 100%"
+
 
   .right{:style => "height: 100%; width: 33%; padding: #{player_box_padding};"}
     -#Doubles#

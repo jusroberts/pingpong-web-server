@@ -209,6 +209,33 @@ body.rooms.game_newfull {
   border: none;
 }
 
+.sf-button {
+  border: 5px solid #2595CA;
+  background-color: #1262A6;
+  color: #21297E;
+  height: 70px;
+  width: 400px;
+  font-family: 'street fighter';
+  font-weight: normal;
+  font-size: 2em;
+}
+
+.sf-button.selected {
+  border-color: #E7E7E7;
+  color: #E7E7E7;
+}
+
+.sf-button:hover {
+  border-left: none;
+  border-right: none;
+  border-top: 5px solid #2595CA;
+  border-bottom: 5px solid #21297E;
+  border-radius: 5px;
+  box-shadow:
+          0 0 0 5px #E29C36,
+          0 0 0 10px #E7DE0A;
+}
+
 .sf-button.quick-game {
   color: transparent;
   background-image: url('/images/pong_assets/pong_quick game big.png');
