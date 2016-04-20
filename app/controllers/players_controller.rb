@@ -62,7 +62,7 @@ class PlayersController < ApplicationController
   def attach_image_post
     unless params[:capture].nil?
       image = params[:capture][:image]
-      hash = Cloudinary::Uploader.upload(image)
+      hash = Cloudinary::Uploader.upload(image, cloudinary_auth)
       image_url = hash['secure_url']
       @player.update_attribute(:image_url, image_url)
     end
@@ -122,6 +122,14 @@ class PlayersController < ApplicationController
 
   def set_room_id
     @id = Room.find(params[:room_id]).id
+  end
+  
+  def cloudinary_auth
+    {
+      cloud_name: ENV["CLOUDINARY_NAME"],
+      api_key:    ENV["CLOUDINARY_API_KEY"],
+      api_secret: ENV["CLOUDINARY_API_SECRET"]
+    }
   end
 
 end
