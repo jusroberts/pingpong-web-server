@@ -1,0 +1,22 @@
+.button{onclick: 'Increment("a")'} Increment A
+.button{onclick: 'Increment("b")'} Increment B
+.send-badge
+  .columns.small-2
+    .button{onclick: 'SendBadge()'} Send Badge:
+  .columns.small-2.end
+    %input#badge-input{type: "text"}
+
+:javascript
+  function Increment(team) {
+    $.get("/api/rooms/#{@room.id}/team/" + team + "/increment", function() {});
+  }
+  function SendBadge() {
+    var badgeString = $("#badge-input").val();
+    var length = badgeString.length;
+    for (var i = length; i < 64; i++) {
+      badgeString += "a";
+    }
+    console.log(length);
+    console.log(badgeString);
+    $.get("/api/rooms/#{@room.id}/players/add?uidHash=" + badgeString);
+  }

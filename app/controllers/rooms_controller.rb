@@ -212,6 +212,9 @@ class RoomsController < ApplicationController
     end
   end
 
+  def controller
+  end
+
   private
 
     def load_indexed_player_image_url(room_players_by_id, key)
