@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       get 'game/newfull' => 'rooms#game_newfull', as: :game_newfull
       post 'game/player_count' => 'rooms#game_player_count_post', as: :game_player_count_post
 
-
+      post 'game/new/players/clear' => 'rooms#players_clear_post', as: :game_players_clear_post
       get 'game/new/players/create' => 'players#new', as: :game_new_player
       post 'game/new/players/create' => 'players#new_post', as: :game_new_player_post
       get 'game/new/players/:player_id' => 'players#confirm', as: :game_player_confirm

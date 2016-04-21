@@ -131,6 +131,12 @@ class RoomsController < ApplicationController
     }
   end
 
+  def players_clear_post
+    # Wipe all the players for this room
+    @room.room_players.delete_all
+    render text: 'OK'
+  end
+
   def game_newfull
     @id = params[:id] || params[:room_id]
     @player_count = @room.player_count
