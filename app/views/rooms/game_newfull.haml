@@ -22,18 +22,20 @@ game new full
 
     .column.settingsbox{:style => "height: 100%; width: 100%; text-align:center;"}
       %h4.sf Select Play Mode:
-      .column.gametype{:style => "position: relative; margin: auto; top: 1%; text-align: center"}
-        #singlesButton{:style => "width: 177px; height: 60px; margin: 10px auto; display: inline-block; background-size: 100% 100%; float: left"}
-        #doublesButton{:style => "width: 177px; height: 60px; margin: 10px auto; display: inline-block; background-size: 100% 100%; float: right"}
+      .column.gametype{:style => "position: relative; margin: auto; display: flex; top: 1%;"}
+        .sf-button#singlesButton{:style => "width: 185px; height: 60px; margin: 20px auto; background-size: 100% 100%;"}
+          .sf-label SINGLES
+        .sf-button#doublesButton{:style => "width: 185px; height: 60px; margin: 20px auto; background-size: 100% 100%;"}
+          .sf-label DOUBLES
 
       #scan_section{:style => "padding: 2%;"}
-        #scan_player1{:style => "width: 400px; margin: 10px auto; display: inline-block; height: 70px; background-size: 100% 100%"}
+        .sf-button#scan_player1{:style => "width: 400px; margin: 10px auto; height: 70px; background-size: 100% 100%"}
+          .sf-label SCAN PLAYER
 
-        =form_tag room_game_new_post_path(id: @id), :style => 'margin: 10px' do
-          =submit_tag "", id: "startButton", style: "width: 400px; margin: 0 auto; display: inline-block; height: 70px; background-size: 100% 100%"
-        =form_tag room_game_players_clear_post_path(id: @id), :style => 'margin: 10px' do
-          -#=submit_tag '', id: 'clearButton', style: "width: 400px; margin: 0 auto; display: inline-block; height: 70px; background-size: 100% 100%"
-          =submit_tag 'CLEAR PLAYERS', id: 'clearButton', class: 'sf-button', style: "margin: 0 auto; display: inline-block; background-size: 100% 100%"
+        =form_tag room_game_players_clear_post_path(id: @id), :style => 'margin: 20px' do
+          =submit_tag 'CLEAR PLAYERS', id: 'clearButton', class: 'sf-button sf-label', style: "margin: 0 auto; display: inline-block; background-size: 100% 100%"
+        =form_tag room_game_new_post_path(id: @id), :style => 'margin: 20px' do
+          =submit_tag '* START GAME *', id: 'startButton', class: 'sf-button sf-label', style: "margin: 0 auto; display: inline-block; background-size: 100% 100%"
 
 
   .right{:style => "height: 100%; width: 33%; padding: #{player_box_padding};"}

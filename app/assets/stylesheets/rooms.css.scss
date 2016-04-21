@@ -139,36 +139,6 @@ body.rooms.game_newfull {
   border-width: 5px;
 }
 
-#startButton {
-   background-image: url('/images/pong_assets/pong_quick game 0.png');
-   background-repeat: no-repeat;
-}
-
-#startButton:hover {
-  background: url("/images/pong_assets/pong_quick game hover.png");
-  background-repeat: no-repeat;
-}
-
-#singlesButton {
-   background-image: url('/images/pong_assets/pong_singles 0.png');
-   background-repeat: no-repeat;
-}
-
-#singlesButton:hover {
-  background-image: url('/images/pong_assets/pong_singles 1.png');
-  background-repeat: no-repeat;
-}
-
-#doublesButton {
-   background-image: url('/images/pong_assets/pong_doubles 0.png');
-   background-repeat: no-repeat;
-}
-
-#doublesButton:hover {
-  background-image: url('/images/pong_assets/pong_doubles 1.png');
-  background-repeat: no-repeat;
-}
-
 #confirmButton {
   background-image: url('/images/pong_assets/pong_start 0.png');
   background-repeat: no-repeat;
@@ -209,15 +179,26 @@ body.rooms.game_newfull {
   border: none;
 }
 
-.sf-button {
-  border: 5px solid #2595CA;
-  background-color: #1262A6;
-  color: #21297E;
-  height: 70px;
-  width: 400px;
+.sf-label {
   font-family: 'street fighter';
   font-weight: normal;
   font-size: 2em;
+  color: #21297E;
+  flex: 1;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sf-button {
+  border: 5px solid #2595CA;
+  background-color: #1262A6;
+  height: 70px;
+  width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sf-button.selected {
@@ -230,10 +211,13 @@ body.rooms.game_newfull {
   border-right: none;
   border-top: 5px solid #2595CA;
   border-bottom: 5px solid #21297E;
-  border-radius: 5px;
+  border-radius: 1px;
   box-shadow:
           0 0 0 5px #E29C36,
           0 0 0 10px #E7DE0A;
+}
+
+.sf-label:hover {
   color: #E7E7E7;
   text-shadow: 4px 4px 0 #21297E;
 }
@@ -249,16 +233,6 @@ body.rooms.game_newfull {
 body.interstitial {
   background-image: url('/images/pong_assets/winners-dont-use-drugs.png');
   background-size: cover;
-}
-
-#scan_player1 {
-  background-image: url('/images/pong_assets/pong_scan player 1.png');
-  background-repeat: no-repeat;
-}
-
-#scan_player2 {
-  background-image: url('/images/pong_assets/pong_scan player 2.png');
-  background-repeat: no-repeat;
 }
 
 #okay_start_game {
