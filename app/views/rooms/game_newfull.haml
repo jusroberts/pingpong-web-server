@@ -5,6 +5,8 @@ game new full
 -player_box_padding='2%'
 -player_box_inset_height='10vh'
 -player_box_inset_width='5vw'
+-default_team_a_avatar='/images/pong_assets/pong_avatar 1 doubles.png'
+-default_team_b_avatar='/images/pong_assets/pong_avatar 2 doubles.png'
 .center{:style => "position: relative; top: 1%; text-align: center"}
 
 %div{:style => "bottom: 0%; width: 100%; position: absolute; height: 45em; display:flex; padding: 2%;"}
@@ -32,8 +34,8 @@ game new full
         .sf-button#scan_player1{:style => "width: 400px; margin: 10px auto; height: 70px; background-size: 100% 100%"}
           .sf-label SCAN PLAYER
 
-        =form_tag room_game_players_clear_post_path(id: @id), :style => 'margin: 20px' do
-          =submit_tag 'CLEAR PLAYERS', id: 'clearButton', class: 'sf-button sf-label hoverable', style: "margin: 0 auto; display: inline-block; background-size: 100% 100%"
+        .sf-button.hoverable#clearButton{:style => "margin: 20px auto; background-size: 100% 100%;"}
+          .sf-label.hoverable CLEAR PLAYERS
         =form_tag room_game_new_post_path(id: @id), :style => 'margin: 20px' do
           =submit_tag '* START GAME *', id: 'startButton', class: 'sf-button sf-label hoverable', style: "margin: 0 auto; display: inline-block; background-size: 100% 100%"
 
@@ -87,4 +89,19 @@ game new full
     })
     $("#doublesButton").click(function () {
       updatePlayerCount(4, $("#doublesButton"), $("#singlesButton"));
+    })
+
+    $("#clearButton").click(function (e) {
+      // Wipe all the players
+      $.post("#{ j(room_game_players_clear_post_path(id: @id)) }")
+      .done(function() {
+        console.log("Player clear succeeded");
+        $(".player_a_1_img").attr("src", "#{ default_team_a_avatar }");
+        $(".player_a_2_img").attr("src", "#{ default_team_a_avatar }");
+        $(".player_b_1_img").attr("src", "#{ default_team_b_avatar }");
+        $(".player_b_2_img").attr("src", "#{ default_team_b_avatar }");
+      })
+      .fail(function() {
+        console.log("Player clear POST failed");
+      })
     })
