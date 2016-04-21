@@ -183,7 +183,6 @@ body.rooms.game_newfull {
   font-family: 'street fighter';
   font-weight: normal;
   font-size: 2em;
-  color: #21297E;
   flex: 1;
   align-self: stretch;
   display: flex;
@@ -199,6 +198,8 @@ body.rooms.game_newfull {
   display: flex;
   align-items: center;
   justify-content: center;
+  // Easier to put this here so border and text color can be changed for .selected
+  color: #21297E;
 }
 
 .sf-button.selected {
@@ -206,7 +207,7 @@ body.rooms.game_newfull {
   color: #E7E7E7;
 }
 
-.sf-button:hover {
+.sf-button.hoverable:hover {
   border-left: none;
   border-right: none;
   border-top: 5px solid #2595CA;
@@ -217,7 +218,7 @@ body.rooms.game_newfull {
           0 0 0 10px #E7DE0A;
 }
 
-.sf-label:hover {
+.sf-label.hoverable:hover {
   color: #E7E7E7;
   text-shadow: 4px 4px 0 #21297E;
 }

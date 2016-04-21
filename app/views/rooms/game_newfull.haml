@@ -23,19 +23,19 @@ game new full
     .column.settingsbox{:style => "height: 100%; width: 100%; text-align:center;"}
       %h4.sf Select Play Mode:
       .column.gametype{:style => "position: relative; margin: auto; display: flex; top: 1%;"}
-        .sf-button#singlesButton{:style => "width: 185px; height: 60px; margin: 20px auto; background-size: 100% 100%;"}
-          .sf-label SINGLES
-        .sf-button#doublesButton{:style => "width: 185px; height: 60px; margin: 20px auto; background-size: 100% 100%;"}
-          .sf-label DOUBLES
+        .sf-button.hoverable#singlesButton{:style => "width: 185px; height: 60px; margin: 20px auto; background-size: 100% 100%;"}
+          .sf-label.hoverable SINGLES
+        .sf-button.hoverable#doublesButton{:style => "width: 185px; height: 60px; margin: 20px auto; background-size: 100% 100%;"}
+          .sf-label.hoverable DOUBLES
 
       #scan_section{:style => "padding: 2%;"}
         .sf-button#scan_player1{:style => "width: 400px; margin: 10px auto; height: 70px; background-size: 100% 100%"}
           .sf-label SCAN PLAYER
 
         =form_tag room_game_players_clear_post_path(id: @id), :style => 'margin: 20px' do
-          =submit_tag 'CLEAR PLAYERS', id: 'clearButton', class: 'sf-button sf-label', style: "margin: 0 auto; display: inline-block; background-size: 100% 100%"
+          =submit_tag 'CLEAR PLAYERS', id: 'clearButton', class: 'sf-button sf-label hoverable', style: "margin: 0 auto; display: inline-block; background-size: 100% 100%"
         =form_tag room_game_new_post_path(id: @id), :style => 'margin: 20px' do
-          =submit_tag '* START GAME *', id: 'startButton', class: 'sf-button sf-label', style: "margin: 0 auto; display: inline-block; background-size: 100% 100%"
+          =submit_tag '* START GAME *', id: 'startButton', class: 'sf-button sf-label hoverable', style: "margin: 0 auto; display: inline-block; background-size: 100% 100%"
 
 
   .right{:style => "height: 100%; width: 33%; padding: #{player_box_padding};"}
@@ -60,6 +60,8 @@ game new full
       $.post("#{ j(room_game_player_count_post_path(id: @id)) }", { player_count: count })
       .done(function() {
         console.log("Player mode change to " + count + " succeeded");
+        selectedElement.addClass("selected");
+        unselectedElement.removeClass("selected");
         playerCount = count;
         displayForPlayerCount(playerCount);
       })
