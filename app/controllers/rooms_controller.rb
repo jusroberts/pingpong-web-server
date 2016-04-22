@@ -151,17 +151,21 @@ class RoomsController < ApplicationController
     @player_b_2_url = nil
 
     room_players_by_id = @room.room_players.to_a.index_by {|rp| "#{rp.team}_#{rp.player_number}"}
+    @player_ids = {
+        :a => [],
+        :b => []
+    }
 
     if @player_count == 2
       # Singles
-      load_indexed_player_image_url(room_players_by_id, 'a_1')
-      load_indexed_player_image_url(room_players_by_id, 'b_1')
+      load_indexed_player_image_url(room_players_by_id, :a, 1, @player_ids)
+      load_indexed_player_image_url(room_players_by_id, :b, 1, @player_ids)
     elsif @player_count == 4
       # Doubles
-      load_indexed_player_image_url(room_players_by_id, 'a_1')
-      load_indexed_player_image_url(room_players_by_id, 'a_2')
-      load_indexed_player_image_url(room_players_by_id, 'b_1')
-      load_indexed_player_image_url(room_players_by_id, 'b_2')
+      load_indexed_player_image_url(room_players_by_id, :a, 1, @player_ids)
+      load_indexed_player_image_url(room_players_by_id, :a, 2, @player_ids)
+      load_indexed_player_image_url(room_players_by_id, :b, 1, @player_ids)
+      load_indexed_player_image_url(room_players_by_id, :b, 2, @player_ids)
     else
       # Wat
       raise("Invalid player count #{@player_count}")
@@ -171,6 +175,8 @@ class RoomsController < ApplicationController
     @player_a_2_url ||= "/images/pong_assets/pong_avatar 1 doubles.png"
     @player_b_1_url ||= "/images/pong_assets/pong_avatar 2 doubles.png"
     @player_b_2_url ||= "/images/pong_assets/pong_avatar 2 doubles.png"
+    # @player_ids = JSON.encode(@player_ids)
+    @player_ids = @player_ids.to_json
   end
 
   def game_new_post
@@ -223,9 +229,16 @@ class RoomsController < ApplicationController
 
   private
 
-    def load_indexed_player_image_url(room_players_by_id, key)
+    # @param room_players_by_id [Hash{Number => RoomPlayers}]
+    # @param team [String]
+    # @param player_number [Number]
+    # @param player_ids [Hash{String => Array<Number>}]
+    def load_indexed_player_image_url(room_players_by_id, team, player_number, player_ids)
+      key = "#{team}_#{player_number}"
       if room_players_by_id.has_key?(key)
+        # @type [Player]
         player = Player.find_by id: room_players_by_id[key].player_id
+        player_ids[team] << player.id
         instance_variable_set("@player_#{key}_url", player.image_url)
       end
     end
