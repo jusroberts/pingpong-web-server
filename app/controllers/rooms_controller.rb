@@ -182,12 +182,12 @@ class RoomsController < ApplicationController
   end
 
   def game_end_post
-    if memorable_game(@room)
+    if memorable_game?(@room)
       save_history(@room)
     end
     @room.update_attributes(team_a_score: 0, team_b_score: 0, game: false)
-    @room.room_players.delete_all
     if params[:quit].present?
+      @room.room_players.delete_all
       @room.update_attribute(:game_session_id, nil)
       redirect_to :room_game_interstitial
     else
@@ -248,7 +248,7 @@ class RoomsController < ApplicationController
 
     # @param room [Room]
     # @return boolean
-    def memorable_game(room)
+    def memorable_game?(room)
       # @type [Array<RoomPlayer>]
       room_players = room.room_players
 
@@ -256,7 +256,6 @@ class RoomsController < ApplicationController
       # Should be an even number of players
           room_players.length % 2 === 0 &&
           room_players.length == room.player_count &&
-          room.game &&
       # Somebody should have points
           (room.team_a_score > 0 || room.team_b_score > 0) &&
           !room.game_session_id.nil?
