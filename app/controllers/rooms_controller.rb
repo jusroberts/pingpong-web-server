@@ -96,13 +96,48 @@ class RoomsController < ApplicationController
     render text: 'OK'
   end
 
+  # /api/rooms/1/status
   def room_status
-    render :json => {
+    # Standard response
+    out = {
         :team_a_score => @room.team_a_score,
         :team_b_score => @room.team_b_score,
         :name => @room.name,
         :has_active_game => @room.game
     }
+
+    # Pull player names
+    # @type [Array<Number>]
+    team_a_ids = []
+    # @type [Array<Number>]
+    team_b_ids = []
+    player_data = {
+        :team_a => [],
+        :team_b => []
+    }
+    @room.room_players.each do |rp|
+      if rp.team == PlayersController::TEAM_A_ID
+        team_a_ids << rp.player_id
+      else
+        team_b_ids << rp.player_id
+      end
+    end
+
+    unless team_a_ids.empty? or team_b_ids.empty?
+      # @type [Array<Player>]
+      players = Player.where(:id => team_a_ids + team_b_ids)
+
+      players.each do |player|
+        if team_a_ids.include? player.id
+          player_data[:team_a] << player.name
+        elsif team_b_ids.include? player.id
+          player_data[:team_b] << player.name
+        end
+      end
+      out[:player_data] = player_data
+    end
+
+    render :json => out
   end
 
   def game_new
