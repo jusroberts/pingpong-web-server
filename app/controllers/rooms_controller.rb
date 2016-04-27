@@ -144,7 +144,7 @@ class RoomsController < ApplicationController
       where room_id = #{@room.id} and game_session_id = '#{@room.game_session_id}'"
     count = ActiveRecord::Base.connection.execute(query)
 
-    if !count.nil? and count.length > 0 and count[0].key?('count')
+    if !count.nil? and count[0].key?('count')
       # Current game is historical games + 1
       out[:game_count] = count[0]['count'] + 1
     end
