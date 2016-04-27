@@ -146,7 +146,7 @@ class RoomsController < ApplicationController
 
     if !count.nil? and count[0].key?('count')
       # Current game is historical games + 1
-      out[:game_count] = count[0]['count'] + 1
+      out[:game_count] = count[0]['count'].to_i + 1
     end
 
     render :json => out
