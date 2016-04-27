@@ -160,12 +160,14 @@ class RoomsController < ApplicationController
       # Singles
       load_indexed_player_image_url(room_players_by_id, :a, 1, @player_ids)
       load_indexed_player_image_url(room_players_by_id, :b, 1, @player_ids)
+
     elsif @player_count == 4
       # Doubles
       load_indexed_player_image_url(room_players_by_id, :a, 1, @player_ids)
       load_indexed_player_image_url(room_players_by_id, :a, 2, @player_ids)
       load_indexed_player_image_url(room_players_by_id, :b, 1, @player_ids)
       load_indexed_player_image_url(room_players_by_id, :b, 2, @player_ids)
+
     else
       # Wat
       raise("Invalid player count #{@player_count}")
@@ -180,7 +182,9 @@ class RoomsController < ApplicationController
   end
 
   def game_new_post
+
     @room.update_attributes(team_a_score: 0, team_b_score: 0, game: true)
+
     redirect_to :room_game_play
 
     # Generate a new game session id
@@ -198,6 +202,13 @@ class RoomsController < ApplicationController
       redirect_to :room_game_interstitial
     else
       @room.update_attributes(team_a_score: 0, team_b_score: 0, game: true)
+      for room_player in @room.room_players
+        if room_player.team == "a"
+          room_player.update_attribute(:team, "b")
+        elsif room_player.team == "b"
+          room_player.update_attribute(:team, "a")
+        end
+      end
       redirect_to :room_game_play
     end
   end
@@ -352,4 +363,6 @@ class RoomsController < ApplicationController
     def room_params
       params.require(:room).permit(:client_token, :name)
     end
+
+
 end

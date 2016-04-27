@@ -4,7 +4,7 @@
   .game-column.center#left
     .progress
       .meter#a_meter &nbsp;
-    %h3.sf#team_a_name= (@team_a_name || "Saasy")
+    %h3.sf#team_a_name= team_a_name
     %h2.sf#team_a_status &nbsp;
     %h1.sf#team_a_score.center= @team_a_score
   .game-column.center#middle
@@ -12,6 +12,6 @@
   .game-column.center#right
     .progress
       .meter#b_meter &nbsp;
-    %h3.sf#team_b_name= (@team_b_name || "Chatty")
+    %h3.sf#team_b_name= team_b_name
     %h2.sf#team_b_status &nbsp;
     %h1.sf#team_b_score.center= @team_b_score

@@ -60,8 +60,8 @@ ActiveRecord::Schema.define(version: 20160413143446) do
     t.datetime "updated_at"
     t.boolean  "game"
     t.integer  "player_count",    default: 4, null: false
-    t.string   "game_session_id"
     t.datetime "increment_at"
+    t.string   "game_session_id"
   end
 
 end
