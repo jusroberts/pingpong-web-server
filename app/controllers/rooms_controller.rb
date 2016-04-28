@@ -74,10 +74,12 @@ class RoomsController < ApplicationController
       return
     end
 
-
     team = params[:team].downcase
 
-    raise("Double Score") if @room.increment_at && @room.increment_at > 1.seconds.ago
+    # Times when this call shouldn't happen
+    if @room.increment_at && @room.increment_at > 1.seconds.ago
+      return
+    end
     raise("invalid team") if params[:team].downcase != 'a' && params[:team].downcase != 'b'
 
     if @room.game
