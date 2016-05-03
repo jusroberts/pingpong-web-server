@@ -53,6 +53,9 @@ $(function() {
       updatePlayerIdObject(playerData, playerIdHash);
       updateScanPlayerButton($("#scan-player"), playerCount, playerIdHash);
     });
+    channel.bind('new_game_refresh', function() {
+      location.reload();
+    });
   }
 
 });

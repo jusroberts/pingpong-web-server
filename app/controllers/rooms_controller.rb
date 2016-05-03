@@ -68,9 +68,18 @@ class RoomsController < ApplicationController
 
   # /api/rooms/1/team/a/increment
   def increment_score
+    if should_reset?
+      private_game_end_post
+      ::WebsocketRails[:"room#{@room.id}"].trigger "new_game_refresh"
+      return
+    end
+
     team = params[:team].downcase
 
-    raise("Double Score") if @room.increment_at && @room.increment_at > 1.seconds.ago
+    # Times when this call shouldn't happen
+    if @room.increment_at && @room.increment_at > 1.seconds.ago
+      return
+    end
     raise("invalid team") if params[:team].downcase != 'a' && params[:team].downcase != 'b'
 
     if @room.game
@@ -239,25 +248,14 @@ class RoomsController < ApplicationController
   end
 
   def game_end_post
-    if memorable_game?(@room)
-      save_history(@room)
-    end
-    @room.update_attributes(team_a_score: 0, team_b_score: 0, game: false)
+
+    private_game_end_post
     if params[:quit].present?
-      @room.room_players.delete_all
-      @room.update_attribute(:game_session_id, nil)
       redirect_to :room_game_interstitial
     else
-      @room.update_attributes(team_a_score: 0, team_b_score: 0, game: true)
-      for room_player in @room.room_players
-        if room_player.team == "a"
-          room_player.update_attribute(:team, "b")
-        elsif room_player.team == "b"
-          room_player.update_attribute(:team, "a")
-        end
-      end
       redirect_to :room_game_play
     end
+
   end
 
   def game_view
@@ -411,5 +409,26 @@ class RoomsController < ApplicationController
       params.require(:room).permit(:client_token, :name)
     end
 
+    def private_game_end_post
+      if memorable_game?(@room)
+        save_history(@room)
+      end
+
+      @room.update_attributes(team_a_score: 0, team_b_score: 0, game: false)
+      if params[:quit].present?
+        @room.room_players.delete_all
+        @room.update_attribute(:game_session_id, nil)
+      else
+        @room.update_attributes(team_a_score: 0, team_b_score: 0, game: true)
+        @room.room_players.each do |room_player|
+          if room_player.team == "a"
+            room_player.update_attribute(:team, "b")
+          elsif room_player.team == "b"
+            room_player.update_attribute(:team, "a")
+          end
+        end
+
+      end
+    end
 
 end
