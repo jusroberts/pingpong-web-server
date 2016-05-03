@@ -409,14 +409,14 @@ class RoomsController < ApplicationController
       else
         @room.update_attributes(team_a_score: 0, team_b_score: 0, game: true)
         @room.room_players.each do |room_player|
-        if room_player.team == "a"
-          room_player.update_attribute(:team, "b")
-        elsif room_player.team == "b"
-          room_player.update_attribute(:team, "a")
+          if room_player.team == "a"
+            room_player.update_attribute(:team, "b")
+          elsif room_player.team == "b"
+            room_player.update_attribute(:team, "a")
+          end
         end
-      end
 
+      end
     end
-  end
 
 end
