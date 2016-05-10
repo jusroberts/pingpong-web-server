@@ -1,0 +1,9 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+player_one:
+  name: Wade Watts
+  rfid_hash: 94ae910e6492eb9ea8c019b63961d254ee9b51124ae910e6492eb9ea8c019b641
+
+player_two:
+  name: Samantha Cook
+  rfid_hash: 94ae910e6492eb9ea8c019b63961d254ee9b51124ae910e6492eb9ea8c019b644

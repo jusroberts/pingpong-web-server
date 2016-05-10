@@ -1,0 +1,16 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+# This model initially had no columns defined.  If you add columns to the
+# model remove the '{}' from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+one:
+  player: player_one
+  completed: true
+  player_count: 2
+  wins: 1
+  losses: 2
+  average_win_margin: 5
+  average_loss_margin: 8
+  total_points_scored: 100
+  total_points_scored_against: 150

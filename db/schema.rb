@@ -11,7 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160413143446) do
+ActiveRecord::Schema.define(version: 20160510022523) do
+
+  create_table "daily_stats", force: true do |t|
+    t.integer  "player_id"
+    t.datetime "week_start"
+    t.datetime "week_end"
+    t.boolean  "completed"
+    t.integer  "player_count"
+    t.integer  "wins"
+    t.integer  "losses"
+    t.integer  "average_win_margin"
+    t.integer  "average_loss_margin"
+    t.integer  "total_points_scored"
+    t.integer  "total_points_scored_against"
+  end
+
+  add_index "daily_stats", ["player_id", "week_start", "completed", "player_count"], name: "daily_stats_lookup"
+  add_index "daily_stats", ["player_id"], name: "index_daily_stats_on_player_id"
 
   create_table "game_histories", force: true do |t|
     t.integer  "room_id"
@@ -60,8 +77,25 @@ ActiveRecord::Schema.define(version: 20160413143446) do
     t.datetime "updated_at"
     t.boolean  "game"
     t.integer  "player_count",    default: 4, null: false
-    t.datetime "increment_at"
     t.string   "game_session_id"
+    t.datetime "increment_at"
   end
+
+  create_table "weekly_stats", force: true do |t|
+    t.integer  "player_id"
+    t.datetime "week_start"
+    t.datetime "week_end"
+    t.boolean  "completed"
+    t.integer  "player_count"
+    t.integer  "wins"
+    t.integer  "losses"
+    t.integer  "average_win_margin"
+    t.integer  "average_loss_margin"
+    t.integer  "total_points_scored"
+    t.integer  "total_points_scored_against"
+  end
+
+  add_index "weekly_stats", ["player_id", "week_start", "completed", "player_count"], name: "weekly_stats_lookup"
+  add_index "weekly_stats", ["player_id"], name: "index_weekly_stats_on_player_id"
 
 end
