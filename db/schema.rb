@@ -14,22 +14,21 @@
 ActiveRecord::Schema.define(version: 20160510022523) do
 
   create_table "daily_stats", force: true do |t|
-    t.integer  "player_id"
-    t.datetime "week_start"
-    t.datetime "week_end"
-    t.boolean  "completed"
-    t.integer  "player_count"
-    t.integer  "wins"
-    t.integer  "losses"
-    t.integer  "most_defeated_player_id"
-    t.integer  "most_defeated_by_player_id"
-    t.integer  "average_win_margin"
-    t.integer  "average_loss_margin"
-    t.integer  "total_points_scored"
-    t.integer  "total_points_scored_against"
+    t.integer "player_id"
+    t.date    "day"
+    t.boolean "has_completed_aggregation"
+    t.integer "player_count"
+    t.integer "wins"
+    t.integer "losses"
+    t.integer "most_defeated_player_id"
+    t.integer "most_defeated_by_player_id"
+    t.integer "average_win_margin"
+    t.integer "average_loss_margin"
+    t.integer "total_points_scored"
+    t.integer "total_points_scored_against"
   end
 
-  add_index "daily_stats", ["player_id", "week_start", "completed", "player_count"], name: "daily_stats_lookup"
+  add_index "daily_stats", ["player_id", "day", "has_completed_aggregation", "player_count"], name: "daily_stats_lookup"
   add_index "daily_stats", ["player_id"], name: "index_daily_stats_on_player_id"
 
   create_table "game_histories", force: true do |t|
@@ -84,22 +83,21 @@ ActiveRecord::Schema.define(version: 20160510022523) do
   end
 
   create_table "weekly_stats", force: true do |t|
-    t.integer  "player_id"
-    t.datetime "week_start"
-    t.datetime "week_end"
-    t.boolean  "completed"
-    t.integer  "player_count"
-    t.integer  "wins"
-    t.integer  "losses"
-    t.integer  "most_defeated_player_id"
-    t.integer  "most_defeated_by_player_id"
-    t.integer  "average_win_margin"
-    t.integer  "average_loss_margin"
-    t.integer  "total_points_scored"
-    t.integer  "total_points_scored_against"
+    t.integer "player_id"
+    t.date    "week_start"
+    t.boolean "has_completed_aggregation"
+    t.integer "player_count"
+    t.integer "wins"
+    t.integer "losses"
+    t.integer "most_defeated_player_id"
+    t.integer "most_defeated_by_player_id"
+    t.integer "average_win_margin"
+    t.integer "average_loss_margin"
+    t.integer "total_points_scored"
+    t.integer "total_points_scored_against"
   end
 
-  add_index "weekly_stats", ["player_id", "week_start", "completed", "player_count"], name: "weekly_stats_lookup"
+  add_index "weekly_stats", ["player_id", "week_start", "has_completed_aggregation", "player_count"], name: "weekly_stats_lookup"
   add_index "weekly_stats", ["player_id"], name: "index_weekly_stats_on_player_id"
 
 end
