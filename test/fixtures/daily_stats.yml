@@ -4,9 +4,9 @@
 # model remove the '{}' from the fixture names and add the columns immediately
 # below each fixture, per the syntax in the comments below
 #
-one:
+one_singles_uncompleted:
   player: player_one
-  completed: true
+  completed: false
   player_count: 2
   wins: 1
   losses: 2
@@ -14,3 +14,23 @@ one:
   average_loss_margin: 8
   total_points_scored: 100
   total_points_scored_against: 150
+two_singles_uncompleted:
+  player: player_one
+  completed: false
+  player_count: 2
+  wins: 5
+  losses: 4
+  average_win_margin: 10
+  average_loss_margin: 20
+  total_points_scored: 300
+  total_points_scored_against: 450
+three_singles_uncompleted:
+  player: player_one
+  completed: false
+  player_count: 2
+  wins: 1
+  losses: 1
+  average_win_margin: 6
+  average_loss_margin: 3
+  total_points_scored: 1
+  total_points_scored_against: 2

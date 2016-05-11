@@ -8,8 +8,8 @@ class AddDailyStatsTable < ActiveRecord::Migration
       t.integer :player_count
       t.integer :wins
       t.integer :losses
-      t.belongs_to :player, :name => 'most_defeated'
-      t.belongs_to :player, :name => 'most_defeated_by'
+      t.integer :most_defeated_player_id
+      t.integer :most_defeated_by_player_id
       t.integer :average_win_margin
       t.integer :average_loss_margin
       t.integer :total_points_scored
