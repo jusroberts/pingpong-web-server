@@ -32,6 +32,43 @@ class PlayerStats
     @total_period_days += period_days
   end
 
+  # @param game_history [GameHistory]
+  def process_game_history!(game_history)
+
+  end
+
+  # @return [DailyStat]
+  def to_daily_stat
+    if @total_period_days != 1
+      raise "Attempted to convert a stat aggregate of #{@total_period_days} days to a daily stat"
+    end
+
+    DailyStat.new(
+        wins: @wins,
+        losses: @losses,
+        average_win_margin: @average_win_margin,
+        average_loss_margin: @average_loss_margin,
+        total_points_scored: @total_points_scored,
+        total_points_scored_against: @total_points_scored_against
+    )
+  end
+
+  # @return [WeeklyStat]
+  def to_weekly_stat
+    # if @total_period_days != 7
+    #   raise "Attempted to convert a stat aggregate of #{@total_period_days} days to a weekly stat"
+    # end
+
+    WeeklyStat.new(
+        wins: @wins,
+        losses: @losses,
+        average_win_margin: @average_win_margin,
+        average_loss_margin: @average_loss_margin,
+        total_points_scored: @total_points_scored,
+        total_points_scored_against: @total_points_scored_against
+    )
+  end
+
 private
   # @param new_stat_value [Number]
   # @param stat_name [String]

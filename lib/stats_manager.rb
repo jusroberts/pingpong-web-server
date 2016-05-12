@@ -3,8 +3,9 @@ class StatsManager
   def initialize
   end
 
+  # @param game_id [Int]
   # @return [Array<DailyStat>]
-  def run_game_stats
+  def run_game_stats(game_id)
     # Get all player ids in the game
 
     # Run daily stats for each player
@@ -13,10 +14,21 @@ class StatsManager
 
   end
 
-  def run_daily_stats_for_player
+  # @param player_id [Int]
+  # @param player_count [Int]
+  # @param day [Date]
+  # @return [Array<DailyStat>]
+  def run_daily_stats_for_player(player_id, player_count, day)
+    player_stats = PlayerStats.new(player_count)
 
+    # Get all game records for this player today and aggregate each one
+    GameHistory.where(player_id: player_id, player_count: player_count, created_at: day.to_datetime...(day.advance(:hours => 24)).to_datetime).all.each do |game_history|
+      player_stats.process_game_history!(game_history)
+    end
   end
 
+  # @param player_id [Int]
+  # @param player_count [Int]
   def run_weekly_stats_for_player(player_id, player_count)
     # Get all unfinished daily stats for this player
     all_daily_stats = DailyStat.where(player_id: player_id, has_completed_aggregation: false, player_count: player_count).all
@@ -56,10 +68,10 @@ class StatsManager
       weekly_stat.has_completed_aggregation = true
       weekly_stat.save
     end
-
   end
 
   # @param player_id [Int]
+  # @param player_count [Int]
   # @return [PlayerStats]
   def get_player_stats(player_id, player_count)
     player_stats = PlayerStats.new(player_count)

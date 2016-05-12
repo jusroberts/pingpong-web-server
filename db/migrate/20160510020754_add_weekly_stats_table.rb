@@ -9,8 +9,8 @@ class AddWeeklyStatsTable < ActiveRecord::Migration
       t.integer :losses
       t.integer :most_defeated_player_id
       t.integer :most_defeated_by_player_id
-      t.integer :average_win_margin
-      t.integer :average_loss_margin
+      t.float :average_win_margin
+      t.float :average_loss_margin
       t.integer :total_points_scored
       t.integer :total_points_scored_against
     end
