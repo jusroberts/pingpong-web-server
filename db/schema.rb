@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160510022523) do
+ActiveRecord::Schema.define(version: 20160526022753) do
 
   create_table "daily_stats", force: true do |t|
     t.integer "player_id"
@@ -22,8 +22,8 @@ ActiveRecord::Schema.define(version: 20160510022523) do
     t.integer "losses"
     t.integer "most_defeated_player_id"
     t.integer "most_defeated_by_player_id"
-    t.integer "average_win_margin"
-    t.integer "average_loss_margin"
+    t.float   "average_win_margin"
+    t.float   "average_loss_margin"
     t.integer "total_points_scored"
     t.integer "total_points_scored_against"
   end
@@ -55,6 +55,8 @@ ActiveRecord::Schema.define(version: 20160510022523) do
     t.string   "image_url"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.float    "rating_skill"
+    t.float    "rating_confidence"
   end
 
   add_index "players", ["rfid_hash"], name: "index_players_on_rfid_hash"
@@ -91,8 +93,8 @@ ActiveRecord::Schema.define(version: 20160510022523) do
     t.integer "losses"
     t.integer "most_defeated_player_id"
     t.integer "most_defeated_by_player_id"
-    t.integer "average_win_margin"
-    t.integer "average_loss_margin"
+    t.float   "average_win_margin"
+    t.float   "average_loss_margin"
     t.integer "total_points_scored"
     t.integer "total_points_scored_against"
   end
