@@ -1,11 +1,12 @@
 %div.row
   %div.column.small-3.small-centered
     %h1 Pongers
-%div.row.small-up-1.medium-up-2.large-up-3
+%div.row.small-up-1.medium-up-2.large-up-4
   - @players.each do |player|
-    %div.column
+    %div.column.stupid-grid-fix
       %div
         %a{ href: player_report_path(player.id)}
-          =player.name
+          %h5
+            =player.name
       %div
-        %img{:src => player.image_url}
+        %img{:src => player.image_url, :width => 160, :height => 120}

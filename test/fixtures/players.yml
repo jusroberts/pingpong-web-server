@@ -3,15 +3,19 @@
 player_one:
   name: Wade Watts
   rfid_hash: 94ae910e6492eb9ea8c019b63961d254ee9b51124ae910e6492eb9ea8c019b641
+  image_url: https://res.cloudinary.com/dnserxyas/image/upload/v1461181468/ya3a99odnttd5wycmqag.jpg
 
 player_two:
   name: Samantha Cook
   rfid_hash: 94ae910e6492eb9ea8c019b63961d254ee9b51124ae910e6492eb9ea8c019b644
+  image_url: https://res.cloudinary.com/dnserxyas/image/upload/v1462213930/mppzos5j1nrapowxuufm.jpg
 
 player_three:
   name: Boaty McBoatface
   rfid_hash: 94ae910e6492eb9ea8c019b63961d254ee9b51124ae910e6492eb9ea8c019b645
+  image_url: https://res.cloudinary.com/dnserxyas/image/upload/v1461601761/ckq1ontixir5g29mefzm.jpg
 
 player_four:
   name: Hooty McOwlface
   rfid_hash: 94ae910e6492eb9ea8c019b63961d254ee9b51124ae910e6492eb9ea8c019b646
+  image_url: https://res.cloudinary.com/dnserxyas/image/upload/v1461777057/mahy1jpu1qybjpimbfnu.jpg
