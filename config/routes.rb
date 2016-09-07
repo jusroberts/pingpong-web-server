@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get 'reports' => 'reports#index', as: :report_index
+  get 'reports/player/:player_id' => 'reports#player', as: :player_report
+
   resources :rooms do
       get 'controller' => 'rooms#controller'
       get 'game/interstitial' => 'rooms#interstitial', as: :game_interstitial
