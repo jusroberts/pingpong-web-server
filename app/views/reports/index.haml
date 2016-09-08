@@ -1,12 +1,12 @@
 %div.row
-  %div.column.small-3.small-centered
+  %div.column.small-6.small-centered
     %h1.sf-label.text-center Select Player
 %div.row.small-up-1.medium-up-2.large-up-4
   - @players.each do |player|
     %div.column
       %div
         %a{ href: player_report_path(player.id)}
-          %h5
+          %h5.text-center
             =player.name
       %div
-        %img{:src => player.image_url, :width => 160, :height => 120}
+        %img.centered{:src => player.image_url, :width => 160, :height => 120}
