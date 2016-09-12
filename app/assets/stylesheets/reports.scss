@@ -30,6 +30,6 @@ img.centered {
 }
 
 body.index {
-  background: url('/images/app_backgrounds/Stage-Select-Background_gray.png') no-repeat;
-  background-size:cover;
+  background-size: cover;
+  background: url('/images/app_backgrounds/Stage-Select-Background_gray.png') no-repeat fixed;
 }
