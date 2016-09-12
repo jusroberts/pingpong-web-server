@@ -4,9 +4,32 @@
 
 h1.sf-label {
   font-size: 3rem;
+  color: #1262A6;
+}
+
+h5.sf-label {
+  font-size: 1rem;
+  color: #1262A6;
 }
 
 img.centered {
   display: block;
   margin: 0 auto;
+}
+
+.image-button-thing {
+  border: 5px solid #FFFFFF;
+  border-radius: 5px;
+}
+
+.image-button-thing:hover {
+  border-radius: 5px;
+  box-shadow:
+          0 0 0 5px #E29C36,
+          0 0 0 10px #E7DE0A;
+}
+
+body.index {
+  background: url('/images/app_backgrounds/Stage-Select-Background_gray.png') no-repeat;
+  background-size:cover;
 }

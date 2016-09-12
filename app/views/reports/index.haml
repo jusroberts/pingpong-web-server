@@ -4,9 +4,12 @@
 %div.row.small-up-1.medium-up-2.large-up-4
   - @players.each do |player|
     %div.column
-      %div
-        %a{ href: player_report_path(player.id)}
-          %h5.text-center
-            =player.name
-      %div
-        %img.centered{:src => player.image_url, :width => 160, :height => 120}
+      %div.row
+        %div.column.small-centered
+          %a{ href: player_report_path(player.id)}
+            %h5.sf-label.text-center
+              =player.name
+      %div.row
+        %div.column.small-8.small-centered
+          %a{ href: player_report_path(player.id)}
+            %img.image-button-thing{:src => player.image_url, :width => 160, :height => 120}
