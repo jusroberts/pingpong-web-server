@@ -51,8 +51,8 @@ class ReportsController < ApplicationController
             end
           end
 
-          if result['id'] > last_id
-            last_id = result['id']
+          if result['id'].to_i > last_id
+            last_id = result['id'].to_i
           end
         end
       end
