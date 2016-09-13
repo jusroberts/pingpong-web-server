@@ -11,6 +11,7 @@ class ReportsController < ApplicationController
     game_types = { 2 => 'Singles', 4 => 'Doubles' }
 
     @stats = {}
+    @players = {}
 
     # Singles and doubles
     game_types.each do |player_count, type_name|
@@ -31,10 +32,12 @@ class ReportsController < ApplicationController
           game_records = ActiveRecord::Base.connection.exec_query(
               "SELECT player_id, win FROM game_histories WHERE game_id = #{result['game_id']}")
 
-          if result['win']
+          is_win = result['win'] == 1 ? true : false
+
+          if is_win
             # Big winner
             wins += 1
-            get_opposing_player_ids_for_game(player_id, !!result['win'], game_records).each do |opponent_id|
+            get_opposing_player_ids_for_game(player_id, is_win, game_records).each do |opponent_id|
               unless player_ids_beat.has_key?(opponent_id)
                 player_ids_beat[opponent_id] = 0
               end
@@ -43,8 +46,8 @@ class ReportsController < ApplicationController
           else
             # LOSER
             losses += 1
-            get_opposing_player_ids_for_game(player_id, !!result['win'], game_records).each do |opponent_id|
-              unless player_ids_beat.has_key?(opponent_id)
+            get_opposing_player_ids_for_game(player_id, is_win, game_records).each do |opponent_id|
+              unless player_ids_beat_by.has_key?(opponent_id)
                 player_ids_beat_by[opponent_id] = 0
               end
               player_ids_beat_by[opponent_id] += 1
@@ -60,13 +63,20 @@ class ReportsController < ApplicationController
       player_id_beat, beat_count = player_ids_beat.max_by{ |k,v| v }
       player_id_beat_by, beat_by_count = player_ids_beat_by.max_by{ |k,v| v }
 
+      @players[type_name] = {
+          :most_beat => {
+              :player => Player.find_by(:id => player_id_beat),
+              :count => beat_count
+          },
+          :most_beat_by => {
+              :player => Player.find_by(:id => player_id_beat_by),
+              :count => beat_by_count
+          },
+      }
+
       @stats[type_name] = {
         :wins => wins,
         :losses => losses,
-        :most_beat => player_id_beat,
-        :most_beat_count => beat_count,
-        :most_beat_by => player_id_beat_by,
-        :most_beat_by_count => beat_by_count,
       }
     end
   end

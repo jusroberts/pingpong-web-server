@@ -16,6 +16,24 @@
     %div.column.small-10.small-centered
       %table
         %tbody
+          - @players[type_name].each do |label, player_data|
+            - label = label.to_s.tr!('_', ' ')
+            -player, count = player_data.values_at(:player, :count)
+            - if player
+              %tr
+                %td
+                  %h5.sf-label
+                    =label
+                %td
+                  %h5.sf-label
+                    =link_to(player.name, "/reports/player/#{player.id}")
+              %tr
+                %td
+                  %h5.sf-label
+                    ="#{label} count"
+                %td
+                  %h5.sf-label
+                    = count
           - stats.each do |stat_name, stat_value|
             - if stat_value
               %tr
