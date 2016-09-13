@@ -1,0 +1,27 @@
+%div.row
+  %div.column.small-8.small-centered
+    %div.row
+      %div.column.small-8.small-centered
+        %h1.sf-label.text-center
+          =@player.name
+    %div.row
+      %div.column.small-5.small-centered.shrink
+        %img{:src => @player.image_url}
+- @stats.each do |type_name, stats|
+  %div.row
+    %div.column.small-4
+      %h1.sf-label
+        =type_name
+  %div.row
+    %div.column.small-10.small-centered
+      %table
+        %tbody
+          - stats.each do |stat_name, stat_value|
+            - if stat_value
+              %tr
+                %td
+                  %h5.sf-label
+                    =stat_name
+                %td
+                  %h5.sf-label
+                    =stat_value
