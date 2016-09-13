@@ -77,7 +77,7 @@ class ReportsController < ApplicationController
     out = []
     win_field = is_winner ? 1 : 0
     game_records.each do |game_record|
-      if (game_record['player_id'] != player_id) &&
+      if (game_record['player_id'].to_i != player_id) &&
           (game_record['win'] != win_field)
         out << game_record['player_id']
       end
