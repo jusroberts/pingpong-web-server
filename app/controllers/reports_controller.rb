@@ -29,7 +29,7 @@ class ReportsController < ApplicationController
                     .order('id asc')
 
         break if !chunk || chunk.length == 0
-        # break if !chunk.rows || chunk.rows.length == 0
+        puts "Processing chunk of #{chunk.length} rows for #{@player.name} id #{player_id}\n"
 
         chunk.each do |result|
           # @type result [GameHistory]
@@ -37,6 +37,7 @@ class ReportsController < ApplicationController
 
           if result.win
             # Big winner
+            puts "Processing win for #{@player.name} id #{player_id}\n"
             wins += 1
             get_opposing_player_ids_for_game(player_id, result.win, game_records).each do |opponent_id|
               unless player_ids_beat.has_key?(opponent_id)
@@ -47,6 +48,7 @@ class ReportsController < ApplicationController
           else
             # LOSER
             losses += 1
+            puts "Processing loss for #{@player.name} id #{player_id}\n"
             get_opposing_player_ids_for_game(player_id, result.win, game_records).each do |opponent_id|
               unless player_ids_beat_by.has_key?(opponent_id)
                 player_ids_beat_by[opponent_id] = 0
