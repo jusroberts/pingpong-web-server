@@ -6,7 +6,6 @@ class ReportsController < ApplicationController
   def player
     player_id = params[:player_id].to_i
     @player = Player.find_by(:id => player_id)
-    last_id = 0
 
     game_types = { 2 => 'Singles', 4 => 'Doubles' }
 
@@ -15,6 +14,7 @@ class ReportsController < ApplicationController
 
     # Singles and doubles
     game_types.each do |player_count, type_name|
+      last_id = 0
       wins = 0
       losses = 0
       player_ids_beat = {}
