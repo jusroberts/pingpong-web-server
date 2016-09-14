@@ -32,9 +32,8 @@ class ReportsController < ApplicationController
                     .limit(50)
                     .order('id asc').to_sql
 
-        puts "Pulling chunk for count #{player_count} for player #{@player.name} id #{player_id} using query #{query}\n"
+        puts "Processing chunk of #{chunk.length} rows for count #{player_count} for #{@player.name} id #{player_id} using query #{query}\n"
         break if !chunk || chunk.length == 0
-        puts "Processing chunk of #{chunk.length} rows for count #{player_count} for #{@player.name} id #{player_id}\n"
 
         chunk.each do |result|
           # @type result [GameHistory]
