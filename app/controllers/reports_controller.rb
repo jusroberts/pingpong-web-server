@@ -22,22 +22,23 @@ class ReportsController < ApplicationController
 
       # Iterate through chunks of history records
       loop do
-        chunk = ActiveRecord::Base.connection.exec_query(
-            "SELECT * FROM game_histories WHERE player_id = #{player_id} AND player_count = #{player_count} " +
-                "AND id > #{last_id} ORDER BY ID ASC LIMIT 50")
+        # @type chunk [Array<GameHistory>]
+        chunk = GameHistory
+                    .where('player_id = ? AND player_count = ? AND id > ?', player_id, player_count, last_id)
+                    .limit(50)
+                    .order('id asc')
 
-        break if chunk.rows.length == 0
+        break if !chunk || chunk.length == 0
+        # break if !chunk.rows || chunk.rows.length == 0
 
         chunk.each do |result|
-          game_records = ActiveRecord::Base.connection.exec_query(
-              "SELECT player_id, win FROM game_histories WHERE game_id = #{result['game_id']}")
+          # @type result [GameHistory]
+          game_records = GameHistory.where(:game_id => result['game_id'])
 
-          is_win = result['win'] == 1 ? true : false
-
-          if is_win
+          if result.win
             # Big winner
             wins += 1
-            get_opposing_player_ids_for_game(player_id, is_win, game_records).each do |opponent_id|
+            get_opposing_player_ids_for_game(player_id, result.win, game_records).each do |opponent_id|
               unless player_ids_beat.has_key?(opponent_id)
                 player_ids_beat[opponent_id] = 0
               end
@@ -46,7 +47,7 @@ class ReportsController < ApplicationController
           else
             # LOSER
             losses += 1
-            get_opposing_player_ids_for_game(player_id, is_win, game_records).each do |opponent_id|
+            get_opposing_player_ids_for_game(player_id, result.win, game_records).each do |opponent_id|
               unless player_ids_beat_by.has_key?(opponent_id)
                 player_ids_beat_by[opponent_id] = 0
               end
