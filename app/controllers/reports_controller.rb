@@ -90,13 +90,16 @@ class ReportsController < ApplicationController
 
   private
 
+  # @param [Numeric] player_id
+  # @param [Boolean] is_winner
+  # @param [Array<GameHistory>] game_records
   def get_opposing_player_ids_for_game(player_id, is_winner, game_records)
     out = []
-    win_field = is_winner ? 1 : 0
     game_records.each do |game_record|
-      if (game_record['player_id'].to_i != player_id) &&
-          (game_record['win'] != win_field)
-        out << game_record['player_id']
+      # @type game_record [GameHistory]
+      if (game_record.player_id != player_id) &&
+          (game_record.win != is_winner)
+        out << game_record.player_id
       end
     end
     out
