@@ -27,9 +27,14 @@ class ReportsController < ApplicationController
                     .where('player_id = ? AND player_count = ? AND id > ?', player_id, player_count, last_id)
                     .limit(50)
                     .order('id asc')
+        query = GameHistory
+                    .where('player_id = ? AND player_count = ? AND id > ?', player_id, player_count, last_id)
+                    .limit(50)
+                    .order('id asc').to_sql
 
+        puts "Pulling chunk for count #{player_count} for player #{@player.name} id #{player_id} using query #{query}\n"
         break if !chunk || chunk.length == 0
-        puts "Processing chunk of #{chunk.length} rows for #{@player.name} id #{player_id}\n"
+        puts "Processing chunk of #{chunk.length} rows for count #{player_count} for #{@player.name} id #{player_id}\n"
 
         chunk.each do |result|
           # @type result [GameHistory]
