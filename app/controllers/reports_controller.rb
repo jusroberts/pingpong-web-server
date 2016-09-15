@@ -27,12 +27,8 @@ class ReportsController < ApplicationController
                     .where('player_id = ? AND player_count = ? AND id > ?', player_id, player_count, last_id)
                     .limit(50)
                     .order('id asc')
-        query = GameHistory
-                    .where('player_id = ? AND player_count = ? AND id > ?', player_id, player_count, last_id)
-                    .limit(50)
-                    .order('id asc').to_sql
 
-        puts "Processing chunk of #{chunk.length} rows for count #{player_count} for #{@player.name} id #{player_id} using query #{query}\n"
+        puts "Processing chunk of #{chunk.length} rows for count #{player_count} for #{@player.name} id #{player_id}\n"
         break if !chunk || chunk.length == 0
 
         chunk.each do |result|
@@ -41,7 +37,6 @@ class ReportsController < ApplicationController
 
           if result.win
             # Big winner
-            puts "Processing win for #{@player.name} id #{player_id}\n"
             wins += 1
             get_opposing_player_ids_for_game(player_id, result.win, game_records).each do |opponent_id|
               unless player_ids_beat.has_key?(opponent_id)
@@ -52,7 +47,6 @@ class ReportsController < ApplicationController
           else
             # LOSER
             losses += 1
-            puts "Processing loss for #{@player.name} id #{player_id}\n"
             get_opposing_player_ids_for_game(player_id, result.win, game_records).each do |opponent_id|
               unless player_ids_beat_by.has_key?(opponent_id)
                 player_ids_beat_by[opponent_id] = 0
@@ -61,8 +55,8 @@ class ReportsController < ApplicationController
             end
           end
 
-          if result['id'].to_i > last_id
-            last_id = result['id'].to_i
+          if result.id > last_id
+            last_id = result.id
           end
         end
       end
@@ -95,8 +89,8 @@ class ReportsController < ApplicationController
   # @param [Array<GameHistory>] game_records
   def get_opposing_player_ids_for_game(player_id, is_winner, game_records)
     out = []
+    # @type game_record [GameHistory]
     game_records.each do |game_record|
-      # @type game_record [GameHistory]
       if (game_record.player_id != player_id) &&
           (game_record.win != is_winner)
         out << game_record.player_id

@@ -4,12 +4,24 @@
 
 h1.sf-label {
   font-size: 3rem;
-  color: #1262A6;
+  color: yellow;
+}
+
+h1.sf-label.sublabel {
+  color: white;
+}
+
+.link-label {
+  color: yellow;
+}
+
+.link-label:visited {
+  color: darkgoldenrod;
 }
 
 h5.sf-label {
   font-size: 1rem;
-  color: #1262A6;
+  color: white;
 }
 
 div.row-break {
@@ -33,6 +45,6 @@ img.centered {
           0 0 0 10px #E7DE0A;
 }
 
-body.index {
-  background-color: gray;
+body.reports {
+  background-color: black;
 }

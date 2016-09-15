@@ -10,10 +10,10 @@
 - @stats.each do |type_name, stats|
   %div.row
     %div.column.small-4
-      %h1.sf-label
+      %h1.sf-label.sublabel
         =type_name
   %div.row
-    %div.column.small-10.small-centered
+    %div.column.small-9.small-centered
       %table
         %tbody
           - @players[type_name].each do |label, player_data|
@@ -26,7 +26,7 @@
                     =label
                 %td
                   %h5.sf-label
-                    =link_to(player.name, "/reports/player/#{player.id}")
+                    =link_to(player.name, "/reports/player/#{player.id}", {:class => 'link-label'})
               %tr
                 %td
                   %h5.sf-label
