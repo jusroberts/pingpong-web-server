@@ -80,6 +80,8 @@ class ReportsController < ApplicationController
         :losses => losses,
       }
     end
+    @total_wins = @stats['Singles'][:wins] + @stats['Singles'][:wins]
+    @total_losses = @stats['Doubles'][:losses] + @stats['Doubles'][:losses]
   end
 
   private

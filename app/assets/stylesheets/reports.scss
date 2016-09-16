@@ -2,12 +2,16 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-h1.sf-label {
+.street-fighter {
+  font-family: 'street fighter';
+  font-weight: normal;
+}
+h1.street-fighter {
   font-size: 3rem;
   color: yellow;
 }
 
-h1.sf-label.sublabel {
+h1.street-fighter.sublabel {
   color: white;
 }
 
@@ -19,7 +23,7 @@ h1.sf-label.sublabel {
   color: darkgoldenrod;
 }
 
-h5.sf-label {
+h5.street-fighter {
   font-size: 1rem;
   color: white;
 }

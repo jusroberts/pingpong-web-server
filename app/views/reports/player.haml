@@ -1,16 +1,22 @@
 %div.row
-  %div.column.small-8.small-centered
+  %div.column.small-8
     %div.row
       %div.column.small-8.small-centered
-        %h1.sf-label.text-center
-          =@player.name
+        %h1.street-fighter.text-center
+          = @player.name
     %div.row
       %div.column.small-5.small-centered.shrink
         %img{:src => @player.image_url}
+  -#%div.column.small-4{:style => 'display: flex; align-items: center'}
+  -#%div.column.small-4{:style => 'display: flex; flex-direction: column'}
+  %div.column.small-4{:style => 'height: 100%; min-height: 100%; display: flex; flex-direction: column'}
+    %div.row
+      %h1.street-fighter.text-center{:style => 'flex: 1'}
+        = "#{@total_wins} - #{@total_losses}"
 - @stats.each do |type_name, stats|
   %div.row
     %div.column.small-4
-      %h1.sf-label.sublabel
+      %h1.street-fighter.sublabel
         =type_name
   %div.row
     %div.column.small-9.small-centered
@@ -18,28 +24,28 @@
         %tbody
           - @players[type_name].each do |label, player_data|
             - label = label.to_s.tr!('_', ' ')
-            -player, count = player_data.values_at(:player, :count)
+            - player, count = player_data.values_at(:player, :count)
             - if player
               %tr
                 %td
-                  %h5.sf-label
+                  %h5.street-fighter
                     =label
                 %td
-                  %h5.sf-label
+                  %h5.street-fighter
                     =link_to(player.name, "/reports/player/#{player.id}", {:class => 'link-label'})
               %tr
                 %td
-                  %h5.sf-label
+                  %h5.street-fighter
                     ="#{label} count"
                 %td
-                  %h5.sf-label
+                  %h5.street-fighter
                     = count
           - stats.each do |stat_name, stat_value|
             - if stat_value
               %tr
                 %td
-                  %h5.sf-label
+                  %h5.street-fighter
                     =stat_name
                 %td
-                  %h5.sf-label
+                  %h5.street-fighter
                     =stat_value
