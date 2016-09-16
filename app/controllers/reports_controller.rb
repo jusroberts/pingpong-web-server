@@ -3,6 +3,10 @@ class ReportsController < ApplicationController
     @players = Player.all
   end
 
+  def history
+
+  end
+
   def player
     player_id = params[:player_id].to_i
     @player = Player.find_by(:id => player_id)
@@ -101,7 +105,5 @@ class ReportsController < ApplicationController
     out
   end
 
-  def get_output_player_hashes()
 
-  end
 end
