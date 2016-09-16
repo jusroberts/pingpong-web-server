@@ -42,6 +42,7 @@
                     = count
           - stats.each do |stat_name, stat_value|
             - if stat_value && stat_value != 0
+            - stat_name = stat_name.to_s.gsub('_', ' ')
               %tr
                 %td
                   %h5.street-fighter
