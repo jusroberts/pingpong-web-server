@@ -96,8 +96,8 @@ class ReportsController < ApplicationController
         :biggest_loss => biggest_loss,
       }
     end
-    @total_wins = @stats['Singles'][:wins] + @stats['Singles'][:wins]
-    @total_losses = @stats['Doubles'][:losses] + @stats['Doubles'][:losses]
+    @total_wins = @stats['Singles'][:wins] + @stats['Doubles'][:wins]
+    @total_losses = @stats['Singles'][:losses] + @stats['Doubles'][:losses]
   end
 
   private
