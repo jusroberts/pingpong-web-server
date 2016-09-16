@@ -41,7 +41,7 @@
                   %h5.street-fighter
                     = count
           - stats.each do |stat_name, stat_value|
-            - if stat_value
+            - if stat_value && stat_value != 0
               %tr
                 %td
                   %h5.street-fighter

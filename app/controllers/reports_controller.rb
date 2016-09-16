@@ -21,6 +21,8 @@ class ReportsController < ApplicationController
       last_id = 0
       wins = 0
       losses = 0
+      biggest_win = 0
+      biggest_loss = 0
       player_ids_beat = {}
       player_ids_beat_by = {}
 
@@ -48,6 +50,10 @@ class ReportsController < ApplicationController
               end
               player_ids_beat[opponent_id] += 1
             end
+            margin = result.player_team_score - result.opponent_team_score
+            if margin > biggest_win
+              biggest_win = margin
+            end
           else
             # LOSER
             losses += 1
@@ -56,6 +62,10 @@ class ReportsController < ApplicationController
                 player_ids_beat_by[opponent_id] = 0
               end
               player_ids_beat_by[opponent_id] += 1
+            end
+            margin = result.opponent_team_score - result.player_team_score
+            if margin > biggest_loss
+              biggest_loss = margin
             end
           end
 
@@ -82,6 +92,8 @@ class ReportsController < ApplicationController
       @stats[type_name] = {
         :wins => wins,
         :losses => losses,
+        :biggest_win => biggest_win,
+        :biggest_loss => biggest_loss,
       }
     end
     @total_wins = @stats['Singles'][:wins] + @stats['Singles'][:wins]
