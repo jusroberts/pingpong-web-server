@@ -1,17 +1,11 @@
 %div.row
-  %div.column.small-8
-    %div.row
-      %div.column.small-8.small-centered
+  %div.column.small-10.small-centered
+    %div.flex-container.centered-flex
+      %div.flex-container.centered-flex.column-flex.flex-container
         %h1.street-fighter.text-center
           = @player.name
-    %div.row
-      %div.column.small-5.small-centered.shrink
-        %img{:src => @player.image_url}
-  -#%div.column.small-4{:style => 'display: flex; align-items: center'}
-  -#%div.column.small-4{:style => 'display: flex; flex-direction: column'}
-  %div.column.small-4{:style => 'height: 100%; min-height: 100%; display: flex; flex-direction: column'}
-    %div.row
-      %h1.street-fighter.text-center{:style => 'flex: 1'}
+        %img{:src => @player.image_url, :height => '320', :width => '240', :style => 'flex-basis: content;'}
+      %h1.street-fighter.text-center
         = "#{@total_wins} - #{@total_losses}"
 - @stats.each do |type_name, stats|
   %div.row
@@ -42,7 +36,7 @@
                     = count
           - stats.each do |stat_name, stat_value|
             - if stat_value && stat_value != 0
-            - stat_name = stat_name.to_s.gsub('_', ' ')
+              - stat_name = stat_name.to_s.gsub('_', ' ')
               %tr
                 %td
                   %h5.street-fighter

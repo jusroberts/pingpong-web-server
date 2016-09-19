@@ -2,6 +2,20 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+div.flex-container {
+  display: flex;
+  flex-direction: row;
+}
+
+div.flex-container.centered-flex {
+  align-items: center;
+  justify-content: center;
+}
+
+div.flex-container.column-flex {
+  flex-direction: column;
+}
+
 .street-fighter {
   font-family: 'street fighter';
   font-weight: normal;
