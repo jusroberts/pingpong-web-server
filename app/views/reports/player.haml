@@ -1,12 +1,13 @@
 %div.row
   %div.column.small-10.small-centered
     %div.flex-container.centered-flex
+      %div.flex-item
+        %img.player-avatar-native{:src => @player.image_url}
       %div.flex-container.centered-flex.column-flex.flex-container.flex-item
         %h1.street-fighter.text-center.flex-item
           = @player.name
-        %img.flex-item.player-avatar-native{:src => @player.image_url}
-      %h1.street-fighter.text-center.flex-item
-        = "#{@total_wins} - #{@total_losses}"
+        %h1.street-fighter.text-center.flex-item
+          = "#{@total_wins} - #{@total_losses}"
 - @stats.each do |type_name, stats|
   %div.row
     %div.column.small-4
