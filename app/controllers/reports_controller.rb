@@ -92,8 +92,8 @@ class ReportsController < ApplicationController
       @stats[type_name] = {
         :wins => wins,
         :losses => losses,
-        :biggest_win => biggest_win,
-        :biggest_loss => biggest_loss,
+        # :biggest_win => biggest_win,
+        # :biggest_loss => biggest_loss,
       }
     end
     @total_wins = @stats['Singles'][:wins] + @stats['Doubles'][:wins]
