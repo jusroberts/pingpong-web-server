@@ -1,11 +1,11 @@
 %div.row
   %div.column.small-10.small-centered
     %div.flex-container.centered-flex
-      %div.flex-container.centered-flex.column-flex.flex-container
-        %h1.street-fighter.text-center
+      %div.flex-container.centered-flex.column-flex.flex-container.flex-item
+        %h1.street-fighter.text-center.flex-item
           = @player.name
-        %img{:src => @player.image_url, :height => '320', :width => '240', :style => 'flex-basis: content;'}
-      %h1.street-fighter.text-center
+        %img.flex-item{:src => @player.image_url, :height => '320', :width => '240', :style => 'flex-basis: content;'}
+      %h1.street-fighter.text-center.flex-item
         = "#{@total_wins} - #{@total_losses}"
 - @stats.each do |type_name, stats|
   %div.row
