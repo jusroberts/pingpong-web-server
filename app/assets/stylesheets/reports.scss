@@ -20,6 +20,16 @@ div.flex-container.column-flex {
   flex: 1;
 }
 
+img.player-avatar-native {
+  width: 320px !important;
+  height: 240px !important;
+}
+
+img.player-avatar-thumbnail {
+  width: 160px !important;
+  height: 120px !important;
+}
+
 .street-fighter {
   font-family: 'street fighter';
   font-weight: normal;

@@ -4,7 +4,7 @@
       %div.flex-container.centered-flex.column-flex.flex-container.flex-item
         %h1.street-fighter.text-center.flex-item
           = @player.name
-        %img.flex-item{:src => @player.image_url, :height => '320', :width => '240', :style => 'flex-basis: content;'}
+        %img.flex-item.player-avatar-native{:src => @player.image_url}
       %h1.street-fighter.text-center.flex-item
         = "#{@total_wins} - #{@total_losses}"
 - @stats.each do |type_name, stats|
