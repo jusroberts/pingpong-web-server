@@ -2,6 +2,7 @@ require 'time'
 require 'rating/trueskill'
 include Saulabs::TrueSkill
 
+# http://www.moserware.com/2010/03/computing-your-skill.html
 class RatingManager
   def initialize
     @beta = 2.0
@@ -11,7 +12,7 @@ class RatingManager
   # @param player [Player]
   # @return [Rating]
   private def get_rating_for_player(player)
-    Rating.new(player.rating_skill, player.rating_confidence, 1.0)
+    Rating.new(player.rating_skill, player.rating_deviation, 1.0)
   end
 
   # @param team_1 [Array<Player>]
@@ -46,7 +47,7 @@ class RatingManager
       # @type rating [Rating]
       rating = team_1_ratings[index]
       player.rating_skill = rating.mean
-      player.rating_confidence = rating.deviation
+      player.rating_deviation = rating.deviation
       player.save
     end
 
@@ -55,7 +56,7 @@ class RatingManager
       # @type rating [Rating]
       rating = team_2_ratings[index]
       player.rating_skill = rating.mean
-      player.rating_confidence = rating.deviation
+      player.rating_deviation = rating.deviation
       player.save
     end
 

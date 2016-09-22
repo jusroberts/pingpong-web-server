@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160526022753) do
+ActiveRecord::Schema.define(version: 20160922171921) do
 
   create_table "daily_stats", force: true do |t|
     t.integer "player_id"
@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(version: 20160526022753) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "rating_skill"
-    t.float    "rating_confidence"
+    t.float    "rating_deviation"
   end
 
   add_index "players", ["rfid_hash"], name: "index_players_on_rfid_hash"
