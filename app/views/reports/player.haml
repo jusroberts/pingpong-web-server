@@ -1,0 +1,47 @@
+%div.row.row-break
+  %div.column.small-10.small-centered
+    %div.flex-container.centered-flex
+      %div.flex-item
+        %img.player-avatar-native{:src => @player.image_url}
+      %div.flex-container.centered-flex.column-flex.flex-container.flex-item
+        %h1.street-fighter.text-center.flex-item
+          = @player.name
+        %h1.street-fighter.text-center.flex-item
+          = "#{@total_wins} - #{@total_losses}"
+- @stats.each do |type_name, stats|
+  %div.row
+    %div.column.small-4
+      %h1.street-fighter.sublabel
+        =type_name
+  %div.row
+    %div.column.small-9.small-centered
+      %table
+        %tbody
+          - @players[type_name].each do |label, player_data|
+            - label = label.to_s.tr!('_', ' ')
+            - player, count = player_data.values_at(:player, :count)
+            - if player
+              %tr
+                %td
+                  %h5.street-fighter
+                    =label
+                %td
+                  %h5.street-fighter
+                    =link_to(player.name, "/reports/player/#{player.id}", {:class => 'link-label'})
+              %tr
+                %td
+                  %h5.street-fighter
+                    ="#{label} count"
+                %td
+                  %h5.street-fighter
+                    = count
+          - stats.each do |stat_name, stat_value|
+            - if stat_value && stat_value != 0
+              - stat_name = stat_name.to_s.gsub('_', ' ')
+              %tr
+                %td
+                  %h5.street-fighter
+                    =stat_name
+                %td
+                  %h5.street-fighter
+                    =stat_value

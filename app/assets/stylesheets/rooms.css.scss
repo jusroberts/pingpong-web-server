@@ -128,7 +128,7 @@ body.rooms.game_newfull {
   background: url("/images/app_backgrounds/Stage-Select-Background.png");
   background-size: cover;
 }
-.column {
+.column.game-column, .column.settingsbox {
     // border: 1px solid #e6e6e6;
     box-sizing: border-box;
     margin: 2%;

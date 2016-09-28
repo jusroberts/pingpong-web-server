@@ -1,0 +1,83 @@
+// Place all the styles related to the Reports controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+div.flex-container {
+  display: flex;
+  flex-direction: row;
+}
+
+div.flex-container.centered-flex {
+  align-items: center;
+  justify-content: center;
+}
+
+div.flex-container.column-flex {
+  flex-direction: column;
+}
+
+.flex-item {
+  flex: 1;
+}
+
+img.player-avatar-native {
+  width: 320px !important;
+  height: 240px !important;
+}
+
+img.player-avatar-thumbnail {
+  width: 160px !important;
+  height: 120px !important;
+}
+
+.street-fighter {
+  font-family: 'street fighter';
+  font-weight: normal;
+}
+h1.street-fighter {
+  font-size: 3rem;
+  color: yellow;
+}
+
+h1.street-fighter.sublabel {
+  color: white;
+}
+
+.link-label {
+  color: yellow;
+}
+
+.link-label:visited {
+  color: darkgoldenrod;
+}
+
+h5.street-fighter {
+  font-size: 1rem;
+  color: white;
+}
+
+div.row-break {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+img.centered {
+  display: block;
+  margin: 0 auto;
+}
+
+.image-button-thing {
+  border: 5px solid #FFFFFF;
+  border-radius: 5px;
+}
+
+.image-button-thing:hover {
+  border-radius: 5px;
+  box-shadow:
+          0 0 0 5px #E29C36,
+          0 0 0 10px #E7DE0A;
+}
+
+body.reports {
+  background-color: black;
+}
