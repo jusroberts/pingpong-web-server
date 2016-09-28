@@ -7,9 +7,9 @@ namespace :backfill do
     loop do
       # Grab a chunk of game_ids
       game_ids = GameHistory
-                     .pluck('DISTINCT game_id')
                      .limit(100)
                      .order('id asc')
+                     .pluck('DISTINCT game_id')
 
       break if game_ids.length == 0
 
