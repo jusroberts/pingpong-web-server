@@ -4,6 +4,17 @@ include Saulabs::TrueSkill
 
 # http://www.moserware.com/2010/03/computing-your-skill.html
 class RatingManager
+  # Default initial mean of ratings.
+  TRUESKILL_MU = 25.0
+  # Default initial standard deviation of ratings.
+  TRUESKILL_SIGMA = 8.333333333333334
+  # Default distance that guarantees about 76% chance of winning.
+  TRUESKILL_BETA = 4.166666666666667
+  # Default dynamic factor.
+  TRUESKILL_TAU = 0.08333333333333334
+  # Default draw probability of the game.
+  TRUESKILL_DRAW_PROBABILITY = 0.1
+
   def initialize
     @beta = 2.0
     @gamma = 0.5
@@ -12,7 +23,9 @@ class RatingManager
   # @param player [Player]
   # @return [Rating]
   private def get_rating_for_player(player)
-    Rating.new(player.rating_skill, player.rating_deviation, 1.0)
+    skill = player.rating_skill ? player.rating_skill : TRUESKILL_MU
+    deviation = player.rating_deviation ? player.rating_deviation : TRUESKILL_SIGMA
+    Rating.new(skill, deviation, 1.0)
   end
 
   # @param team_1 [Array<Player>]
