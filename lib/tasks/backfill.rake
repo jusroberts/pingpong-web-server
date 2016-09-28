@@ -3,10 +3,12 @@ namespace :backfill do
   task backfill_rating: :environment do
     player_cache = {}
     manager = RatingManager.new
+    last_id = 0
 
     loop do
       # Grab a chunk of game_ids
       game_ids = GameHistory
+                     .where('game_id > ?', last_id)
                      .limit(100)
                      .order('game_id asc')
                      .pluck('DISTINCT game_id')
@@ -55,6 +57,10 @@ namespace :backfill do
 
         winning_players.each { |player| player.save }
         losing_players.each { |player| player.save }
+
+        if game_id > last_id
+          last_id = game_id
+        end
       end
     end
   end
