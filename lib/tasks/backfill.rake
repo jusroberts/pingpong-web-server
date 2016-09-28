@@ -5,6 +5,9 @@ namespace :backfill do
     manager = RatingManager.new
     last_id = 0
 
+    # Zero out all ratings before recalculating
+    ActiveRecord::Base.connection.execute("UPDATE players SET rating_skill = #{RatingManager::TRUESKILL_MU}, rating_deviation = #{RatingManager::TRUESKILL_SIGMA}")
+
     loop do
       # Grab a chunk of game_ids
       game_ids = GameHistory
