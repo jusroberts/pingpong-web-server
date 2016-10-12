@@ -46,20 +46,31 @@ namespace :backfill do
           unless player_cache.has_key?(winner_id)
             player_cache[winner_id] = Player.find_by(:id => winner_id)
           end
-          player_cache[winner_id]
+          # @type winner [Player]
+          winner = player_cache[winner_id]
+          puts "Winner id #{winner_id} before win processed skill: #{winner.rating_skill}, deviation: #{winner.rating_deviation}"
+          winner
         end
         losing_players = loser_ids.map do |loser_id|
           unless player_cache.has_key?(loser_id)
             player_cache[loser_id] = Player.find_by(:id => loser_id)
           end
-          player_cache[loser_id]
+          loser = player_cache[loser_id]
+          puts "Loser id #{loser_id} before lose processed skill: #{loser.rating_skill}, deviation: #{loser.rating_deviation}"
+          loser
         end
 
         puts "Updating skills for #{game_id}, team #{winner_ids.join(',')} won by #{winning_margin} over #{loser_ids.join(',')}"
         manager.process_game(winning_players, winning_margin, losing_players, losing_margin)
 
-        winning_players.each { |player| player.save }
-        losing_players.each { |player| player.save }
+        winning_players.each do |winner|
+          winner.save
+          puts "Winner id #{winner.id} after win processed skill: #{winner.rating_skill}, deviation: #{winner.rating_deviation}"
+        end
+        losing_players.each do |loser|
+          loser.save
+          puts "Loser id #{loser.id} after lose processed skill: #{loser.rating_skill}, deviation: #{loser.rating_deviation}"
+        end
 
         if game_id > last_id
           last_id = game_id
