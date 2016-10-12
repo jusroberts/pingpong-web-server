@@ -342,25 +342,33 @@ class RoomsController < ApplicationController
       # We should batch this but ActiveRecord makes it a pain in the ass and I don't care that much
       # @type [Array<GameHistory>]
       histories = []
+      # @type [Array<Player>]
+      winning_players = []
+      # @type [Array<Player>]
+      losing_players = []
       if room.team_a_score > room.team_b_score
         # Yay for team A
         team_a_players.each do |room_player|
           history = new_game_history(room, room_player, true)
           histories << history
+          winning_players << Player.find_by(:id => room_player.player_id)
         end
         team_b_players.each do |room_player|
           history = new_game_history(room, room_player, false)
           histories << history
+          losing_players << Player.find_by(:id => room_player.player_id)
         end
       else
         team_a_players.each do |room_player|
           history = new_game_history(room, room_player, false)
           histories << history
+          winning_players << Player.find_by(:id => room_player.player_id)
         end
         # All glory to team B
         team_b_players.each do |room_player|
           history = new_game_history(room, room_player, true)
           histories << history
+          losing_players << Player.find_by(:id => room_player.player_id)
         end
       end
 
@@ -369,6 +377,13 @@ class RoomsController < ApplicationController
       histories.each do |history|
         history.update_attributes(game_id: game_id)
       end
+
+      # Update skills
+      margin = (room.team_a_score - room.team_b_score).abs
+      manager = RatingManager.new
+      manager.process_game(winning_players, margin, losing_players, -margin)
+      winning_players.each { |player| player.save }
+      losing_players.each { |player| player.save }
     end
 
     # @param room [Room]

@@ -16,7 +16,7 @@ class RatingManager
   TRUESKILL_DRAW_PROBABILITY = 0.1
 
   def initialize
-    @beta = 2.0
+    @beta = TRUESKILL_BETA
     @gamma = 0.5
   end
 
