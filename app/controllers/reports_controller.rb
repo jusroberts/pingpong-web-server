@@ -7,6 +7,10 @@ class ReportsController < ApplicationController
 
   end
 
+  def leaderboard
+    @players = Player.all.order(rating_skill: :desc).limit(20)
+  end
+
   def player
     player_id = params[:player_id].to_i
     @player = Player.find_by(:id => player_id)

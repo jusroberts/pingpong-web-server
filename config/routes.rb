@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get 'reports' => 'reports#index', as: :report_index
+  get 'reports/leaderboard' => 'reports#leaderboard', as: :report_leaderboard
   get 'reports/player/:player_id' => 'reports#player', as: :player_report
   get 'reports/historyTable/:player_id_1(/:player_id_2)' => 'reports#history', as: :history_table
 

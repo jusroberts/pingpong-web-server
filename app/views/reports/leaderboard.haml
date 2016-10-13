@@ -1,0 +1,31 @@
+%div.row
+  %div.column.small-12
+    %h1.street-fighter.sublabel.text-center
+      Leaderboard
+%div.row
+  %div.column.small-9.small-centered
+    %table
+      %thead
+        %tr
+          %td
+            %h4.street-fighter
+              Player
+          %td
+            %h4.street-fighter
+              Rating
+          %td
+            %h4.street-fighter
+              Deviation
+      %tbody
+        - @players.each do |player|
+          - if player
+            %tr
+              %td
+                %h5.street-fighter
+                  =link_to(player.name, "/reports/player/#{player.id}", {:class => 'link-label'})
+              %td
+                %h5.street-fighter
+                  =player.rating_skill
+              %td
+                %h5.street-fighter
+                  =player.rating_deviation
