@@ -1,4 +1,6 @@
 class ReportsController < ApplicationController
+  LEADERBOARD_DEVIATION_CUTOFF = 3.0
+
   def index
     @players = Player.all.order(id: :asc)
   end
@@ -8,7 +10,10 @@ class ReportsController < ApplicationController
   end
 
   def leaderboard
-    @players = Player.all.order(rating_skill: :desc).limit(20)
+    @players = Player
+                   .where('rating_deviation < ?', LEADERBOARD_DEVIATION_CUTOFF)
+                   .limit(20)
+                   .order(rating_skill: :desc)
   end
 
   def player
