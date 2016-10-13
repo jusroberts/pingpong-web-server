@@ -1,6 +1,6 @@
 class ReportsController < ApplicationController
   def index
-    @players = Player.all
+    @players = Player.all.order(id: :asc)
   end
 
   def history
