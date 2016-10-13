@@ -25,7 +25,7 @@
                   =link_to(player.name, "/reports/player/#{player.id}", {:class => 'link-label'})
               %td
                 %h5.street-fighter
-                  =player.rating_skill
+                  =(player.rating_skill * 1000).floor
               %td
                 %h5.street-fighter
                   =player.rating_deviation
