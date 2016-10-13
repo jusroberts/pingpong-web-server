@@ -8,6 +8,8 @@
           = @player.name
         %h1.street-fighter.text-center.flex-item
           = "#{@total_wins} - #{@total_losses}"
+        %h1.street-fighter.text-center.flex-item
+          = (@player.rating_skill * 1000).floor
 - @stats.each do |type_name, stats|
   %div.row
     %div.column.small-4
