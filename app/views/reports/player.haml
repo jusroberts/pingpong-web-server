@@ -29,14 +29,7 @@
                     =label
                 %td
                   %h5.street-fighter
-                    =link_to(player.name, "/reports/player/#{player.id}", {:class => 'link-label'})
-              %tr
-                %td
-                  %h5.street-fighter
-                    ="#{label} count"
-                %td
-                  %h5.street-fighter
-                    = count
+                    ="#{link_to(player.name, "/reports/player/#{player.id}", {:class => 'link-label'})} #{count} times"
           - stats.each do |stat_name, stat_value|
             - if stat_value && stat_value != 0
               - stat_name = stat_name.to_s.gsub('_', ' ')
