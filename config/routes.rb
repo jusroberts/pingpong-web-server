@@ -33,6 +33,8 @@ Rails.application.routes.draw do
   get '/api/rooms/:id/team/:team/increment' => 'rooms#increment_score', as: :increment_score
   get '/api/rooms/:id/status' => 'rooms#room_status', as: :room_status
   get '/api/rooms/:room_id/players/add' => 'players#handle_player_hash', as: :handle_player_hash
+  get '/api/rooms/:room_id/players/predict/:player_id_1_1/:player_id_1_2/:player_id_2_1/:player_id_2_2' => 'players#predict_game', as: :predict_game
+  get '/api/rooms/:room_id/players/optimize/:player_id_1/:player_id_2/:player_id_3/:player_id_4' => 'players#optimize_teams', as: :optimize_teams_doubles
   get '/api/rooms/:room_id/send_current_scores' => 'rooms#send_current_scores'
 
 end

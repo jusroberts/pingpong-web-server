@@ -76,6 +76,15 @@ class PlayersController < ApplicationController
     #Player.find(params[:player_id]).delete
   end
 
+  def predict_game
+
+    render :json => out
+  end
+
+  def optimize_teams
+
+  end
+
   private
 
   def add_new_player(room_id, player)
