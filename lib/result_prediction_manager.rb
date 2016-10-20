@@ -1,13 +1,38 @@
 class ResultPredictionManager
 
+  # @param player_1 [Player]
+  # @param player_2 [Player]
+  # @param player_3 [Player]
+  # @param player_4 [Player]
+  # @return [Array<Array<Player>>]
+  def optimize_teams(player_1, player_2, player_3, player_4)
+    lowest_score = 50
+    best_team_set = []
+    # There are really only three distinct combinations
+    configs = [
+        [[player_1, player_2], [player_3, player_4]],
+        [[player_1, player_3], [player_2, player_4]],
+        [[player_1, player_4], [player_3, player_2]],
+    ]
+    configs.each do |team_1, team_2|
+      winning_team, winning_score = predict_result(team_1, team_2)
+      if winning_score < lowest_score
+        lowest_score = winning_score
+        best_team_set = [team_1, team_2]
+      end
+    end
+
+    best_team_set
+  end
+
   # @param team_1 [Array<Player>]
   # @param team_2 [Array<Player>]
   # @return [Array<Array<Player>, Number>]
   def predict_result(team_1, team_2)
-    team_1_winning_lowest_rating_diff, team_1_winning_score = get_lowest_rating_change(team_1, team_2)
-    team_2_winning_lowest_rating_diff, team_2_winning_score = get_lowest_rating_change(team_2, team_1)
+    team_1_winning_diff, team_1_winning_score = get_lowest_rating_change(team_1, team_2)
+    team_2_winning_diff, team_2_winning_score = get_lowest_rating_change(team_2, team_1)
 
-    if (team_1_winning_lowest_rating_diff < team_2_winning_lowest_rating_diff)
+    if team_1_winning_diff < team_2_winning_diff
       [team_1, team_1_winning_score]
     else
       [team_2, team_2_winning_score]
