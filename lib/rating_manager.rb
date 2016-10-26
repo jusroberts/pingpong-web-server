@@ -66,7 +66,6 @@ class RatingManager
       rating = team_1_ratings[index]
       player.rating_skill = rating.mean
       player.rating_deviation = rating.deviation
-      player.save
     end
 
     team_2.each_with_index do |player, index|
@@ -75,7 +74,6 @@ class RatingManager
       rating = team_2_ratings[index]
       player.rating_skill = rating.mean
       player.rating_deviation = rating.deviation
-      player.save
     end
 
     [team_1, team_2]
