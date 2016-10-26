@@ -1,8 +1,10 @@
-game new full
 #room-id=@id
 -doubles_player_box_size='65%'
 -singles_player_box_size='85%'
--player_box_padding='2%'
+-avatar_container_box_height='75%'
+-avatar_container_padding_row_height='20%'
+-score_spread_row_height='5%'
+-player_box_padding='0%'
 -player_box_inset_height='10vh'
 -player_box_inset_width='5vw'
 -default_team_a_avatar='/images/pong_assets/pong_avatar 1 doubles.png'
@@ -11,14 +13,21 @@ game new full
 
 %div{:style => "bottom: 0%; width: 100%; position: absolute; height: 45em; display:flex; padding: 2%;"}
   .left{:style => "height: 100%; width: 33%; padding: #{player_box_padding};"}
-    -#Doubles#
-    .picturebox.doubles-picturebox{:style => "display: none; height: #{doubles_player_box_size}; width: #{doubles_player_box_size};"}
-      %img.player_a_1_img{:src => @player_a_1_url, :style => "height: 100%; width: 100%;"}
-    .picturebox.doubles-picturebox{:style => "display: none; height: #{doubles_player_box_size}; width: #{doubles_player_box_size}; position: relative; left: #{player_box_inset_width}; top: -#{player_box_inset_height};"}
-      %img.player_a_2_img{:src => @player_a_2_url, :style => "height: 100%; width: 100%;"}
-    -#Singles#
-    .picturebox.singles-picturebox{:style => "display: none; height: #{singles_player_box_size}; width: #{singles_player_box_size}; position: relative; top: 10%"}
-      %img.player_a_1_img{:src => @player_a_1_url, :style => "height: 100%; width: 100%;"}
+    .avatar-container{:style => "height: #{avatar_container_box_height}; width: 100%"}
+      -#Doubles#
+      .picturebox.doubles-picturebox{:style => "display: none; height: #{doubles_player_box_size}; width: #{doubles_player_box_size};"}
+        %img.player_a_1_img{:src => @player_a_1_url, :style => "height: 100%; width: 100%;"}
+      .picturebox.doubles-picturebox{:style => "display: none; height: #{doubles_player_box_size}; width: #{doubles_player_box_size}; position: relative; left: #{player_box_inset_width}; top: -#{player_box_inset_height};"}
+        %img.player_a_2_img{:src => @player_a_2_url, :style => "height: 100%; width: 100%;"}
+      -#Singles#
+      .picturebox.singles-picturebox{:style => "display: none; height: #{singles_player_box_size}; width: #{singles_player_box_size}; position: relative; top: 10%"}
+        %img.player_a_1_img{:src => @player_a_1_url, :style => "height: 100%; width: 100%;"}
+    .row{:style => "height: #{avatar_container_padding_row_height}; width: 100%"}
+    .row{:style => "height: #{score_spread_row_height}; width: 100%"}
+      .column.small-10.text-right
+        %h4#team_a_favored.street-fighter
+      .column.small-2
+        %img#team_a_star{:style => "display: none;", :src => "/images/pong_assets/favstar.gif"}
 
   .middle{:style => "height: 100%; width: 33%; padding: 2%;"}
 
@@ -41,18 +50,25 @@ game new full
 
 
   .right{:style => "height: 100%; width: 33%; padding: #{player_box_padding};"}
-    -#Doubles#
-    .picturebox.doubles-picturebox{:style => "display: none; height: #{doubles_player_box_size}; width: #{doubles_player_box_size}; float: right;"}
-      %img.player_b_1_img{:src => @player_b_1_url, :style => "height: 100%; width: 100%;"}
-    .picturebox.doubles-picturebox{:style => "display: none; height: #{doubles_player_box_size}; width: #{doubles_player_box_size}; float: right; position: relative; left: -#{player_box_inset_width}; top: -#{player_box_inset_height};"}
-      %img.player_b_2_img{:src => @player_b_2_url, :style => "height: 100%; width: 100%;"}
-    -#Singles#
-    .picturebox.singles-picturebox{:style => "display: none; height: #{singles_player_box_size}; width: #{singles_player_box_size}; float: right; position: relative; top: 10%"}
-      %img.player_b_1_img{:src => @player_b_1_url, :style => "height: 100%; width: 100%;"}
+    .avatar-container{:style => "height: #{avatar_container_box_height}; width: 100%"}
+      -#Doubles#
+      .picturebox.doubles-picturebox{:style => "display: none; height: #{doubles_player_box_size}; width: #{doubles_player_box_size}; float: right;"}
+        %img.player_b_1_img{:src => @player_b_1_url, :style => "height: 100%; width: 100%;"}
+      .picturebox.doubles-picturebox{:style => "display: none; height: #{doubles_player_box_size}; width: #{doubles_player_box_size}; float: right; position: relative; left: -#{player_box_inset_width}; top: -#{player_box_inset_height};"}
+        %img.player_b_2_img{:src => @player_b_2_url, :style => "height: 100%; width: 100%;"}
+      -#Singles#
+      .picturebox.singles-picturebox{:style => "display: none; height: #{singles_player_box_size}; width: #{singles_player_box_size}; float: right; position: relative; top: 10%"}
+        %img.player_b_1_img{:src => @player_b_1_url, :style => "height: 100%; width: 100%;"}
+    .row{:style => "height: #{avatar_container_padding_row_height}; width: 100%"}
+    .row{:style => "height: #{score_spread_row_height}; width: 100%"}
+      .column.small-4
+        %img#team_b_star{:style => "display: none;", :src => "/images/pong_assets/favstar.gif"}
+      .column.small-8.text-left
+        %h3#team_b_favored.street-fighter{:style => "color: white;"}
 :javascript
-  var playerCount = #{@player_count};
-  var playerIdHash = JSON.parse('#{@player_ids}');
-  var pageType = 'new_game';
-  var default_team_a_avatar = '#{default_team_a_avatar}';
-  var default_team_b_avatar = '#{default_team_b_avatar}';
+  let playerCount = #{@player_count};
+  let playerIdHash = JSON.parse('#{@player_ids}');
+  let pageType = 'new_game';
+  let default_team_a_avatar = '#{default_team_a_avatar}';
+  let default_team_b_avatar = '#{default_team_b_avatar}';
 
