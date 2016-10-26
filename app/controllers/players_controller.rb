@@ -21,13 +21,7 @@ class PlayersController < ApplicationController
       ::WebsocketRails[:"room#{@id}"].trigger 'user_scan_new', player.id
     else
       # Otherwise this player exists, so add them to this room's current players
-      room_player = add_new_player(@id, player)
-      ::WebsocketRails[:"room#{@id}"].trigger 'user_scan_existing', {
-          :player_id => player.id,
-          :image_url => player.image_url,
-          :team => room_player.team,
-          :player_number => room_player.player_number
-      }
+      add_player_and_update_room(player)
     end
 
     render nothing: true
@@ -82,10 +76,50 @@ class PlayersController < ApplicationController
   end
 
   def optimize_teams
+    player_ids = params[:players].split(',')
+    players = player_ids.map { |player_id| Player.find(player_id) }
 
+    manager = ResultPredictionManager.new
+    team_1, team_2 = manager.optimize_teams(*players)
+
+    # Client-side will clear all existing players, so add them back on the server side
+    # and fire off websocket updates
+
+    team_1.each do |player|
+      add_player_and_update_room(player)
+    end
+    team_2.each do |player|
+      add_player_and_update_room(player)
+    end
+
+    playerIdHash = {
+        a: team_1.map { |player| player.id },
+        b: team_2.map { |player| player.id },
+    }
+
+    imageUrls = {
+        a: team_1.map { |player| player.image_url },
+        b: team_2.map { |player| player.image_url },
+    }
+
+    render :json => {
+        playerIdHash: playerIdHash
+    #     imageUrls: imageUrls
+    }
   end
 
   private
+
+  # @param player [Player]
+  def add_player_and_update_room(player)
+    room_player = add_new_player(@id, player)
+    ::WebsocketRails[:"room#{@id}"].trigger 'user_scan_existing', {
+        :player_id => player.id,
+        :image_url => player.image_url,
+        :team => room_player.team,
+        :player_number => room_player.player_number
+    }
+  end
 
   def add_new_player(room_id, player)
     # Pull the room object

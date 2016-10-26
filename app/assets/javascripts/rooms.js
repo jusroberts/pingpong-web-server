@@ -194,6 +194,40 @@ class RunningGameEvents {
     }
 }
 
+class ApiActions {
+    static clearPlayers() {
+        return $.post("new/players/clear")
+            .done(function() {
+                console.log("Player clear POST succeeded");
+                playerIdHash = {
+                    a: [],
+                    b: []
+                };
+                $(".player_a_1_img").attr("src", default_team_a_avatar);
+                $(".player_a_2_img").attr("src", default_team_a_avatar);
+                $(".player_b_1_img").attr("src", default_team_b_avatar);
+                $(".player_b_2_img").attr("src", default_team_b_avatar);
+                NewGameEvents.updateScanPlayerButton($("#scan-player"), playerCount, playerIdHash);
+            })
+            .fail(function() {
+                console.log("Player clear POST failed");
+            })
+    }
+    static optimizePlayers(playerIds) {
+        let roomId = $('#room-id').text();
+        return $.get('/api/rooms/' + roomId + '/players/optimize',
+            {
+                players: playerIds.join(',')
+            }
+        ).done(function (data) {
+            console.log("Team optimization GET succeeded");
+            playerIdHash = data;
+        }).fail(function() {
+            console.log("Team optimization POST failed");
+        });
+    }
+}
+
 class NewGameEvents {
     static setUpNewGameEventHandlers() {
         $("#scanButton").click(function () {
@@ -211,22 +245,7 @@ class NewGameEvents {
 
         $("#clearButton").click(function (e) {
             // Wipe all the players
-            $.post("new/players/clear")
-                .done(function() {
-                    console.log("Player clear succeeded");
-                    playerIdHash = {
-                        a: [],
-                        b: []
-                    };
-                    $(".player_a_1_img").attr("src", default_team_a_avatar);
-                    $(".player_a_2_img").attr("src", default_team_a_avatar);
-                    $(".player_b_1_img").attr("src", default_team_b_avatar);
-                    $(".player_b_2_img").attr("src", default_team_b_avatar);
-                    NewGameEvents.updateScanPlayerButton($("#scan-player"), playerCount, playerIdHash);
-                })
-                .fail(function() {
-                    console.log("Player clear POST failed");
-                })
+            ApiActions.clearPlayers();
         });
     }
 
@@ -294,11 +313,25 @@ class NewGameEvents {
     }
 
     static optimizeTeams() {
+        // Only allow optimizing if everyone's signed in
+        if (playerIdHash.a.length != 2 || playerIdHash.b.length != 2) {
+            return;
+        }
 
+        let playerIds = playerIdHash.a.concat(playerIdHash.b);
+        ApiActions.clearPlayers()
+            .then(function() {
+                console.log('Clear callback completed');
+                // Once we've cleared the current players, run the optimize call to repopulate them
+                return ApiActions.optimizePlayers(playerIds);
+            }).then(function(optimizeData) {
+                console.log('Optimize callback completed');
+            });
     }
 
     static predictGame() {
-
+        //     '/api/rooms/:room_id/players/predict/' +
+        // :player_id_1_1/:player_id_1_2/:player_id_2_1/:player_id_2_2' => 'players#predict_game', as: :predict_game
     }
 }
 
@@ -309,7 +342,6 @@ $(document).ready( function() {
     console.log('rooms JS init');
     let socketHandler = new SocketHandler();
     socketHandler.startListening();
-    socketHandler.updateScoreBars();
 
     if (pageType == 'new_game') {
         if (playerCount == 2) {
@@ -322,6 +354,7 @@ $(document).ready( function() {
         NewGameEvents.displayForPlayerCount(playerCount);
         NewGameEvents.updateScanPlayerButton($("#scan-player"), playerCount, playerIdHash);
     } else if (pageType == 'view_game') {
+        socketHandler.updateScoreBars();
         let backgroundHandler = new BackgroundHandler();
         backgroundHandler.setUpBackground();
     }
