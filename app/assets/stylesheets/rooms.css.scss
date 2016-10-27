@@ -134,9 +134,60 @@ body.rooms.game_newfull {
     margin: 2%;
 }
 
+.avatar-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  align-items: center;
+}
+
+.avatar-container.doubles-container {
+  justify-content: space-between;
+}
+
+.avatar-container.singles-container {
+  justify-content: center;
+}
+
 .picturebox {
   border: 1px solid #FFFFFF;
   border-width: 5px;
+  height: 55%;
+  width: 60%;
+}
+
+.picturebox.doubles-player-1.left {
+  align-self: flex-start;
+}
+
+.picturebox.doubles-player-2.left {
+  align-self: flex-end;
+  margin-top: -15%;
+}
+
+.picturebox.doubles-player-1.right {
+  align-self: flex-end;
+}
+
+.picturebox.doubles-player-2.right {
+  align-self: flex-start;
+  margin-top: -15%;
+}
+
+.prediction-container {
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: flex-start;
+  align-self: flex-start;
+}
+
+.prediction-container.left {
+  flex-direction: row-reverse;
+}
+
+.prediction-container.right {
+  flex-direction: row;
 }
 
 #confirmButton {
