@@ -206,28 +206,7 @@ class RoomsController < ApplicationController
     # Team B.2
     @player_b_2_url = nil
 
-    room_players_by_id = @room.room_players.to_a.index_by {|rp| "#{rp.team}_#{rp.player_number}"}
-    @player_ids = {
-        :a => [],
-        :b => []
-    }
-
-    if @player_count == 2
-      # Singles
-      load_indexed_player_image_url(room_players_by_id, :a, 1, @player_ids)
-      load_indexed_player_image_url(room_players_by_id, :b, 1, @player_ids)
-
-    elsif @player_count == 4
-      # Doubles
-      load_indexed_player_image_url(room_players_by_id, :a, 1, @player_ids)
-      load_indexed_player_image_url(room_players_by_id, :a, 2, @player_ids)
-      load_indexed_player_image_url(room_players_by_id, :b, 1, @player_ids)
-      load_indexed_player_image_url(room_players_by_id, :b, 2, @player_ids)
-
-    else
-      # Wat
-      raise("Invalid player count #{@player_count}")
-    end
+    @player_ids = load_player_ids(@room, @player_count, true)
 
     @player_a_1_url ||= "/images/pong_assets/pong_avatar 1 doubles.png"
     @player_a_2_url ||= "/images/pong_assets/pong_avatar 1 doubles.png"
@@ -285,18 +264,42 @@ class RoomsController < ApplicationController
 
   private
 
-    # @param room_players_by_id [Hash{Number => RoomPlayers}]
-    # @param team [String]
-    # @param player_number [Number]
-    # @param player_ids [Hash{String => Array<Number>}]
-    def load_indexed_player_image_url(room_players_by_id, team, player_number, player_ids)
-      key = "#{team}_#{player_number}"
-      if room_players_by_id.has_key?(key)
-        # @type [Player]
-        player = Player.find_by id: room_players_by_id[key].player_id
-        player_ids[team] << player.id
-        instance_variable_set("@player_#{key}_url", player.image_url)
+    # @param room [Room]
+    # @param player_count [Integer]
+    # @param set_image_urls [Boolean]
+    # @return [Hash{String => Array<Number>}]
+    def load_player_ids(room, player_count, set_image_urls = false)
+      player_ids = {
+          :a => [],
+          :b => []
+      }
+      room_players_by_id = room.room_players.to_a.index_by {|rp| "#{rp.team}_#{rp.player_number}"}
+      teams = [:a, :b]
+      if player_count == 2
+        # Singles
+        player_numbers = [1]
+      elsif player_count == 4
+        # Doubles
+        player_numbers = [1, 2]
+      else
+        raise "Invalid player count #{player_count}"
       end
+
+      teams.each do |team|
+        player_numbers.each do |player_number|
+          key = "#{team}_#{player_number}"
+          if room_players_by_id.has_key?(key)
+            player_id = room_players_by_id[key].player_id
+            # @type [Player]
+            player_ids[team] << player_id
+            if set_image_urls
+              player = Player.find_by id: player_id
+              instance_variable_set("@player_#{key}_url", player.image_url)
+            end
+          end
+        end
+      end
+      player_ids
     end
 
     def set_current_game_status
@@ -306,6 +309,8 @@ class RoomsController < ApplicationController
 
       @team_b_status = @team_b_score == "W" ? "WINNER!" : "&nbsp;".html_safe
       @team_a_status = @team_a_score == "W" ? "WINNER!" : "&nbsp;".html_safe
+
+      @player_ids = load_player_ids(@room, @room.player_count).to_json
     end
 
     def send_scores
