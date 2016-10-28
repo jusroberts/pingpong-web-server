@@ -66,7 +66,7 @@ class SocketHandler {
       let imageSelector = ".player_" + playerData.team + "_" + playerData.player_number + "_img";
       $(imageSelector).attr("src", playerData.image_url);
       NewGameFunctions.updatePlayerIdObject(playerData, playerIdHash);
-      NewGameFunctions.updateScanPlayerButton($("#scan-player"), playerCount, playerIdHash);
+      NewGameFunctions.updateScanPlayerButton($("#scanLabel"), playerCount, playerIdHash);
     });
     channel.bind('new_game_refresh', function() {
       location.reload();
@@ -208,7 +208,7 @@ class ApiActions {
                 $(".player_a_2_img").attr("src", default_team_a_avatar);
                 $(".player_b_1_img").attr("src", default_team_b_avatar);
                 $(".player_b_2_img").attr("src", default_team_b_avatar);
-                NewGameFunctions.updateScanPlayerButton($("#scan-player"), playerCount, playerIdHash);
+                NewGameFunctions.updateScanPlayerButton($("#scanLabel"), playerCount, playerIdHash);
             })
             .fail(function() {
                 console.log("Player clear POST failed");
@@ -277,7 +277,7 @@ class NewGameFunctions {
                 NewGameFunctions.displayForPlayerCount(playerCount);
                 playerIdHash['a'].splice(1, 1);
                 playerIdHash['b'].splice(1, 1);
-                NewGameFunctions.updateScanPlayerButton($("#scan-player"), playerCount, playerIdHash);
+                NewGameFunctions.updateScanPlayerButton($("#scanLabel"), playerCount, playerIdHash);
             })
             .fail(function () {
                 console.log("Player mode change POST failed");
@@ -305,6 +305,11 @@ class NewGameFunctions {
     static updateScanPlayerButton(button, playerCount, playerIds) {
         let teamA = playerIds['a'];
         let teamB = playerIds['b'];
+        let scanButton = $('#scanButton');
+        let scanLabel = $('#scanLabel');
+
+        scanButton.removeClass('hoverable');
+        scanLabel.removeClass('hoverable');
         if (playerCount == 2) {
             // Singles
             if (teamA.length == 0) {
@@ -312,7 +317,7 @@ class NewGameFunctions {
             } else if (teamB.length == 0) {
                 button.text('SCAN PLAYER 2');
             } else {
-                button.text('OPTIMIZE TEAMS');
+                button.text('LET\'S ROCK!');
             }
         } else {
             // Doubles
@@ -325,7 +330,9 @@ class NewGameFunctions {
             } else if (teamB.length < 2) {
                 button.text('SCAN PLAYER B-2');
             } else {
-                button.text('LET\'S ROCK!');
+                scanButton.addClass('hoverable');
+                scanLabel.addClass('hoverable');
+                button.text('BALANCE TEAMS');
             }
         }
     }
@@ -404,7 +411,7 @@ $(document).ready( function() {
 
         NewGameFunctions.setUpNewGameEventHandlers();
         NewGameFunctions.displayForPlayerCount(playerCount);
-        NewGameFunctions.updateScanPlayerButton($("#scan-player"), playerCount, playerIdHash);
+        NewGameFunctions.updateScanPlayerButton($("#scanLabel"), playerCount, playerIdHash);
         if (NewGameFunctions.isGameFull()) {
             NewGameFunctions.predictGame();
         }

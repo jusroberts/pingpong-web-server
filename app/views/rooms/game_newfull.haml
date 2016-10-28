@@ -1,15 +1,12 @@
 #room-id=@id
--singles_player_box_size='85%'
 -avatar_container_box_height='100%'
 -player_box_padding='0%'
--player_box_inset_height='10vh'
--player_box_inset_width='5vw'
 -default_team_a_avatar='/images/pong_assets/pong_avatar 1 doubles.png'
 -default_team_b_avatar='/images/pong_assets/pong_avatar 2 doubles.png'
 .center{:style => "position: relative; top: 1%; text-align: center"}
 
-%div{:style => "bottom: 0%; width: 100%; position: absolute; height: 50%; display:flex; padding: 1%;"}
-  .left{:style => "height: 100%; width: 33%; padding: #{player_box_padding};"}
+%div{:style => "bottom: 0%; width: 100%; position: absolute; height: 50%; display:flex; justify-content: space-between; padding: 1%;"}
+  .left-container{:style => "height: 100%; width: 33%; padding: #{player_box_padding};"}
     .avatar-container{:style => "height: #{avatar_container_box_height}; width: 100%"}
       -#Doubles#
       .picturebox.doubles-picturebox.doubles-player-1.left{:style => "display: none;"}
@@ -17,13 +14,13 @@
       .picturebox.doubles-picturebox.doubles-player-2.left{:style => "display: none;"}
         %img.player_a_2_img{:src => @player_a_2_url, :style => "height: 100%; width: 100%;"}
       -#Singles#
-      .picturebox.singles-picturebox{:style => "display: none; height: #{singles_player_box_size}; width: #{singles_player_box_size}; position: relative; top: 10%"}
+      .picturebox.singles-picturebox.left{:style => "display: none;"}
         %img.player_a_1_img{:src => @player_a_1_url, :style => "height: 100%; width: 100%;"}
       .prediction-container.left
         %h3#team_a_favored.street-fighter{:style => "color: white;"}
         %img#team_a_star{:style => "display: none;", :src => "/images/pong_assets/favstar.gif"}
 
-  .middle{:style => "height: 100%; width: 33%; padding: 2%;"}
+  .middle-container{:style => "height: 100%; width: 33%; padding: 2%;"}
 
     .column.settingsbox{:style => "height: 100%; width: 100%; text-align:center;"}
       %h4.sf Select Play Mode:
@@ -35,7 +32,7 @@
 
       #scan_section{:style => "padding: 2%;"}
         .sf-button#scanButton{:style => "width: 400px; margin: 10px auto; height: 70px; background-size: 100% 100%"}
-          .sf-label#scan-player SCAN PLAYER
+          .sf-label#scanLabel SCAN PLAYER
 
         .sf-button.hoverable#clearButton{:style => "margin: 20px auto; background-size: 100% 100%;"}
           .sf-label.hoverable CLEAR PLAYERS
@@ -43,7 +40,7 @@
           =submit_tag '* START GAME *', id: 'startButton', class: 'sf-button sf-label hoverable', style: "margin: 0 auto; display: inline-block; background-size: 100% 100%"
 
 
-  .right{:style => "height: 100%; width: 33%; padding: #{player_box_padding};"}
+  .right-container{:style => "height: 100%; width: 33%; padding: #{player_box_padding};"}
     .avatar-container{:style => "height: #{avatar_container_box_height}; width: 100%"}
       -#Doubles#
       .picturebox.doubles-picturebox.doubles-player-1.right{:style => "display: none;"}
@@ -51,7 +48,7 @@
       .picturebox.doubles-picturebox.doubles-player-2.right{:style => "display: none;"}
         %img.player_b_2_img{:src => @player_b_2_url, :style => "height: 100%; width: 100%;"}
       -#Singles#
-      .picturebox.singles-picturebox{:style => "display: none; height: #{singles_player_box_size}; width: #{singles_player_box_size}; float: right; position: relative; top: 10%"}
+      .picturebox.singles-picturebox.right{:style => "display: none;"}
         %img.player_b_1_img{:src => @player_b_1_url, :style => "height: 100%; width: 100%;"}
       .prediction-container.right
         %img#team_b_star{:style => "display: none;", :src => "/images/pong_assets/favstar.gif"}

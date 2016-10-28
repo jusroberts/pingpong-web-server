@@ -152,8 +152,24 @@ body.rooms.game_newfull {
 .picturebox {
   border: 1px solid #FFFFFF;
   border-width: 5px;
-  height: 55%;
-  width: 60%;
+}
+
+.picturebox.doubles-picturebox {
+  height: 44%;
+  width: 55%;
+}
+
+.picturebox.singles-picturebox {
+  height: 88%;
+  width: 88%;
+}
+
+.picturebox.singles-picturebox.left {
+  align-self: flex-end;
+}
+
+.picturebox.singles-picturebox.right {
+  align-self: flex-start;
 }
 
 .picturebox.doubles-player-1.left {
@@ -162,7 +178,6 @@ body.rooms.game_newfull {
 
 .picturebox.doubles-player-2.left {
   align-self: flex-end;
-  margin-top: -15%;
 }
 
 .picturebox.doubles-player-1.right {
@@ -171,10 +186,10 @@ body.rooms.game_newfull {
 
 .picturebox.doubles-player-2.right {
   align-self: flex-start;
-  margin-top: -15%;
 }
 
 .prediction-container {
+  height: 12%;
   display: flex;
   flex: 1 1 auto;
   align-items: center;
