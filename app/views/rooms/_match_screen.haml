@@ -4,16 +4,27 @@
   .game-column.center#left
     .progress
       .meter#a_meter &nbsp;
-    %h3.sf#team_a_name= team_a_name
+    .name-container
+      %h3.sf#team_a_name= team_a_name
     %h2.sf#team_a_status &nbsp;
     %h1.sf#team_a_score.center= @team_a_score
   .game-column.center#middle
     %h3.sf vs
+    .prediction-container.left.view-game
+      %img#team_a_star{:style => "display: none;", :src => "/images/pong_assets/favstar.gif"}
+      %h4#team_a_favored.sf
+    .prediction-container.right.view-game
+      %img#team_b_star{:style => "display: none;", :src => "/images/pong_assets/favstar.gif"}
+      %h4#team_b_favored.sf
   .game-column.center#right
     .progress
       .meter#b_meter &nbsp;
-    %h3.sf#team_b_name= team_b_name
+    .name-container
+      %h3.sf#team_b_name= team_b_name
     %h2.sf#team_b_status &nbsp;
     %h1.sf#team_b_score.center= @team_b_score
 :javascript
-  var pageType = 'view_game';
+  let pageType = 'view_game';
+  let playerIdHash = JSON.parse('#{@player_ids}');
+  let playerCount = #{@room.player_count};
+

@@ -42,25 +42,26 @@ h4.sf{
    -webkit-text-stroke-color: black;
 }
 .scoring{
-  display: table;
-  width: 92%;
-  margin-left: 4%;
-  margin-right: 4%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 96%;
+  margin-left: 2%;
+  margin-right: 2%;
 }
 .game-column{
-  display: table-cell;
-  vertical-align: top;
+  display: flex;
+  flex-direction: column;
 }
 #middle{
-  width: 10%;
+  width: 16%;
   text-align: center;
 }
 #left{
   width: 42%;
-  margin-left: 3%;
 }
 #right{
-  margin-right: 3%;
   width: 42%;
 }
 #team_a_name {
@@ -71,6 +72,20 @@ h4.sf{
   text-align: right;
   font-size: 3em;
 }
+
+.name-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.name-container.left {
+  flex-direction: row;
+}
+
+.name-container.right {
+  flex-direction: row-reverse;
+}
+
 #team_a_status{
   color: black;
   -webkit-text-fill-color: #ED1C24; /* Will override color (regardless of order) */
@@ -134,9 +149,90 @@ body.rooms.game_newfull {
     margin: 2%;
 }
 
+.avatar-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  align-items: center;
+}
+
+.avatar-container.doubles-container {
+  justify-content: space-between;
+}
+
+.avatar-container.singles-container {
+  justify-content: center;
+}
+
 .picturebox {
   border: 1px solid #FFFFFF;
   border-width: 5px;
+}
+
+.picturebox.doubles-picturebox {
+  height: 44%;
+  width: 55%;
+}
+
+.picturebox.singles-picturebox {
+  height: 88%;
+  width: 88%;
+}
+
+.picturebox.singles-picturebox.left {
+  align-self: flex-end;
+}
+
+.picturebox.singles-picturebox.right {
+  align-self: flex-start;
+}
+
+.picturebox.doubles-player-1.left {
+  align-self: flex-start;
+}
+
+.picturebox.doubles-player-2.left {
+  align-self: flex-end;
+}
+
+.picturebox.doubles-player-1.right {
+  align-self: flex-end;
+}
+
+.picturebox.doubles-player-2.right {
+  align-self: flex-start;
+}
+
+.prediction-container {
+  height: 12%;
+  display: flex;
+  flex: 1 1 auto;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.prediction-container.left {
+  flex-direction: row-reverse;
+}
+
+.prediction-container.left.new-game {
+  align-self: flex-end;
+}
+
+.prediction-container.left.view-game {
+  align-self: flex-start;
+}
+
+.prediction-container.right {
+  flex-direction: row;
+}
+
+.prediction-container.right.new-game {
+  align-self: flex-start;
+}
+
+.prediction-container.right.view-game {
+  align-self: flex-end;
 }
 
 #confirmButton {

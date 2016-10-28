@@ -71,8 +71,28 @@ class PlayersController < ApplicationController
   end
 
   def predict_game
+    player_ids = params[:playerIdHash]
 
-    render :json => out
+    team_a = player_ids[:a].map { |player_id| Player.find(player_id) }
+    team_b = player_ids[:b].map { |player_id| Player.find(player_id) }
+
+    manager = ResultPredictionManager.new
+    winning_team, winning_score = manager.predict_result(team_a, team_b)
+
+    if winning_team == team_a
+      favored_team = :a
+    elsif winning_team == team_b
+      favored_team = :b
+    else
+      raise "Failed to predict game, invalid winning team #{winning_team}"
+    end
+
+    # winning_ids = winning_team.map { |player| player.id }
+
+    render :json => {
+        favoredTeam: favored_team,
+        pointSpread: winning_score
+    }
   end
 
   def optimize_teams
