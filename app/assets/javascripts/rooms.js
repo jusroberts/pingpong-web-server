@@ -18,11 +18,12 @@ class SocketHandler {
 
   updateScoreBars() {
       // update bars on page load
-      RunningGameEvents.scoreA($("#team_a_score").text());
-      RunningGameEvents.scoreB($("#team_b_score").text());
+      RunningGameFunctions.scoreA($("#team_a_score").text());
+      RunningGameFunctions.scoreB($("#team_b_score").text());
   }
 
   startListening() {
+      let socketHandler = this;
       let roomId = $('#room-id').text();
     let channel = window.dispatcher.subscribe('room' + roomId);
     console.log(window.location.host + '/websocket');
@@ -33,7 +34,7 @@ class SocketHandler {
       let reconnect = setInterval(function(){
         if (window.dispatcher.state === 'connected') {
           console.log('Reconnected.');
-          RunningGameEvents.startListening();
+          socketHandler.startListening();
           console.log('Requesting latest scores...');
           $.get('/api/rooms/' + roomId + '/send_current_scores'), function ( data ) {
             console.log(data);
@@ -47,12 +48,12 @@ class SocketHandler {
     });
 
     channel.bind('team_a_score', function(score) {
-      RunningGameEvents.scoreA(score);
+      RunningGameFunctions.scoreA(score);
       $("#team_a_score").text(score);
       console.log(score);
     });
     channel.bind('team_b_score', function(score) {
-      RunningGameEvents.scoreB(score);
+      RunningGameFunctions.scoreB(score);
       $("#team_b_score").text(score);
       console.log(score);
     });
@@ -64,8 +65,9 @@ class SocketHandler {
       console.log(playerData.image_url);
       let imageSelector = ".player_" + playerData.team + "_" + playerData.player_number + "_img";
       $(imageSelector).attr("src", playerData.image_url);
-      NewGameEvents.updatePlayerIdObject(playerData, playerIdHash);
-      NewGameEvents.updateScanPlayerButton($("#scan-player"), playerCount, playerIdHash);
+      NewGameFunctions.updatePlayerIdObject(playerData, playerIdHash);
+      NewGameFunctions.updateScanPlayerButton($("#scanLabel"), playerCount, playerIdHash);
+        NewGameFunctions.updatePrediction();
     });
     channel.bind('new_game_refresh', function() {
       location.reload();
@@ -110,7 +112,7 @@ class BackgroundHandler {
     }
 }
 
-class RunningGameEvents {
+class RunningGameFunctions {
     static scoreA(score) {
         if (score === 'W') {
             console.log("TEAM A SCORE = W");
@@ -121,7 +123,7 @@ class RunningGameEvents {
                 "background-repeat": "no-repeat"
             });
             $("#b_meter").animate({width: "0%"});
-            RunningGameEvents.startContinueCountdown();
+            RunningGameFunctions.startContinueCountdown();
         } else if (score === 'G') {
             console.log("TEAM A SCORE = G");
             $("#b_meter").animate({width: (100 / 21) + "%"});
@@ -153,7 +155,7 @@ class RunningGameEvents {
                 "background-repeat": "no-repeat"
             });
             $("#a_meter").animate({width: "0%"});
-            RunningGameEvents.startContinueCountdown();
+            RunningGameFunctions.startContinueCountdown();
         } else if (score === 'G') {
             $("#a_meter").animate({width: (100 / 21) + "%"});
 
@@ -207,12 +209,14 @@ class ApiActions {
                 $(".player_a_2_img").attr("src", default_team_a_avatar);
                 $(".player_b_1_img").attr("src", default_team_b_avatar);
                 $(".player_b_2_img").attr("src", default_team_b_avatar);
-                NewGameEvents.updateScanPlayerButton($("#scan-player"), playerCount, playerIdHash);
+                NewGameFunctions.updateScanPlayerButton($("#scanLabel"), playerCount, playerIdHash);
+                NewGameFunctions.updatePrediction();
             })
             .fail(function() {
                 console.log("Player clear POST failed");
             })
     }
+
     static optimizePlayers(playerIds) {
         let roomId = $('#room-id').text();
         return $.get('/api/rooms/' + roomId + '/players/optimize',
@@ -221,26 +225,42 @@ class ApiActions {
             }
         ).done(function (data) {
             console.log("Team optimization GET succeeded");
-            playerIdHash = data;
         }).fail(function() {
             console.log("Team optimization POST failed");
         });
     }
+
+    static predictGame(playerIdHash) {
+        let roomId = $('#room-id').text();
+        return $.get('/api/rooms/' + roomId + '/players/predict',
+            {
+                playerIdHash: playerIdHash
+            }
+        ).then(function (data) {
+            console.log("Predict game GET succeeded");
+            return {
+                favoredTeam: data.favoredTeam,
+                pointSpread: data.pointSpread
+            };
+        }, function() {
+            console.log("Predict game POST failed");
+        });
+    }
 }
 
-class NewGameEvents {
+class NewGameFunctions {
     static setUpNewGameEventHandlers() {
         $("#scanButton").click(function () {
             // Optimizing singles makes no sense
             if (playerCount == 4) {
-                NewGameEvents.optimizeTeams();
+                NewGameFunctions.optimizeTeams();
             }
         });
         $("#singlesButton").click(function () {
-            NewGameEvents.updatePlayerCount(2, $("#singlesButton"), $("#doublesButton"));
+            NewGameFunctions.updatePlayerCount(2, $("#singlesButton"), $("#doublesButton"));
         });
         $("#doublesButton").click(function () {
-            NewGameEvents.updatePlayerCount(4, $("#doublesButton"), $("#singlesButton"));
+            NewGameFunctions.updatePlayerCount(4, $("#doublesButton"), $("#singlesButton"));
         });
 
         $("#clearButton").click(function (e) {
@@ -256,10 +276,11 @@ class NewGameEvents {
                 selectedElement.addClass("selected");
                 unselectedElement.removeClass("selected");
                 playerCount = count;
-                NewGameEvents.displayForPlayerCount(playerCount);
+                NewGameFunctions.displayForPlayerCount(playerCount);
                 playerIdHash['a'].splice(1, 1);
                 playerIdHash['b'].splice(1, 1);
-                NewGameEvents.updateScanPlayerButton($("#scan-player"), playerCount, playerIdHash);
+                NewGameFunctions.updateScanPlayerButton($("#scanLabel"), playerCount, playerIdHash);
+                NewGameFunctions.updatePrediction();
             })
             .fail(function () {
                 console.log("Player mode change POST failed");
@@ -287,6 +308,11 @@ class NewGameEvents {
     static updateScanPlayerButton(button, playerCount, playerIds) {
         let teamA = playerIds['a'];
         let teamB = playerIds['b'];
+        let scanButton = $('#scanButton');
+        let scanLabel = $('#scanLabel');
+
+        scanButton.removeClass('hoverable');
+        scanLabel.removeClass('hoverable');
         if (playerCount == 2) {
             // Singles
             if (teamA.length == 0) {
@@ -294,7 +320,7 @@ class NewGameEvents {
             } else if (teamB.length == 0) {
                 button.text('SCAN PLAYER 2');
             } else {
-                button.text('OPTIMIZE TEAMS');
+                button.text('LET\'S ROCK!');
             }
         } else {
             // Doubles
@@ -307,7 +333,43 @@ class NewGameEvents {
             } else if (teamB.length < 2) {
                 button.text('SCAN PLAYER B-2');
             } else {
-                button.text('LET\'S ROCK!');
+                scanButton.addClass('hoverable');
+                scanLabel.addClass('hoverable');
+                button.text('BALANCE TEAMS');
+            }
+        }
+    }
+
+    static updatePrediction() {
+        if (NewGameFunctions.isGameFull()) {
+            NewGameFunctions.predictGame();
+        } else {
+            NewGameFunctions.displayPrediction('hide', 'a');
+            NewGameFunctions.displayPrediction('hide', 'b');
+        }
+    }
+
+    static displayPrediction(toggleAction, team) {
+        let teamAStar = $('#team_a_star');
+        let teamAFavored = $('#team_a_favored');
+        let teamBStar = $('#team_b_star');
+        let teamBFavored = $('#team_b_favored');
+
+        if (toggleAction == 'show') {
+            if (team == 'a') {
+                teamAStar.show();
+                teamAFavored.show();
+            } else if (team == 'b') {
+                teamBStar.show();
+                teamBFavored.show();
+            }
+        } else if (toggleAction == 'hide') {
+            if (team == 'a') {
+                teamAStar.hide();
+                teamAFavored.hide();
+            } else if (team == 'b') {
+                teamBStar.hide();
+                teamBFavored.hide();
             }
         }
     }
@@ -324,14 +386,42 @@ class NewGameEvents {
                 console.log('Clear callback completed');
                 // Once we've cleared the current players, run the optimize call to repopulate them
                 return ApiActions.optimizePlayers(playerIds);
-            }).then(function(optimizeData) {
+            }).then(function(data) {
                 console.log('Optimize callback completed');
+                playerIdHash = data;
             });
     }
 
     static predictGame() {
-        //     '/api/rooms/:room_id/players/predict/' +
-        // :player_id_1_1/:player_id_1_2/:player_id_2_1/:player_id_2_2' => 'players#predict_game', as: :predict_game
+        ApiActions.predictGame(playerIdHash)
+            .done(function(data) {
+                console.log('Predict callback completed');
+                let {
+                    favoredTeam,
+                    pointSpread
+                } = data;
+                let teamAFavored = $('#team_a_favored');
+                let teamBFavored = $('#team_b_favored');
+
+                if (favoredTeam == 'a') {
+                    NewGameFunctions.displayPrediction('show', 'a');
+                    NewGameFunctions.displayPrediction('hide', 'b');
+                    teamAFavored.text('+' + pointSpread);
+                } else if (favoredTeam == 'b') {
+                    NewGameFunctions.displayPrediction('show', 'b');
+                    NewGameFunctions.displayPrediction('hide', 'a');
+                    teamBFavored.text('+' + pointSpread);
+                } else {
+                    console.log('Invalid game prediction response' + JSON.stringify(data));
+                }
+            });
+    }
+
+    static isGameFull() {
+        return (
+            (playerCount == 2 && playerIdHash.a.length == 1 && playerIdHash.b.length == 1) ||
+            (playerCount == 4 && playerIdHash.a.length == 2 && playerIdHash.b.length == 2)
+        );
     }
 }
 
@@ -350,12 +440,13 @@ $(document).ready( function() {
             $('#doublesButton').addClass('selected');
         }
 
-        NewGameEvents.setUpNewGameEventHandlers();
-        NewGameEvents.displayForPlayerCount(playerCount);
-        NewGameEvents.updateScanPlayerButton($("#scan-player"), playerCount, playerIdHash);
+        NewGameFunctions.setUpNewGameEventHandlers();
+        NewGameFunctions.displayForPlayerCount(playerCount);
+        NewGameFunctions.updateScanPlayerButton($("#scanLabel"), playerCount, playerIdHash);
     } else if (pageType == 'view_game') {
         socketHandler.updateScoreBars();
         let backgroundHandler = new BackgroundHandler();
         backgroundHandler.setUpBackground();
     }
+    NewGameFunctions.updatePrediction();
 });
