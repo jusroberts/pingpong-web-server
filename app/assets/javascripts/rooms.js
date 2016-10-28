@@ -67,6 +67,7 @@ class SocketHandler {
       $(imageSelector).attr("src", playerData.image_url);
       NewGameFunctions.updatePlayerIdObject(playerData, playerIdHash);
       NewGameFunctions.updateScanPlayerButton($("#scanLabel"), playerCount, playerIdHash);
+        NewGameFunctions.updatePrediction();
     });
     channel.bind('new_game_refresh', function() {
       location.reload();
@@ -209,6 +210,7 @@ class ApiActions {
                 $(".player_b_1_img").attr("src", default_team_b_avatar);
                 $(".player_b_2_img").attr("src", default_team_b_avatar);
                 NewGameFunctions.updateScanPlayerButton($("#scanLabel"), playerCount, playerIdHash);
+                NewGameFunctions.updatePrediction();
             })
             .fail(function() {
                 console.log("Player clear POST failed");
@@ -278,6 +280,7 @@ class NewGameFunctions {
                 playerIdHash['a'].splice(1, 1);
                 playerIdHash['b'].splice(1, 1);
                 NewGameFunctions.updateScanPlayerButton($("#scanLabel"), playerCount, playerIdHash);
+                NewGameFunctions.updatePrediction();
             })
             .fail(function () {
                 console.log("Player mode change POST failed");
@@ -337,6 +340,40 @@ class NewGameFunctions {
         }
     }
 
+    static updatePrediction() {
+        if (NewGameFunctions.isGameFull()) {
+            NewGameFunctions.predictGame();
+        } else {
+            NewGameFunctions.displayPrediction('hide', 'a');
+            NewGameFunctions.displayPrediction('hide', 'b');
+        }
+    }
+
+    static displayPrediction(toggleAction, team) {
+        let teamAStar = $('#team_a_star');
+        let teamAFavored = $('#team_a_favored');
+        let teamBStar = $('#team_b_star');
+        let teamBFavored = $('#team_b_favored');
+
+        if (toggleAction == 'show') {
+            if (team == 'a') {
+                teamAStar.show();
+                teamAFavored.show();
+            } else if (team == 'b') {
+                teamBStar.show();
+                teamBFavored.show();
+            }
+        } else if (toggleAction == 'hide') {
+            if (team == 'a') {
+                teamAStar.hide();
+                teamAFavored.hide();
+            } else if (team == 'b') {
+                teamBStar.hide();
+                teamBFavored.hide();
+            }
+        }
+    }
+
     static optimizeTeams() {
         // Only allow optimizing if everyone's signed in
         if (playerIdHash.a.length != 2 || playerIdHash.b.length != 2) {
@@ -363,27 +400,21 @@ class NewGameFunctions {
                     favoredTeam,
                     pointSpread
                 } = data;
-                let teamAStar = $('#team_a_star');
                 let teamAFavored = $('#team_a_favored');
-                let teamBStar = $('#team_b_star');
                 let teamBFavored = $('#team_b_favored');
 
                 if (favoredTeam == 'a') {
-                    teamAStar.show();
+                    NewGameFunctions.displayPrediction('show', 'a');
+                    NewGameFunctions.displayPrediction('hide', 'b');
                     teamAFavored.text('+' + pointSpread);
-                    teamBStar.hide();
-                    teamBFavored.text('');
                 } else if (favoredTeam == 'b') {
-                    teamBStar.show();
+                    NewGameFunctions.displayPrediction('show', 'b');
+                    NewGameFunctions.displayPrediction('hide', 'a');
                     teamBFavored.text('+' + pointSpread);
-                    teamAStar.hide();
-                    teamAFavored.text('');
                 } else {
                     console.log('Invalid game prediction response' + JSON.stringify(data));
                 }
             });
-        //     '/api/rooms/:room_id/players/predict/' +
-        // :player_id_1_1/:player_id_1_2/:player_id_2_1/:player_id_2_2' => 'players#predict_game', as: :predict_game
     }
 
     static isGameFull() {
@@ -412,9 +443,7 @@ $(document).ready( function() {
         NewGameFunctions.setUpNewGameEventHandlers();
         NewGameFunctions.displayForPlayerCount(playerCount);
         NewGameFunctions.updateScanPlayerButton($("#scanLabel"), playerCount, playerIdHash);
-        if (NewGameFunctions.isGameFull()) {
-            NewGameFunctions.predictGame();
-        }
+        NewGameFunctions.updatePrediction();
     } else if (pageType == 'view_game') {
         socketHandler.updateScoreBars();
         let backgroundHandler = new BackgroundHandler();

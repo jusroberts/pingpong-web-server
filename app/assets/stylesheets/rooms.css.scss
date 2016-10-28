@@ -194,15 +194,16 @@ body.rooms.game_newfull {
   flex: 1 1 auto;
   align-items: center;
   justify-content: flex-start;
-  align-self: flex-start;
 }
 
 .prediction-container.left {
   flex-direction: row-reverse;
+  align-self: flex-end;
 }
 
 .prediction-container.right {
   flex-direction: row;
+  align-self: flex-start;
 }
 
 #confirmButton {
