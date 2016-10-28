@@ -12,7 +12,6 @@ class ReportsController < ApplicationController
   def leaderboard
     @players = Player
                    .where('rating_deviation < ?', LEADERBOARD_DEVIATION_CUTOFF)
-                   .limit(20)
                    .order(rating_skill: :desc)
   end
 

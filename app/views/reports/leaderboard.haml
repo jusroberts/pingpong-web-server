@@ -9,6 +9,9 @@
         %tr
           %td
             %h4.street-fighter
+              Rank
+          %td
+            %h4.street-fighter
               Player
           %td
             %h4.street-fighter
@@ -17,9 +20,14 @@
             %h4.street-fighter
               Deviation
       %tbody
+        - rank = 0
         - @players.each do |player|
           - if player
+            - rank += 1
             %tr
+              %td
+                %h5.street-fighter
+                  =rank
               %td
                 %h5.street-fighter
                   =link_to(player.name, "/reports/player/#{player.id}", {:class => 'link-label'})
