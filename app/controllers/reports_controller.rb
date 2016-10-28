@@ -1,6 +1,4 @@
 class ReportsController < ApplicationController
-  LEADERBOARD_DEVIATION_CUTOFF = 3.0
-
   def index
     @players = Player.all.order(id: :asc)
   end
@@ -10,9 +8,7 @@ class ReportsController < ApplicationController
   end
 
   def leaderboard
-    @players = Player
-                   .where('rating_deviation < ?', LEADERBOARD_DEVIATION_CUTOFF)
-                   .order(rating_skill: :desc)
+    @players = PlayerDao::get_leaderboard_players
   end
 
   def player

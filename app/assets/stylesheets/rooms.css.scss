@@ -203,6 +203,22 @@ body.rooms.game_newfull {
   align-self: flex-start;
 }
 
+.player-ranking {
+  height: 2rem;
+  width: 2rem;
+  color: white;
+  position: absolute;
+  bottom: 0;
+}
+
+.player-ranking.left {
+  right: 0;
+}
+
+.player-ranking.right {
+  left: 0;
+}
+
 .prediction-container {
   height: 12%;
   display: flex;

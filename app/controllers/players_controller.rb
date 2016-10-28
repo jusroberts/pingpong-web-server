@@ -67,7 +67,28 @@ class PlayersController < ApplicationController
   end
 
   def delete
-    #Player.find(params[:player_id]).delete
+  end
+
+  def get_rank
+    # @type [Array<Integer>]
+    player_ids = params[:playerIds]
+    player_ids.map! { |player_id| player_id.to_i }
+
+    # @type [Hash{Integer => Integer}]
+    ranked_players = {}
+
+    rank = 0
+    # @type player [Player]
+    PlayerDao::get_leaderboard_players.each do |player|
+      rank += 1
+      if player_ids.include?(player.id)
+        ranked_players[player.id] = rank
+      end
+      if ranked_players.length == player_ids.length
+        break
+      end
+    end
+    render :json => ranked_players
   end
 
   def predict_game
@@ -117,14 +138,8 @@ class PlayersController < ApplicationController
         b: team_2.map { |player| player.id },
     }
 
-    imageUrls = {
-        a: team_1.map { |player| player.image_url },
-        b: team_2.map { |player| player.image_url },
-    }
-
     render :json => {
         playerIdHash: playerIdHash
-    #     imageUrls: imageUrls
     }
   end
 

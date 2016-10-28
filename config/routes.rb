@@ -34,7 +34,8 @@ Rails.application.routes.draw do
   get '/api/rooms/:id/status' => 'rooms#room_status', as: :room_status
   get '/api/rooms/:room_id/players/add' => 'players#handle_player_hash', as: :handle_player_hash
   get '/api/rooms/:room_id/players/predict' => 'players#predict_game', as: :predict_game
-  get '/api/rooms/:room_id/players/optimize' => 'players#optimize_teams', as: :optimize_teams_doubles
+  get '/api/rooms/:room_id/players/optimize' => 'players#optimize_teams', as: :optimize_teams
+  get '/api/rooms/:room_id/players/rank' => 'players#get_rank', as: :get_player_rank
   get '/api/rooms/:room_id/send_current_scores' => 'rooms#send_current_scores'
 
 end

@@ -246,6 +246,19 @@ class ApiActions {
             console.log("Predict game POST failed");
         });
     }
+
+    static getRankings(playerIds) {
+        let roomId = $('#room-id').text();
+        return $.get('/api/rooms/' + roomId + '/players/rank',
+            {
+                playerIds: playerIds
+            }
+        ).done(function (data) {
+            console.log("Ranking GET succeeded");
+        }).fail(function() {
+            console.log("Ranking GET failed");
+        });
+    }
 }
 
 class NewGameFunctions {
@@ -417,6 +430,16 @@ class NewGameFunctions {
             });
     }
 
+    static updateRankings() {
+        let playerIds = playerIdHash.a.concat(playerIdHash.b);
+        ApiActions.getRankings(playerIds)
+            .done(function (data) {
+                console.log('Get rankings callback completed ' + JSON.stringify(data));
+                let playerRankings = JSON.parse(data);
+
+            });
+    }
+
     static isGameFull() {
         return (
             (playerCount == 2 && playerIdHash.a.length == 1 && playerIdHash.b.length == 1) ||
@@ -449,4 +472,5 @@ $(document).ready( function() {
         backgroundHandler.setUpBackground();
     }
     NewGameFunctions.updatePrediction();
+    NewGameFunctions.updateRankings();
 });
