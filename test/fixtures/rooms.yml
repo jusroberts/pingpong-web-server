@@ -1,12 +1,14 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
+  id: 1
   client_token: MyString
   team_a_score: 1
   team_b_score: 1
   name: MyString
 
 two:
+  id: 2
   client_token: MyString
   team_a_score: 1
   team_b_score: 1

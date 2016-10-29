@@ -138,9 +138,7 @@ class PlayersController < ApplicationController
         b: team_2.map { |player| player.id },
     }
 
-    render :json => {
-        playerIdHash: playerIdHash
-    }
+    render :json => playerIdHash
   end
 
   private

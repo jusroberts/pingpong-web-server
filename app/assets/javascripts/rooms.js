@@ -435,8 +435,7 @@ class NewGameFunctions {
         ApiActions.getRankings(playerIds)
             .done(function (data) {
                 console.log('Get rankings callback completed ' + JSON.stringify(data));
-                let playerRankings = JSON.parse(data);
-
+                let playerRankings = data;
             });
     }
 
