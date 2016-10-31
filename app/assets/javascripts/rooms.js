@@ -435,7 +435,17 @@ class NewGameFunctions {
         ApiActions.getRankings(playerIds)
             .done(function (data) {
                 console.log('Get rankings callback completed ' + JSON.stringify(data));
-                let playerRankings = data;
+
+                for (let playerIdString in data) {
+                    let playerId = parseInt(playerIdString, 10);
+                    if (data.hasOwnProperty(playerId)) {
+                        let playerRank = data[playerId];
+                        let rankingTextElement = NewGameFunctions.getRankingTextElement(playerId);
+                        if (rankingTextElement) {
+                            rankingTextElement.text(playerRank);
+                        }
+                    }
+                }
             });
     }
 
@@ -444,6 +454,19 @@ class NewGameFunctions {
             (playerCount == 2 && playerIdHash.a.length == 1 && playerIdHash.b.length == 1) ||
             (playerCount == 4 && playerIdHash.a.length == 2 && playerIdHash.b.length == 2)
         );
+    }
+
+    static getRankingTextElement(playerId) {
+        let indexA = playerIdHash.a.indexOf(playerId);
+        let indexB = playerIdHash.b.indexOf(playerId);
+
+        if (indexA >= 0) {
+            return $(`.player_a_${indexA + 1}_ranking`);
+        } else if (indexB >= 0) {
+            return $(`.player_b_${indexB + 1}_ranking`);
+        }
+
+        return null;
     }
 }
 
