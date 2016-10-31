@@ -72,6 +72,10 @@ class PlayersController < ApplicationController
   def get_rank
     # @type [Array<Integer>]
     player_ids = params[:playerIds]
+    unless player_ids
+      render :json => nil
+      return
+    end
     player_ids.map! { |player_id| player_id.to_i }
 
     render :json => RankingHelper::get_player_rankings(player_ids)

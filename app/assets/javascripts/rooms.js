@@ -68,6 +68,7 @@ class SocketHandler {
       NewGameFunctions.updatePlayerIdObject(playerData, playerIdHash);
       NewGameFunctions.updateScanPlayerButton($("#scanLabel"), playerCount, playerIdHash);
         NewGameFunctions.updatePrediction();
+        NewGameFunctions.updateRankings();
     });
     channel.bind('new_game_refresh', function() {
       location.reload();
@@ -205,6 +206,7 @@ class ApiActions {
                     a: [],
                     b: []
                 };
+                $('.player-ranking').text('');
                 $(".player_a_1_img").attr("src", default_team_a_avatar);
                 $(".player_a_2_img").attr("src", default_team_a_avatar);
                 $(".player_b_1_img").attr("src", default_team_b_avatar);
@@ -432,6 +434,8 @@ class NewGameFunctions {
 
     static updateRankings() {
         let playerIds = playerIdHash.a.concat(playerIdHash.b);
+        // Clear all existing rankings
+        $('.player-ranking').text('');
         ApiActions.getRankings(playerIds)
             .done(function (data) {
                 console.log('Get rankings callback completed ' + JSON.stringify(data));
