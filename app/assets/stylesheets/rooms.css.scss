@@ -165,8 +165,8 @@ body.rooms.game_newfull {
 }
 
 .picturebox {
-  border: 1px solid #FFFFFF;
-  border-width: 5px;
+  border: 5px solid #FFFFFF;
+  position: relative;
 }
 
 .picturebox.doubles-picturebox {
@@ -209,6 +209,7 @@ body.rooms.game_newfull {
   color: white;
   position: absolute;
   bottom: 0;
+  text-shadow: 3px 3px 0 #21297E;
 }
 
 .player-ranking.left {
@@ -249,6 +250,10 @@ body.rooms.game_newfull {
 
 .prediction-container.right.view-game {
   align-self: flex-end;
+}
+
+.prediction-text {
+  text-shadow: 3px 3px 0 #21297E;
 }
 
 #confirmButton {
