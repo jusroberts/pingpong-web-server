@@ -74,21 +74,7 @@ class PlayersController < ApplicationController
     player_ids = params[:playerIds]
     player_ids.map! { |player_id| player_id.to_i }
 
-    # @type [Hash{Integer => Integer}]
-    ranked_players = {}
-
-    rank = 0
-    # @type player [Player]
-    PlayerDao::get_leaderboard_players.each do |player|
-      rank += 1
-      if player_ids.include?(player.id)
-        ranked_players[player.id] = rank
-      end
-      if ranked_players.length == player_ids.length
-        break
-      end
-    end
-    render :json => ranked_players
+    render :json => RankingHelper::get_player_rankings(player_ids)
   end
 
   def predict_game

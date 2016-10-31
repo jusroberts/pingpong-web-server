@@ -1,5 +1,5 @@
 module RoomsHelper
-  def team_a_name
+  def get_team_a_name(player_rankings)
     a_room_players = @room.room_players.select {|room_player| room_player.team == PlayersController::TEAM_A_ID}
     team_a_players = []
     for room_player in a_room_players
@@ -7,14 +7,22 @@ module RoomsHelper
     end
 
     if team_a_players.length > 0
-      name = team_a_players.map { |p| p.name }.join(' // ')
+      names = []
+      team_a_players.each do |player|
+        if player_rankings.has_key?(player.id)
+          names << "#{player.name} (\##{player_rankings[player.id]})"
+        else
+          names << player.name
+        end
+      end
+      name = names.join(' // ')
     else
       name = "Chatty"
     end
-    return(name)
+    name
   end
 
-  def team_b_name
+  def team_b_name(player_rankings)
     b_room_players = @room.room_players.select {|room_player| room_player.team == PlayersController::TEAM_B_ID}
     team_b_players = []
     for room_player in b_room_players
@@ -22,12 +30,20 @@ module RoomsHelper
     end
 
     if team_b_players.length > 0
-      name = team_b_players.map { |p| p.name }.join(' // ')
+      names = []
+      team_b_players.each do |player|
+        if player_rankings.has_key?(player.id)
+          names << "#{player.name} (\##{player_rankings[player.id]})"
+        else
+          names << player.name
+        end
+      end
+      name = names.join(' // ')
     else
       name = "Sassy"
     end
 
-    return(name)
+    name
   end
 
 end

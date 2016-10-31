@@ -310,7 +310,10 @@ class RoomsController < ApplicationController
       @team_b_status = @team_b_score == "W" ? "WINNER!" : "&nbsp;".html_safe
       @team_a_status = @team_a_score == "W" ? "WINNER!" : "&nbsp;".html_safe
 
-      @player_ids = load_player_ids(@room, @room.player_count).to_json
+      player_id_hash = load_player_ids(@room, @room.player_count)
+      @player_ids = player_id_hash.to_json
+      actual_player_ids = player_id_hash[:a] + player_id_hash[:b]
+      @player_rankings = RankingHelper::get_player_rankings(actual_player_ids)
     end
 
     def send_scores

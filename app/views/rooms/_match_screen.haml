@@ -5,7 +5,7 @@
     .progress
       .meter#a_meter &nbsp;
     .name-container
-      %h3.sf#team_a_name= team_a_name
+      %h3.sf#team_a_name= get_team_a_name(@player_rankings)
     %h2.sf#team_a_status &nbsp;
     %h1.sf#team_a_score.center= @team_a_score
   .game-column.center#middle
@@ -20,7 +20,7 @@
     .progress
       .meter#b_meter &nbsp;
     .name-container
-      %h3.sf#team_b_name= team_b_name
+      %h3.sf#team_b_name= team_b_name(@player_rankings)
     %h2.sf#team_b_status &nbsp;
     %h1.sf#team_b_score.center= @team_b_score
 :javascript

@@ -488,11 +488,11 @@ $(document).ready( function() {
         NewGameFunctions.setUpNewGameEventHandlers();
         NewGameFunctions.displayForPlayerCount(playerCount);
         NewGameFunctions.updateScanPlayerButton($("#scanLabel"), playerCount, playerIdHash);
+        NewGameFunctions.updateRankings();
     } else if (pageType == 'view_game') {
         socketHandler.updateScoreBars();
         let backgroundHandler = new BackgroundHandler();
         backgroundHandler.setUpBackground();
     }
     NewGameFunctions.updatePrediction();
-    NewGameFunctions.updateRankings();
 });
