@@ -7,7 +7,7 @@ class RankingHelper
 
     rank = 0
     # @type player [Player]
-    PlayerDao::get_leaderboard_players.each do |player|
+    PlayerDao::get_leaderboard_players(PlayerDao::LEADERBOARD_DEVIATION_CUTOFF).each do |player|
       rank += 1
       if player_ids.include?(player.id)
         ranked_players[player.id] = rank

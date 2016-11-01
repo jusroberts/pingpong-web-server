@@ -8,7 +8,11 @@ class ReportsController < ApplicationController
   end
 
   def leaderboard
-    @players = PlayerDao::get_leaderboard_players
+    if params[:ignore_deviation]
+      @players = PlayerDao::get_leaderboard_players(RatingManager::TRUESKILL_SIGMA)
+    else
+      @players = PlayerDao::get_leaderboard_players(PlayerDao::LEADERBOARD_DEVIATION_CUTOFF)
+    end
   end
 
   def player

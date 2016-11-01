@@ -20,14 +20,18 @@
             %h4.street-fighter
               Deviation
       %tbody
-        - rank = 0
+        - running_rank = 0
         - @players.each do |player|
           - if player
-            - rank += 1
+            - if player.rating_deviation < PlayerDao::LEADERBOARD_DEVIATION_CUTOFF
+              - running_rank += 1
+              - current_rank = running_rank
+            - else
+              - current_rank = ''
             %tr
               %td
                 %h5.street-fighter
-                  =rank
+                  =current_rank
               %td
                 %h5.street-fighter
                   =link_to(player.name, "/reports/player/#{player.id}", {:class => 'link-label'})
