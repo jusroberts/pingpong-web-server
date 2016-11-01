@@ -226,7 +226,6 @@ body.rooms.game_newfull {
 .prediction-container {
   height: 12%;
   display: flex;
-  //flex: 1 1 auto;
   align-items: center;
   justify-content: flex-start;
 }
@@ -278,7 +277,7 @@ body.rooms.game_newfull {
   background-repeat: no-repeat;
   width: 575px;
   height: 91px;
-  //display:none;
+  display:none;
   margin:auto;
 }
 
