@@ -204,20 +204,19 @@ body.rooms.game_newfull {
 }
 
 .player-ranking {
-  height: 2rem;
-  width: 2rem;
+  font-size: 3rem;
   color: white;
   position: absolute;
-  bottom: 0;
+  bottom: .5rem;
   text-shadow: 3px 3px 0 #21297E;
 }
 
 .player-ranking.left {
-  right: 0;
+  right: .5rem;
 }
 
 .player-ranking.right {
-  left: 0;
+  left: .5rem;
 }
 
 .prediction-container {
@@ -253,6 +252,9 @@ body.rooms.game_newfull {
 }
 
 .prediction-text {
+  margin-bottom: 0;
+  font-size: 3rem;
+  color: white;
   text-shadow: 3px 3px 0 #21297E;
 }
 
