@@ -370,13 +370,13 @@ class RoomsController < ApplicationController
         team_a_players.each do |room_player|
           history = new_game_history(room, room_player, false)
           histories[room_player.player_id] = history
-          winning_players << Player.find_by(:id => room_player.player_id)
+          losing_players << Player.find_by(:id => room_player.player_id)
         end
         # All glory to team B
         team_b_players.each do |room_player|
           history = new_game_history(room, room_player, true)
           histories[room_player.player_id] = history
-          losing_players << Player.find_by(:id => room_player.player_id)
+          winning_players << Player.find_by(:id => room_player.player_id)
         end
       end
 
