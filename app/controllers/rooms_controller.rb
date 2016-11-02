@@ -348,8 +348,8 @@ class RoomsController < ApplicationController
       team_b_players = room_players.select {|room_player| room_player.team == PlayersController::TEAM_B_ID}
 
       # We should batch this but ActiveRecord makes it a pain in the ass and I don't care that much
-      # @type [Array<GameHistory>]
-      histories = []
+      # @type [Hash{Integer => GameHistory}]
+      histories = {}
       # @type [Array<Player>]
       winning_players = []
       # @type [Array<Player>]
@@ -358,32 +358,42 @@ class RoomsController < ApplicationController
         # Yay for team A
         team_a_players.each do |room_player|
           history = new_game_history(room, room_player, true)
-          histories << history
+          histories[room_player.player_id] = history
           winning_players << Player.find_by(:id => room_player.player_id)
         end
         team_b_players.each do |room_player|
           history = new_game_history(room, room_player, false)
-          histories << history
+          histories[room_player.player_id] = history
           losing_players << Player.find_by(:id => room_player.player_id)
         end
       else
         team_a_players.each do |room_player|
           history = new_game_history(room, room_player, false)
-          histories << history
+          histories[room_player.player_id] = history
           winning_players << Player.find_by(:id => room_player.player_id)
         end
         # All glory to team B
         team_b_players.each do |room_player|
           history = new_game_history(room, room_player, true)
-          histories << history
+          histories[room_player.player_id] = history
           losing_players << Player.find_by(:id => room_player.player_id)
         end
       end
 
       # Use the first player's history PK as the game ID because it's an easy way to generate a unique, sequential integer
-      game_id = histories[0].id
-      histories.each do |history|
+      game_id = histories.values[0].id
+      histories.each do |player_id, history|
         history.update_attributes(game_id: game_id)
+      end
+
+      starting_skills = {}
+      starting_deviations = {}
+
+      # Store starting ratings so we can calculate differential
+      players = winning_players + losing_players
+      players.each do |player|
+        starting_skills[player.id] = player.rating_skill
+        starting_deviations[player.id] = player.rating_deviation
       end
 
       # Update skills
@@ -392,6 +402,16 @@ class RoomsController < ApplicationController
       manager.process_game(winning_players, margin, losing_players, -margin)
       winning_players.each { |player| player.save }
       losing_players.each { |player| player.save }
+
+      # Calculate and store rating differentials
+      # @type player [Player]
+      players.each do |player|
+        # @type [GameHistory]
+        player_history = histories[player.id]
+        player_history.skill_change = player.rating_skill - starting_skills[player.id]
+        player_history.deviation_change = player.rating_deviation - starting_deviations[player.id]
+        player_history.save
+      end
     end
 
     # @param room [Room]

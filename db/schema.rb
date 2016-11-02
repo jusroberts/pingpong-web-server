@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160922171921) do
+ActiveRecord::Schema.define(version: 20161102022434) do
 
   create_table "daily_stats", force: true do |t|
     t.integer "player_id"
@@ -42,6 +42,8 @@ ActiveRecord::Schema.define(version: 20160922171921) do
     t.boolean  "win"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.float    "skill_change"
+    t.float    "deviation_change"
   end
 
   add_index "game_histories", ["game_id", "game_session_id"], name: "index_game_histories_on_game_id_and_game_session_id"

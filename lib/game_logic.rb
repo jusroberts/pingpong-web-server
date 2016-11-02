@@ -1,5 +1,6 @@
 require 'time'
 class GameLogic
+  PENULTIMATE_SCORE = 20
 
   def initialize(team_a_score, team_b_score)
     @team_a_score = team_a_score
@@ -27,12 +28,12 @@ class GameLogic
   private
 
   def current_team_score(current_team_score, opponent_score)
-    return current_team_score if current_team_score < 20
+    return current_team_score if current_team_score < PENULTIMATE_SCORE
 
     return 'W' if current_team_wins(current_team_score, opponent_score)
     return 'L' if current_team_loses(current_team_score, opponent_score)
 
-    return 'G' if current_team_score == 20 && opponent_score < 20
+    return 'G' if current_team_score == PENULTIMATE_SCORE && opponent_score < PENULTIMATE_SCORE
     return 'D' if current_team_score == opponent_score
 
     return 'ADV' if current_team_score > opponent_score
@@ -40,7 +41,7 @@ class GameLogic
   end
 
   def current_team_wins(current_team_score, opponent_score)
-    current_team_score > 20 && current_team_score - opponent_score >= 2
+    current_team_score > PENULTIMATE_SCORE && current_team_score - opponent_score >= 2
   end
 
   def current_team_loses(current_team_score, opponent_score)

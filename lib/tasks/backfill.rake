@@ -30,8 +30,12 @@ namespace :backfill do
         winning_margin = nil
         losing_margin = nil
 
+        # @type [Hash{Integer => GameHistory}]
+        player_histories = {}
+
+        # @type game_record [GameHistory]
         game_records.each do |game_record|
-          # @type game_record [GameHistory]
+          player_histories[game_record.player_id] = game_record
 
           if game_record.win
             winner_ids << game_record.player_id
@@ -60,6 +64,16 @@ namespace :backfill do
           loser
         end
 
+        starting_skills = {}
+        starting_deviations = {}
+
+        # Store starting ratings so we can calculate differential
+        players = winning_players + losing_players
+        players.each do |player|
+          starting_skills[player.id] = player.rating_skill
+          starting_deviations[player.id] = player.rating_deviation
+        end
+
         puts "Updating skills for #{game_id}, team #{winner_ids.join(',')} won by #{winning_margin} over #{loser_ids.join(',')}"
         manager.process_game(winning_players, winning_margin, losing_players, losing_margin)
 
@@ -70,6 +84,16 @@ namespace :backfill do
         losing_players.each do |loser|
           loser.save
           puts "Loser id #{loser.id} after lose processed skill: #{loser.rating_skill}, deviation: #{loser.rating_deviation}"
+        end
+
+        # Calculate and store rating differentials
+        # @type player [Player]
+        players.each do |player|
+          # @type [GameHistory]
+          player_history = player_histories[player.id]
+          player_history.skill_change = player.rating_skill - starting_skills[player.id]
+          player_history.deviation_change = player.rating_deviation - starting_deviations[player.id]
+          player_history.save
         end
 
         if game_id > last_id
