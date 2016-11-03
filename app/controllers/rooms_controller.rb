@@ -2,6 +2,7 @@ require 'time'
 
 class RoomsController < ApplicationController
   before_action :set_room, except: [:index, :new, :create, :home]
+  before_action :show_topbar, only: [:home]
 
   VALID_PLAYER_COUNTS = [2, 4]
 

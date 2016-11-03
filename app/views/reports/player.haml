@@ -4,12 +4,13 @@
       %div.flex-item
         %img.player-avatar-native{:src => @player.image_url}
       %div.flex-container.centered-flex.column-flex.flex-container.flex-item
-        %h1.street-fighter.text-center.flex-item
-          = @player.name
-        %h1.street-fighter.text-center.flex-item
-          = "#{@total_wins} - #{@total_losses}"
-        %h1.street-fighter.text-center.flex-item
-          = (@player.rating_skill * 1000).floor
+        =link_to history_table_path(@player.id) do
+          %h1.street-fighter.text-center.flex-item
+            = @player.name
+          %h1.street-fighter.text-center.flex-item
+            = "#{@total_wins} - #{@total_losses}"
+          %h1.street-fighter.text-center.flex-item
+            = (@player.rating_skill * 1000).floor
 - @stats.each do |type_name, stats|
   %div.row
     %div.column.small-4

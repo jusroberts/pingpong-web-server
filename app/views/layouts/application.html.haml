@@ -12,5 +12,6 @@
     = csrf_meta_tag
 
   %body{class: "#{controller_name} #{action_name}"}
-
+    - if @show_topbar
+      = render '/layouts/topbar'
     = yield

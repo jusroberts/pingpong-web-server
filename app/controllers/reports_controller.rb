@@ -1,4 +1,6 @@
 class ReportsController < ApplicationController
+  before_action :show_topbar
+
   def index
     @players = Player.all.order(id: :asc)
   end
