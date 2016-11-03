@@ -1,4 +1,42 @@
+- # @type records [Array<GameHistory>]
+
 %link{:rel => :stylesheet, :type => 'text/css', :href => 'https://cdn.datatables.net/v/zf/jqc-1.12.3/dt-1.10.12/b-1.2.2/b-colvis-1.2.2/b-html5-1.2.2/cr-1.3.2/fc-3.2.2/fh-3.1.2/r-2.1.0/sc-1.4.2/datatables.min.css'}
-%script{:type => 'text/javascript', :href => 'https://cdn.datatables.net/v/zf/jqc-1.12.3/dt-1.10.12/b-1.2.2/b-colvis-1.2.2/b-html5-1.2.2/cr-1.3.2/fc-3.2.2/fh-3.1.2/r-2.1.0/sc-1.4.2/datatables.min.js'}
+%script{:type => 'text/javascript', :language => 'javascript', :src => 'https://cdn.datatables.net/v/zf/jqc-1.12.3/dt-1.10.12/b-1.2.2/b-colvis-1.2.2/b-html5-1.2.2/cr-1.3.2/fc-3.2.2/fh-3.1.2/r-2.1.0/sc-1.4.2/datatables.min.js'}
 
 %table#history-table
+  %thead
+    %tr
+      %th
+        %h5.street-fighter
+          = 'Player'
+      %th
+        %h5.street-fighter
+          = 'W/L'
+      %th
+        %h5.street-fighter
+          = 'Team Score'
+      %th
+        %h5.street-fighter
+          = 'Opposing Score'
+      %th
+        %h5.street-fighter
+          = 'Rating Change'
+  %tbody
+    - # @type record [GameHistory]
+    - records.each do |record|
+      %tr
+        %td
+          %h5.street-fighter
+            = record.player_id
+        %td
+          %h5.street-fighter
+            = record.win ? 'W' : 'L'
+        %td
+          %h5.street-fighter
+            = record.player_team_score
+        %td
+          %h5.street-fighter
+            = record.opponent_team_score
+        %td
+          %h5.street-fighter
+            = record.skill_change

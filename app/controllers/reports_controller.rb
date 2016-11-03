@@ -4,7 +4,29 @@ class ReportsController < ApplicationController
   end
 
   def history
+    primary_player_id = params[:player_id_1]
+    secondary_player_id = params[:player_id_2]
 
+    @primary_player = nil
+    @secondary_player = nil
+
+    if primary_player_id
+      @primary_player = Player.find_by(:id => primary_player_id)
+      if secondary_player_id
+        @secondary_player = Player.find_by(:id => secondary_player_id)
+        @records = GameHistory
+                       .where('player_id = ? OR player_id = ?', primary_player_id, secondary_player_id)
+                       .limit(50)
+                       .order('id desc')
+      else
+        @records = GameHistory
+                       .where('player_id = ?', primary_player_id)
+                       .limit(50)
+                       .order('id desc')
+      end
+    else
+      @records = GameHistory.all.limit(50)
+    end
   end
 
   def leaderboard
