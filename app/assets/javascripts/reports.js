@@ -9,6 +9,9 @@ class DataTableStyling {
         let paginationButtons = $('.paginate_button');
         paginationButtons.addClass('street-fighter');
         paginationButtons.addClass('data-table-info');
+        let ellipses = $('.ellipsis');
+        ellipses.addClass('street-fighter');
+        ellipses.addClass('data-table-info');
     }
 }
 
