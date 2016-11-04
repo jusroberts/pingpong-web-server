@@ -8,7 +8,6 @@ class GameHistoryDao
                    .where(:player_id => player_ids)
                    .group('game_id')
                    .having('count(*) >= ?', player_ids.length)
-                   .order(id: :desc)
                    .pluck(:game_id)
 
     histories = GameHistory.where(:game_id => game_ids)
