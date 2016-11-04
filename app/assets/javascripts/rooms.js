@@ -493,10 +493,11 @@ $(document).ready( function() {
         NewGameFunctions.displayForPlayerCount(playerCount);
         NewGameFunctions.updateScanPlayerButton($("#scanLabel"), playerCount, playerIdHash);
         NewGameFunctions.updateRankings();
+        NewGameFunctions.updatePrediction();
     } else if (pageType == 'view_game') {
         socketHandler.updateScoreBars();
         let backgroundHandler = new BackgroundHandler();
         backgroundHandler.setUpBackground();
+        NewGameFunctions.updatePrediction();
     }
-    NewGameFunctions.updatePrediction();
 });

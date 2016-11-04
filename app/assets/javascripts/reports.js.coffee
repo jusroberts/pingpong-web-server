@@ -4,6 +4,7 @@
 
 ready = ->
   historyTableDiv = $('#history-table')
+  console.log('History table')
   # If we actually have a history table element, fire up the DataTables JS
   if historyTableDiv.length
     historyTableDiv.DataTable(
