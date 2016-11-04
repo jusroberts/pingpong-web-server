@@ -20,8 +20,8 @@ module ReportsHelper
     player_team_records = records.select { |record| record.win == win_or_lose }
     opponent_team_records = records.select { |record| record.win != win_or_lose }
 
-    player_team_names = player_team_records.map { |record| record.player_id }.map { |player_id| player_name(player_id) }
-    opponent_team_names = opponent_team_records.map { |record| record.player_id }.map { |player_id| player_name(player_id) }
+    player_team_names = player_team_records.map { |record| record.player_id }.sort.map { |player_id| player_name(player_id) }
+    opponent_team_names = opponent_team_records.map { |record| record.player_id }.sort.map { |player_id| player_name(player_id) }
 
     [player_record, player_team_names.join(' and '), opponent_team_names.join(' and ')]
   end
