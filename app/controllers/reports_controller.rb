@@ -16,18 +16,12 @@ class ReportsController < ApplicationController
       @primary_player = Player.find_by(:id => primary_player_id)
       if secondary_player_id
         @secondary_player = Player.find_by(:id => secondary_player_id)
-        @records = GameHistory
-                       .where('player_id = ? OR player_id = ?', primary_player_id, secondary_player_id)
-                       .limit(50)
-                       .order('id desc')
+        @records = GameHistoryDao::get_per_game_histories(primary_player_id, secondary_player_id)
       else
-        @records = GameHistory
-                       .where('player_id = ?', primary_player_id)
-                       .limit(50)
-                       .order('id desc')
+        @records = GameHistoryDao::get_per_game_histories(primary_player_id)
       end
     else
-      @records = GameHistory.all.limit(50)
+      @records = GameHistory.all.order(id: :desc)
     end
   end
 
