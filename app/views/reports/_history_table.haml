@@ -25,9 +25,13 @@
       %th
         %h5.street-fighter
           = 'Rating Change'
+      %th
+        %h5.street-fighter
+          = 'Time'
   %tbody
-    - # @type record [GameHistory]
+    - # @type records [Array<GameHistory>]
     - records.each do |game_id, records|
+      - # @type player_record [GameHistory]
       - player_record, player_team, opposing_team = team_names(player.id, records)
       %tr
         %td
@@ -48,5 +52,8 @@
         %td
           %h5.street-fighter
             = (player_record.skill_change * 1000).floor
+        %td
+          %h5.street-fighter
+            = player_record.created_at
 :javascript
   let pageType = 'history_table';
