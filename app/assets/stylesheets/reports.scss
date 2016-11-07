@@ -56,11 +56,6 @@ h5.street-fighter {
   color: white;
 }
 
-.street-fighter.data-table-info {
-  color: white;
-  margin: .5rem;
-}
-
 div.row-break {
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -85,4 +80,11 @@ img.centered {
 
 body.reports {
   background-color: black;
+}
+
+#history-table_info, .paginate_button, .ellipsis {
+  font-family: 'street fighter';
+  font-weight: normal;
+  color: white;
+  margin: .5rem;
 }
