@@ -36,10 +36,10 @@
       %tr
         %td
           %h5.street-fighter
-            = player_team
+            = raw(player_team)
         %td
           %h5.street-fighter
-            = opposing_team
+            = raw(opposing_team)
         %td
           %h5.street-fighter
             = player_record.win ? 'W' : 'L'

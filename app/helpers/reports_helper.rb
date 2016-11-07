@@ -3,7 +3,8 @@ module ReportsHelper
     if !cached_names[player_id]
       cached_names[player_id] = Player.find(player_id).name rescue "ERROR"
     end
-    cached_names[player_id]
+    name = cached_names[player_id]
+    link_to(name, player_report_path(player_id))
   end
 
   def cached_names
