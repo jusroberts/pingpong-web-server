@@ -5,6 +5,11 @@ class DataTableStyling {
     static applyStyling() {
         let ellipses = $('.ellipsis');
         ellipses.text('...');
+
+        $('.paginate-button').click(function () {
+            let ellipses = $('.ellipsis');
+            ellipses.text('...');
+        });
     }
 }
 
