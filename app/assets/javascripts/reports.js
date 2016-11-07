@@ -6,7 +6,7 @@ class DataTableStyling {
         let ellipses = $('.ellipsis');
         ellipses.text('...');
 
-        $('.paginate-button').click(function () {
+        $('.paginate_button').click(function () {
             let ellipses = $('.ellipsis');
             ellipses.text('...');
         });
