@@ -513,14 +513,13 @@ class Audio {
     constructor() {
         // Webkit/blink browsers need prefix, Safari won't work without window.
         this.context = new (window.AudioContext || window.webkitAudioContext)(); // define audio context
-        this.audioElements = {
-            'teamAScore': document.querySelector('#beep'),
-            'teamBScore': document.querySelector('#boop'),
-            'win': document.querySelector('#beep'),
-            'game': document.querySelector('#beep'),
-            'deuce': document.querySelector('#beep'),
-            'advantage': document.querySelector('#beep'),
-        };
+        this.audioElements = {};
+        // 'teamAScore': document.querySelector('#beep'),
+        // 'teamBScore': document.querySelector('#boop'),
+        // 'win': document.querySelector('#beep'),
+        // 'game': document.querySelector('#beep'),
+        // 'deuce': document.querySelector('#beep'),
+        // 'advantage': document.querySelector('#beep'),
     }
 
     /**
@@ -559,6 +558,11 @@ class Audio {
     }
 
     playSound(key) {
+        // All audio files in public/audio should be automatically loaded as <audio> elements in the template
+        // The key here is the filename sans extension
+        if (!this.audioElements.hasOwnProperty(key)) {
+            this.audioElements[key] = document.querySelector('#' + key);
+        }
         this.audioElements[key].play();
     }
 }

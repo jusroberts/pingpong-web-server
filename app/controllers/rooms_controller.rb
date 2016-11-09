@@ -315,6 +315,11 @@ class RoomsController < ApplicationController
       @player_ids = player_id_hash.to_json
       actual_player_ids = player_id_hash[:a] + player_id_hash[:b]
       @player_rankings = RankingHelper::get_player_rankings(actual_player_ids)
+
+      @audio_filenames = {}
+      Dir["public/audio/*"].each do |path|
+        @audio_filenames[File.basename(path, '.mp3')] = path
+      end
     end
 
     def send_scores(team = nil)

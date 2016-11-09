@@ -1,5 +1,5 @@
-%audio#beep{:style => "display: none;", :src => "/audio/beep.mp3", :type => "audio/mpeg"}
-%audio#boop{:style => "display: none;", :src => "/audio/boop.mp3", :type => "audio/mpeg"}
+- @audio_filenames.each do |filename, path|
+  %audio{:id => filename, :style => "display: none;", :src => path}
 %p
   #room-id= @room.id
 .scoring
