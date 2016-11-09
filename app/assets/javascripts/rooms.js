@@ -549,10 +549,10 @@ class Audio {
     handleScoreUpdate(teamAScore, teamBScore, scoringTeam) {
         switch (scoringTeam) {
             case 'a':
-                this.playSound('teamAScore');
+                this.playSound('beep');
                 break;
             case 'b':
-                this.playSound('teamBScore');
+                this.playSound('boop');
                 break;
         }
     }
