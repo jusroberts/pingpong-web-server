@@ -95,7 +95,7 @@ class RoomsController < ApplicationController
         @room.update_attribute(:game, false)
       end
     end
-    send_scores
+    send_scores(team)
     @room.update_attribute(:increment_at, Time.now)
     render nothing: true
   end
@@ -317,11 +317,15 @@ class RoomsController < ApplicationController
       @player_rankings = RankingHelper::get_player_rankings(actual_player_ids)
     end
 
-    def send_scores
+    def send_scores(team = nil)
       set_room
       game_logic = GameLogic.new(@room.team_a_score, @room.team_b_score)
-      ::WebsocketRails[:"room#{@room.id}"].trigger "team_a_score", game_logic.showable_team_a_score
-      ::WebsocketRails[:"room#{@room.id}"].trigger "team_b_score", game_logic.showable_team_b_score
+      unless !team.nil? && team == 'b'
+        ::WebsocketRails[:"room#{@room.id}"].trigger "team_a_score", game_logic.showable_team_a_score
+      end
+      unless !team.nil? && team == 'a'
+        ::WebsocketRails[:"room#{@room.id}"].trigger "team_b_score", game_logic.showable_team_b_score
+      end
     end
 
     # @param room [Room]

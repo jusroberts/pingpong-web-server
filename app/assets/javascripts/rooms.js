@@ -11,69 +11,77 @@
  * @type {string} default_team_b_avatar
  */
 
+/**
+ * @class
+ * @property {RunningGameFunctions} runningGame
+ */
 class SocketHandler {
-  constructor() {
-      window.dispatcher = new WebSocketRails(window.location.host + '/websocket');
-  }
+    /**
+     * @param {RunningGameFunctions} runningGame
+     */
+    constructor(runningGame) {
+        window.dispatcher = new WebSocketRails(window.location.host + '/websocket');
+        this.runningGame = runningGame;
+    }
 
-  updateScoreBars() {
-      // update bars on page load
-      RunningGameFunctions.scoreA($("#team_a_score").text());
-      RunningGameFunctions.scoreB($("#team_b_score").text());
-  }
+    updateScoreBars() {
+        // update bars on page load
+        this.runningGame.scoreA($("#team_a_score").text(), false);
+        this.runningGame.scoreB($("#team_b_score").text(), false);
+    }
 
-  startListening() {
-      let socketHandler = this;
-      let roomId = $('#room-id').text();
-    let channel = window.dispatcher.subscribe('room' + roomId);
-    console.log(window.location.host + '/websocket');
-    console.log('room' + roomId);
+    startListening() {
+        let socketHandler = this;
+        let roomId = $('#room-id').text();
+        let channel = window.dispatcher.subscribe('room' + roomId);
+        console.log(window.location.host + '/websocket');
+        console.log('room' + roomId);
 
-    dispatcher.bind('connection_closed', function() {
-      console.log('Connection Lost!');
-      let reconnect = setInterval(function(){
-        if (window.dispatcher.state === 'connected') {
-          console.log('Reconnected.');
-          socketHandler.startListening();
-          console.log('Requesting latest scores...');
-          $.get('/api/rooms/' + roomId + '/send_current_scores'), function ( data ) {
-            console.log(data);
-          };
-          clearInterval(reconnect);
-        } else {
-          console.log('Attempting to reconnect...');
-          window.dispatcher = new WebSocketRails(window.location.host + '/websocket');
-        }
-      }, 5000);
-    });
+        dispatcher.bind('connection_closed', function () {
+            console.log('Connection Lost!');
+            let reconnect = setInterval(function () {
+                if (window.dispatcher.state === 'connected') {
+                    console.log('Reconnected.');
+                    socketHandler.startListening();
+                    console.log('Requesting latest scores...');
+                    $.get('/api/rooms/' + roomId + '/send_current_scores'), function (data) {
+                        console.log(data);
+                    };
+                    clearInterval(reconnect);
+                } else {
+                    console.log('Attempting to reconnect...');
+                    window.dispatcher = new WebSocketRails(window.location.host + '/websocket');
+                }
+            }, 5000);
+        });
 
-    channel.bind('team_a_score', function(score) {
-      RunningGameFunctions.scoreA(score);
-      $("#team_a_score").text(score);
-      console.log(score);
-    });
-    channel.bind('team_b_score', function(score) {
-      RunningGameFunctions.scoreB(score);
-      $("#team_b_score").text(score);
-      console.log(score);
-    });
-    channel.bind('user_scan_new', function(player_id) {
-      window.location.replace("/rooms/" + roomId + "/game/new/players/create?player_id=" + player_id);
-      console.log("Redirecting to create player " + player_id);
-    });
-    channel.bind('user_scan_existing', function(playerData) {
-      console.log(playerData.image_url);
-      let imageSelector = ".player_" + playerData.team + "_" + playerData.player_number + "_img";
-      $(imageSelector).attr("src", playerData.image_url);
-      NewGameFunctions.updatePlayerIdObject(playerData, playerIdHash);
-      NewGameFunctions.updateScanPlayerButton($("#scanLabel"), playerCount, playerIdHash);
-        NewGameFunctions.updatePrediction();
-        NewGameFunctions.updateRankings();
-    });
-    channel.bind('new_game_refresh', function() {
-      location.reload();
-    });
-  }
+        channel.bind('team_a_score', function (score) {
+            socketHandler.runningGame.scoreA(score);
+            $("#team_a_score").text(score);
+            console.log(score);
+        });
+        channel.bind('team_b_score', function (score) {
+            socketHandler.runningGame.scoreB(score);
+            $("#team_b_score").text(score);
+            console.log(score);
+        });
+        channel.bind('user_scan_new', function (player_id) {
+            window.location.replace("/rooms/" + roomId + "/game/new/players/create?player_id=" + player_id);
+            console.log("Redirecting to create player " + player_id);
+        });
+        channel.bind('user_scan_existing', function (playerData) {
+            console.log(playerData.image_url);
+            let imageSelector = ".player_" + playerData.team + "_" + playerData.player_number + "_img";
+            $(imageSelector).attr("src", playerData.image_url);
+            NewGameFunctions.updatePlayerIdObject(playerData, playerIdHash);
+            NewGameFunctions.updateScanPlayerButton($("#scanLabel"), playerCount, playerIdHash);
+            NewGameFunctions.updatePrediction();
+            NewGameFunctions.updateRankings();
+        });
+        channel.bind('new_game_refresh', function () {
+            location.reload();
+        });
+    }
 }
 
 class BackgroundHandler {
@@ -113,10 +121,24 @@ class BackgroundHandler {
     }
 }
 
+/**
+ * @class
+ * @property {Audio} audio
+ * @property {number} teamAScore
+ * @property {number} teamBScore
+ */
 class RunningGameFunctions {
-    static scoreA(score) {
+    constructor(audio) {
+        this.audio = audio;
+        this.teamAScore = 0;
+        this.teamBScore = 0;
+    }
+
+    scoreA(score, increment = true) {
+        this.teamAScore = score;
         if (score === 'W') {
             console.log("TEAM A SCORE = W");
+            this.audio.handleSpecialScore('a', 'win');
             $("#team_a_status").css({
                 "background": 'url("/images/pong_assets/winner-animation.gif")',
                 "background-size": "75%",
@@ -124,31 +146,36 @@ class RunningGameFunctions {
                 "background-repeat": "no-repeat"
             });
             $("#b_meter").animate({width: "0%"});
-            RunningGameFunctions.startContinueCountdown();
+            this.startContinueCountdown();
         } else if (score === 'G') {
             console.log("TEAM A SCORE = G");
+            this.audio.handleSpecialScore('a', 'game');
             $("#b_meter").animate({width: (100 / 21) + "%"});
-
         } else if (score === 'D') {
             console.log("TEAM A SCORE = D");
+            this.audio.handleSpecialScore('a', 'deuce');
             $("#b_meter").animate({width: "100%"});
             $("#b_meter").css({"background": "#ED1C24"});
-
         } else if (score === 'ADV') {
             console.log("TEAM A SCORE = ADV");
+            this.audio.handleSpecialScore('a', 'advantage');
             $("#a_meter").animate({width: "100%"});
             $("#b_meter").animate({width: "50%"});
             $("#a_meter").css({"background": "#ED1C24"});
             $("#b_meter").css({"background": "#ED1C24"});
-
         } else {
+            if (increment) {
+                this.audio.handleScoreUpdate(this.teamAScore, this.teamBScore, 'a');
+            }
             $("#team_a_status").text('\xa0');
             $("#b_meter").animate({width: ((21 - score) * 100 / 21) + "%"});
         }
     }
 
-    static scoreB(score) {
+    scoreB(score, increment = true) {
+        this.teamBScore = score;
         if (score === 'W') {
+            this.audio.handleSpecialScore('b', 'win');
             $("#team_b_status").css({
                 "background": 'url("/images/pong_assets/winner-animation.gif")',
                 "background-size": "75%",
@@ -156,21 +183,24 @@ class RunningGameFunctions {
                 "background-repeat": "no-repeat"
             });
             $("#a_meter").animate({width: "0%"});
-            RunningGameFunctions.startContinueCountdown();
+            this.startContinueCountdown();
         } else if (score === 'G') {
+            this.audio.handleSpecialScore('b', 'game');
             $("#a_meter").animate({width: (100 / 21) + "%"});
-
         } else if (score === 'D') {
+            this.audio.handleSpecialScore('b', 'deuce');
             $("#a_meter").animate({width: "100%"});
             $("#a_meter").css({"background": "#ED1C24"});
-
         } else if (score === 'ADV') {
+            this.audio.handleSpecialScore('b', 'advantage');
             $("#b_meter").animate({width: "100%"});
             $("#a_meter").animate({width: "50%"});
             $("#a_meter").css({"background": "#ED1C24"});
             $("#b_meter").css({"background": "#ED1C24"});
-
         } else {
+            if (increment) {
+                this.audio.handleScoreUpdate(this.teamAScore, this.teamBScore, 'b');
+            }
             $("#team_b_status").text('\xa0');
             $("#a_meter").animate({width: ((21 - score) * 100 / 21) + "%"});
         }
@@ -475,11 +505,72 @@ class NewGameFunctions {
 }
 
 /**
+ * @type {number} playerCount
+ * @property {Object.<string, string>} audioElements
+ * @property {AudioContext} context
+ */
+class Audio {
+    constructor() {
+        // Webkit/blink browsers need prefix, Safari won't work without window.
+        this.context = new (window.AudioContext || window.webkitAudioContext)(); // define audio context
+        this.audioElements = {
+            'teamAScore': document.querySelector('#beep'),
+            'teamBScore': document.querySelector('#boop'),
+            'win': document.querySelector('#beep'),
+            'game': document.querySelector('#beep'),
+            'deuce': document.querySelector('#beep'),
+            'advantage': document.querySelector('#beep'),
+        };
+    }
+
+    /**
+     * @param {string} team
+     * @param {string} code
+     */
+    handleSpecialScore(team, code) {
+        this.playSound(code);
+        // switch (code) {
+        //     case 'win':
+        //         this.playSound('')
+        //         break;
+        //     case 'game':
+        //         break;
+        //     case 'deuce':
+        //         break;
+        //     case 'advantage':
+        //         break;
+        // }
+    }
+
+    /**
+     * @param {number} teamAScore
+     * @param {number} teamBScore
+     * @param {number} scoringTeam
+     */
+    handleScoreUpdate(teamAScore, teamBScore, scoringTeam) {
+        switch (scoringTeam) {
+            case 'a':
+                this.playSound('teamAScore');
+                break;
+            case 'b':
+                this.playSound('teamBScore');
+                break;
+        }
+    }
+
+    playSound(key) {
+        this.audioElements[key].play();
+    }
+}
+
+/**
  * Initialize page on load
  */
 $(document).ready( function() {
     console.log('rooms JS init');
-    let socketHandler = new SocketHandler();
+    let audio = new Audio();
+    let runningGame = new RunningGameFunctions(audio);
+    let socketHandler = new SocketHandler(runningGame);
     socketHandler.startListening();
 
     if (pageType == 'new_game') {
