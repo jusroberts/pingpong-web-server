@@ -76,6 +76,9 @@ class RoomsController < ApplicationController
     end
 
     team = params[:team].downcase
+    unless ['a', 'b'].include?(team)
+      raise "Invalid team #{team} passed to increment score function"
+    end
 
     # Times when this call shouldn't happen
     if @room.increment_at && @room.increment_at > 1.seconds.ago
@@ -95,7 +98,7 @@ class RoomsController < ApplicationController
         @room.update_attribute(:game, false)
       end
     end
-    send_scores(team)
+    send_scores
     @room.update_attribute(:increment_at, Time.now)
     render nothing: true
   end
@@ -318,19 +321,19 @@ class RoomsController < ApplicationController
 
       @audio_filenames = {}
       Dir["public/audio/*"].each do |path|
-        @audio_filenames[File.basename(path, '.mp3')] = path
+        # Some hanky-panky to lose the "public" prefix
+        server_path = File.join(Pathname(path).each_filename.to_a[1..-1])
+        @audio_filenames[File.basename(path, '.mp3')] = server_path
       end
     end
 
-    def send_scores(team = nil)
+    def send_scores
       set_room
       game_logic = GameLogic.new(@room.team_a_score, @room.team_b_score)
-      unless !team.nil? && team == 'b'
-        ::WebsocketRails[:"room#{@room.id}"].trigger "team_a_score", game_logic.showable_team_a_score
-      end
-      unless !team.nil? && team == 'a'
-        ::WebsocketRails[:"room#{@room.id}"].trigger "team_b_score", game_logic.showable_team_b_score
-      end
+      ::WebsocketRails[:"room#{@room.id}"].trigger "score_update", {
+          :teamAScore => game_logic.showable_team_a_score,
+          :teamBScore => game_logic.showable_team_b_score,
+      }
     end
 
     # @param room [Room]

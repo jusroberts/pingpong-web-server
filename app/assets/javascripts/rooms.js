@@ -26,8 +26,8 @@ class SocketHandler {
 
     updateScoreBars() {
         // update bars on page load
-        this.runningGame.scoreA($("#team_a_score").text(), false);
-        this.runningGame.scoreB($("#team_b_score").text(), false);
+        this.runningGame.scoreA($("#team_a_score").text());
+        this.runningGame.scoreB($("#team_b_score").text());
     }
 
     startListening() {
@@ -55,15 +55,9 @@ class SocketHandler {
             }, 5000);
         });
 
-        channel.bind('team_a_score', function (score) {
-            socketHandler.runningGame.scoreA(score);
-            $("#team_a_score").text(score);
-            console.log(score);
-        });
-        channel.bind('team_b_score', function (score) {
-            socketHandler.runningGame.scoreB(score);
-            $("#team_b_score").text(score);
-            console.log(score);
+        channel.bind('score_update', function (score) {
+            let {teamAScore, teamBScore} = score;
+            socketHandler.runningGame.updateScore(teamAScore, teamBScore);
         });
         channel.bind('user_scan_new', function (player_id) {
             window.location.replace("/rooms/" + roomId + "/game/new/players/create?player_id=" + player_id);
@@ -124,21 +118,32 @@ class BackgroundHandler {
 /**
  * @class
  * @property {Audio} audio
- * @property {number} teamAScore
- * @property {number} teamBScore
+ * @property {number} lastTeamAScore
+ * @property {number} lastTeamBScore
  */
 class RunningGameFunctions {
     constructor(audio) {
         this.audio = audio;
-        this.teamAScore = 0;
-        this.teamBScore = 0;
+        this.lastTeamAScore = 0;
+        this.lastTeamBScore = 0;
     }
 
-    scoreA(score, increment = true) {
-        this.teamAScore = score;
+    updateScore(teamAScore, teamBScore) {
+        if (teamAScore != this.lastTeamAScore) {
+            this.scoreA(teamAScore);
+            this.lastTeamAScore = teamAScore;
+        }
+        if (teamBScore != this.lastTeamBScore) {
+            this.scoreB(teamBScore);
+            this.lastTeamBScore = teamBScore;
+        }
+        this.audio.handleScoreUpdate(teamAScore, teamBScore);
+    }
+
+    scoreA(score) {
+        this.lastTeamAScore = score;
+        console.log("TEAM A SCORE = " + score);
         if (score === 'W') {
-            console.log("TEAM A SCORE = W");
-            this.audio.handleSpecialScore('a', 'win');
             $("#team_a_status").css({
                 "background": 'url("/images/pong_assets/winner-animation.gif")',
                 "background-size": "75%",
@@ -146,36 +151,28 @@ class RunningGameFunctions {
                 "background-repeat": "no-repeat"
             });
             $("#b_meter").animate({width: "0%"});
-            this.startContinueCountdown();
+            RunningGameFunctions.startContinueCountdown();
         } else if (score === 'G') {
-            console.log("TEAM A SCORE = G");
-            this.audio.handleSpecialScore('a', 'game');
             $("#b_meter").animate({width: (100 / 21) + "%"});
         } else if (score === 'D') {
-            console.log("TEAM A SCORE = D");
-            this.audio.handleSpecialScore('a', 'deuce');
             $("#b_meter").animate({width: "100%"});
             $("#b_meter").css({"background": "#ED1C24"});
         } else if (score === 'ADV') {
-            console.log("TEAM A SCORE = ADV");
-            this.audio.handleSpecialScore('a', 'advantage');
             $("#a_meter").animate({width: "100%"});
             $("#b_meter").animate({width: "50%"});
             $("#a_meter").css({"background": "#ED1C24"});
             $("#b_meter").css({"background": "#ED1C24"});
         } else {
-            if (increment) {
-                this.audio.handleScoreUpdate(this.teamAScore, this.teamBScore, 'a');
-            }
             $("#team_a_status").text('\xa0');
             $("#b_meter").animate({width: ((21 - score) * 100 / 21) + "%"});
         }
+        $("#team_a_score").text(score);
     }
 
-    scoreB(score, increment = true) {
-        this.teamBScore = score;
+    scoreB(score) {
+        this.lastTeamBScore = score;
+        console.log("TEAM B SCORE = " + score);
         if (score === 'W') {
-            this.audio.handleSpecialScore('b', 'win');
             $("#team_b_status").css({
                 "background": 'url("/images/pong_assets/winner-animation.gif")',
                 "background-size": "75%",
@@ -183,27 +180,22 @@ class RunningGameFunctions {
                 "background-repeat": "no-repeat"
             });
             $("#a_meter").animate({width: "0%"});
-            this.startContinueCountdown();
+            RunningGameFunctions.startContinueCountdown();
         } else if (score === 'G') {
-            this.audio.handleSpecialScore('b', 'game');
             $("#a_meter").animate({width: (100 / 21) + "%"});
         } else if (score === 'D') {
-            this.audio.handleSpecialScore('b', 'deuce');
             $("#a_meter").animate({width: "100%"});
             $("#a_meter").css({"background": "#ED1C24"});
         } else if (score === 'ADV') {
-            this.audio.handleSpecialScore('b', 'advantage');
             $("#b_meter").animate({width: "100%"});
             $("#a_meter").animate({width: "50%"});
             $("#a_meter").css({"background": "#ED1C24"});
             $("#b_meter").css({"background": "#ED1C24"});
         } else {
-            if (increment) {
-                this.audio.handleScoreUpdate(this.teamAScore, this.teamBScore, 'b');
-            }
             $("#team_b_status").text('\xa0');
             $("#a_meter").animate({width: ((21 - score) * 100 / 21) + "%"});
         }
+        $("#team_b_score").text(score);
     }
 
     static startContinueCountdown() {
@@ -514,20 +506,31 @@ class Audio {
         // Webkit/blink browsers need prefix, Safari won't work without window.
         this.context = new (window.AudioContext || window.webkitAudioContext)(); // define audio context
         this.audioElements = {};
-        // 'teamAScore': document.querySelector('#beep'),
-        // 'teamBScore': document.querySelector('#boop'),
-        // 'win': document.querySelector('#beep'),
-        // 'game': document.querySelector('#beep'),
-        // 'deuce': document.querySelector('#beep'),
-        // 'advantage': document.querySelector('#beep'),
+        this.lastTeamAScore = 0;
+        this.lastTeamBScore = 0;
     }
 
     /**
-     * @param {string} team
-     * @param {string} code
+     * @param {number} teamAScore
+     * @param {number} teamBScore
      */
-    handleSpecialScore(team, code) {
-        this.playSound(code);
+    handleScoreUpdate(teamAScore, teamBScore) {
+        if (!isNaN(teamAScore)) {
+            let teamAIncrement = teamAScore - this.lastTeamAScore;
+            if (teamAIncrement > 0) {
+                // Team A scored
+                this.playSound('beep');
+            }
+        }
+        if (!isNaN(teamBScore)) {
+            let teamBIncrement = teamBScore - this.lastTeamBScore;
+            if (teamBIncrement > 0) {
+                // Team B scored
+                this.playSound('boop');
+            }
+        }
+        this.lastTeamAScore = teamAScore;
+        this.lastTeamBScore = teamBScore;
         // switch (code) {
         //     case 'win':
         //         this.playSound('')
@@ -539,22 +542,6 @@ class Audio {
         //     case 'advantage':
         //         break;
         // }
-    }
-
-    /**
-     * @param {number} teamAScore
-     * @param {number} teamBScore
-     * @param {number} scoringTeam
-     */
-    handleScoreUpdate(teamAScore, teamBScore, scoringTeam) {
-        switch (scoringTeam) {
-            case 'a':
-                this.playSound('beep');
-                break;
-            case 'b':
-                this.playSound('boop');
-                break;
-        }
     }
 
     playSound(key) {

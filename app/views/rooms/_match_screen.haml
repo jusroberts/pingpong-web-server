@@ -1,5 +1,5 @@
 - @audio_filenames.each do |filename, path|
-  %audio{:id => filename, :style => "display: none;", :src => path}
+  %audio{:id => filename, :style => "display: none;", :src => '/' + path}
 %p
   #room-id= @room.id
 .scoring
@@ -8,7 +8,7 @@
       .meter#a_meter &nbsp;
     .name-container
       %h3.sf#team_a_name= get_team_a_name(@player_rankings)
-    %h2.sf.team-status#team_a_status winner;
+    %h2.sf.team-status#team_a_status
     %h1.sf.team-score#team_a_score.center= @team_a_score
   .game-column.center#middle
     %h3.sf vs
@@ -24,7 +24,7 @@
       .meter#b_meter &nbsp;
     .name-container
       %h3.sf#team_b_name= team_b_name(@player_rankings)
-    %h2.sf.team-status#team_b_status winner;
+    %h2.sf.team-status#team_b_status
     %h1.sf.team-score#team_b_score.center= @team_b_score
 :javascript
   let pageType = 'view_game';
