@@ -11,6 +11,12 @@
  * @type {string} default_team_b_avatar
  */
 
+class Utilities {
+    static sleep(time) {
+        return new Promise((resolve) => setTimeout(resolve, time));
+    }
+}
+
 /**
  * @class
  * @property {RunningGameFunctions} runningGame
@@ -26,8 +32,12 @@ class SocketHandler {
 
     updateScoreBars() {
         // update bars on page load
-        this.runningGame.scoreA($("#team_a_score").text());
-        this.runningGame.scoreB($("#team_b_score").text());
+        let teamAScore = $("#team_a_score").text();
+        let teamBScore = $("#team_b_score").text();
+        this.runningGame.audio.lastTeamAScore = teamAScore;
+        this.runningGame.audio.lastTeamBScore = teamBScore;
+        this.runningGame.scoreA(teamAScore);
+        this.runningGame.scoreB(teamBScore);
     }
 
     startListening() {
@@ -508,6 +518,7 @@ class Audio {
         this.audioElements = {};
         this.lastTeamAScore = 0;
         this.lastTeamBScore = 0;
+        this.interSoundDelayMillis = 500;
     }
 
     /**
@@ -515,42 +526,65 @@ class Audio {
      * @param {number} teamBScore
      */
     handleScoreUpdate(teamAScore, teamBScore) {
+        let audio = this;
+        // Get an array of sounds to play
+        let sounds = this.getSoundsToPlay(teamAScore, teamBScore);
+
+        // Play each sound in sequence, to completion
+        let firstSoundKey = sounds.shift();
+        console.log('Playing first sound ' + firstSoundKey);
+        let promise = this.playSound(firstSoundKey);
+
+        sounds.forEach(function(soundKey, index) {
+            promise = promise
+                .then(function() {
+                    console.log('Sleep ' + (index + 1));
+                    return Utilities.sleep(audio.interSoundDelayMillis);
+                })
+                .then(function() {
+                    console.log('Playing ' + (index + 1) + ' sound ' + soundKey);
+                    return audio.playSound(soundKey);
+                })
+        });
+
+        this.lastTeamAScore = teamAScore;
+        this.lastTeamBScore = teamBScore;
+    }
+
+    getSoundsToPlay(teamAScore, teamBScore) {
+        // Add the filename strings for any sounds that should play for this scoring event to the sounds array
+        let sounds = [];
+
         if (!isNaN(teamAScore)) {
             let teamAIncrement = teamAScore - this.lastTeamAScore;
             if (teamAIncrement > 0) {
                 // Team A scored
-                this.playSound('beep');
+                sounds.push('pong_beep');
             }
         }
         if (!isNaN(teamBScore)) {
             let teamBIncrement = teamBScore - this.lastTeamBScore;
             if (teamBIncrement > 0) {
                 // Team B scored
-                this.playSound('boop');
+                sounds.push('pong_boop');
             }
         }
-        this.lastTeamAScore = teamAScore;
-        this.lastTeamBScore = teamBScore;
-        // switch (code) {
-        //     case 'win':
-        //         this.playSound('')
-        //         break;
-        //     case 'game':
-        //         break;
-        //     case 'deuce':
-        //         break;
-        //     case 'advantage':
-        //         break;
-        // }
+
+        return sounds;
     }
 
     playSound(key) {
+        let audio = this;
         // All audio files in public/audio should be automatically loaded as <audio> elements in the template
         // The key here is the filename sans extension
         if (!this.audioElements.hasOwnProperty(key)) {
             this.audioElements[key] = document.querySelector('#' + key);
         }
         this.audioElements[key].play();
+        return new Promise(function(resolve, reject) {
+            audio.audioElements[key].addEventListener('ended', resolve);
+            audio.audioElements[key].addEventListener('error', reject);
+        });
     }
 }
 
