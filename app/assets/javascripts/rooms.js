@@ -610,6 +610,9 @@ class Audio {
         if (teamAScore == 'W' || teamBScore == 'W') {
             sounds.push('game_over');
         }
+        if (teamAScoreNumeric == 4 && teamBScoreNumeric == 4) {
+            sounds.push('fours');
+        }
 
         return sounds;
     }
