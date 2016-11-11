@@ -510,6 +510,7 @@ class NewGameFunctions {
  * @type {number} playerCount
  * @property {Object.<string, string>} audioElements
  * @property {AudioContext} context
+ * @property {number} scoringStreak Number of unanswered points scored; positive is team A and vice versa
  */
 class Audio {
     constructor() {
@@ -518,7 +519,9 @@ class Audio {
         this.audioElements = {};
         this.lastTeamAScore = 0;
         this.lastTeamBScore = 0;
+        this.scoringStreak = 0;
         this.interSoundDelayMillis = 500;
+        this.lastPromise = new Promise(function(resolve) {resolve()});
     }
 
     /**
@@ -529,24 +532,23 @@ class Audio {
         let audio = this;
         // Get an array of sounds to play
         let sounds = this.getSoundsToPlay(teamAScore, teamBScore);
+        console.log('Playing sounds: ' + JSON.stringify(sounds));
 
         // Play each sound in sequence, to completion
-        let firstSoundKey = sounds.shift();
-        console.log('Playing first sound ' + firstSoundKey);
-        let promise = this.playSound(firstSoundKey);
-
+        let promise = this.lastPromise;
         sounds.forEach(function(soundKey, index) {
             promise = promise
-                .then(function() {
-                    console.log('Sleep ' + (index + 1));
-                    return Utilities.sleep(audio.interSoundDelayMillis);
-                })
                 .then(function() {
                     console.log('Playing ' + (index + 1) + ' sound ' + soundKey);
                     return audio.playSound(soundKey);
                 })
+                .then(function() {
+                    console.log('Sleep ' + (index + 1));
+                    return Utilities.sleep(audio.interSoundDelayMillis);
+                })
         });
 
+        this.lastPromise = promise;
         this.lastTeamAScore = teamAScore;
         this.lastTeamBScore = teamBScore;
     }
@@ -554,20 +556,59 @@ class Audio {
     getSoundsToPlay(teamAScore, teamBScore) {
         // Add the filename strings for any sounds that should play for this scoring event to the sounds array
         let sounds = [];
+        let teamAScoreNumeric = null;
+        let teamBScoreNumeric = null;
+        let teamAIncrement = null;
+        let teamBIncrement = null;
 
+        // Do some parsing
         if (!isNaN(teamAScore)) {
-            let teamAIncrement = teamAScore - this.lastTeamAScore;
-            if (teamAIncrement > 0) {
-                // Team A scored
-                sounds.push('pong_beep');
-            }
+            teamAScoreNumeric = parseInt(teamAScore, 10);
+            teamAIncrement = teamAScoreNumeric - this.lastTeamAScore;
         }
         if (!isNaN(teamBScore)) {
-            let teamBIncrement = teamBScore - this.lastTeamBScore;
-            if (teamBIncrement > 0) {
-                // Team B scored
-                sounds.push('pong_boop');
+            teamBScoreNumeric = parseInt(teamBScore, 10);
+            teamBIncrement = teamBScoreNumeric - this.lastTeamBScore;
+        }
+
+        if (teamAIncrement > 0) {
+            // Team A scored
+            sounds.push('pong_beep');
+            // If Team B has a streak going
+            if (this.scoringStreak < 0) {
+                // Reset the streak
+                this.scoringStreak = 0;
             }
+            this.scoringStreak++;
+        }
+        if (teamBIncrement > 0) {
+            // Team B scored
+            sounds.push('pong_boop');
+            // If Team A has a streak going
+            if (this.scoringStreak > 0) {
+                // Reset the streak
+                this.scoringStreak = 0;
+            }
+            this.scoringStreak--;
+        }
+        console.log('Scoring streak: ' + this.scoringStreak);
+        if (Math.abs(this.scoringStreak) == 5) {
+            sounds.push('rampage');
+        }
+        if (Math.abs(this.scoringStreak) == 10) {
+            sounds.push('untouchable');
+        }
+        if (Math.abs(this.scoringStreak) == 15) {
+            sounds.push('invincible');
+        }
+        if (Math.abs(this.scoringStreak) == 20) {
+            sounds.push('inconceivable');
+        }
+        if ((teamAScoreNumeric + teamBScoreNumeric) % 5 == 0) {
+            sounds.push('change_places');
+        }
+        if (teamAScore == 'W' || teamBScore == 'W') {
+            sounds.push('game_over');
         }
 
         return sounds;
