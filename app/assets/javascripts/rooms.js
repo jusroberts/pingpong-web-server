@@ -520,8 +520,9 @@ class Audio {
         this.lastTeamAScore = 0;
         this.lastTeamBScore = 0;
         this.scoringStreak = 0;
-        this.interSoundDelayMillis = 500;
+        this.interSoundDelayMillis = 200;
         this.lastPromise = new Promise(function(resolve) {resolve()});
+        this.lastServingTeam = null;
     }
 
     /**
@@ -560,6 +561,7 @@ class Audio {
         let teamBScoreNumeric = null;
         let teamAIncrement = null;
         let teamBIncrement = null;
+        let servingTeam = null;
 
         // Do some parsing
         if (!isNaN(teamAScore)) {
@@ -571,6 +573,7 @@ class Audio {
             teamBIncrement = teamBScoreNumeric - this.lastTeamBScore;
         }
 
+        // Populate some sounds
         if (teamAIncrement > 0) {
             // Team A scored
             sounds.push('pong_beep');
@@ -604,7 +607,30 @@ class Audio {
         if (Math.abs(this.scoringStreak) == 20) {
             sounds.push('inconceivable');
         }
-        if ((teamAScoreNumeric + teamBScoreNumeric) % 5 == 0) {
+        if (teamAScoreNumeric && teamBScoreNumeric && ((teamAScoreNumeric + teamBScoreNumeric) % 5 == 0)) {
+            sounds.push('change_places');
+        }
+        if (teamAScore == 'G') {
+            servingTeam = 'b';
+        }
+        if (teamAScore == 'ADV') {
+            servingTeam = 'b';
+            if (this.lastServingTeam && this.lastServingTeam != servingTeam) {
+                sounds.push('change_places');
+            }
+        }
+        if (teamBScore == 'G') {
+            servingTeam = 'a';
+        }
+        if (teamBScore == 'ADV') {
+            servingTeam = 'a';
+            if (this.lastServingTeam && this.lastServingTeam != servingTeam) {
+                sounds.push('change_places');
+            }
+        }
+        if (teamAScore == 'D') {
+            // If it's deuce, swap serving team. Keep track so we can tell when we have a switch
+            servingTeam = this.lastServingTeam == 'a' ? 'b' : 'a';
             sounds.push('change_places');
         }
         if (teamAScore == 'W' || teamBScore == 'W') {
@@ -614,6 +640,7 @@ class Audio {
             sounds.push('fours');
         }
 
+        this.lastServingTeam = servingTeam;
         return sounds;
     }
 
