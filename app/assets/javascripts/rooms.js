@@ -652,7 +652,7 @@ class Audio {
         }
         if (teamAScore == 'G') {
             servingTeam = 'b';
-            sounds.push('change_places');
+            // sounds.push('change_places');
         }
         if (teamAScore == 'ADV') {
             servingTeam = 'b';
@@ -662,7 +662,7 @@ class Audio {
         }
         if (teamBScore == 'G') {
             servingTeam = 'a';
-            sounds.push('change_places');
+            // sounds.push('change_places');
         }
         if (teamBScore == 'ADV') {
             servingTeam = 'a';
