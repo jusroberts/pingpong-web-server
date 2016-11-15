@@ -9,7 +9,10 @@
  * @type {string} pageType
  * @type {string} default_team_a_avatar
  * @type {string} default_team_b_avatar
+ * @type {number} wesId
  */
+
+const wesId = 20;
 
 class Utilities {
     static sleep(time) {
@@ -507,15 +510,31 @@ class NewGameFunctions {
 }
 
 /**
- * @type {number} playerCount
+ * @class
+ */
+class Players {
+    /**
+     * @param {Object.<string, Array.<number>>} playerIdHash
+     * @param {number} playerId
+     */
+    static getPlayerTeam(playerIdHash, playerId) {
+        if (playerIdHash.a.indexOf(playerId) >= 0) {
+            return 'a';
+        }
+        if (playerIdHash.b.indexOf(playerId) >= 0) {
+            return 'b';
+        }
+        return null;
+    }
+}
+
+/**
+ * @class
  * @property {Object.<string, string>} audioElements
- * @property {AudioContext} context
  * @property {number} scoringStreak Number of unanswered points scored; positive is team A and vice versa
  */
 class Audio {
     constructor() {
-        // Webkit/blink browsers need prefix, Safari won't work without window.
-        this.context = new (window.AudioContext || window.webkitAudioContext)(); // define audio context
         this.audioElements = {};
         this.lastTeamAScore = 0;
         this.lastTeamBScore = 0;
@@ -562,6 +581,7 @@ class Audio {
         let teamAIncrement = null;
         let teamBIncrement = null;
         let servingTeam = null;
+        let wesTeam = Players.getPlayerTeam(playerIdHash, wesId);
 
         // Do some parsing
         if (!isNaN(teamAScore)) {
@@ -574,9 +594,15 @@ class Audio {
         }
 
         // Populate some sounds
+
+        // Streak logic
         if (teamAIncrement > 0) {
             // Team A scored
-            sounds.push('pong_beep');
+            if (wesTeam) {
+                sounds.push('beep');
+            } else {
+                sounds.push('pong_beep');
+            }
             // If Team B has a streak going
             if (this.scoringStreak < 0) {
                 // Reset the streak
@@ -586,7 +612,11 @@ class Audio {
         }
         if (teamBIncrement > 0) {
             // Team B scored
-            sounds.push('pong_boop');
+            if (wesTeam) {
+                sounds.push('boop');
+            } else {
+                sounds.push('pong_boop');
+            }
             // If Team A has a streak going
             if (this.scoringStreak > 0) {
                 // Reset the streak
@@ -607,11 +637,22 @@ class Audio {
         if (Math.abs(this.scoringStreak) == 20) {
             sounds.push('inconceivable');
         }
+
+        // Yell at Wes
+        if (wesTeam == 'a' && this.scoringStreak <= -5) {
+            sounds.push('dammit_wes');
+        }
+        if (wesTeam == 'b' && this.scoringStreak >= 5) {
+            sounds.push('dammit_wes');
+        }
+
+        // Serving change logic
         if (teamAScoreNumeric && teamBScoreNumeric && ((teamAScoreNumeric + teamBScoreNumeric) % 5 == 0)) {
             sounds.push('change_places');
         }
         if (teamAScore == 'G') {
             servingTeam = 'b';
+            sounds.push('change_places');
         }
         if (teamAScore == 'ADV') {
             servingTeam = 'b';
@@ -621,6 +662,7 @@ class Audio {
         }
         if (teamBScore == 'G') {
             servingTeam = 'a';
+            sounds.push('change_places');
         }
         if (teamBScore == 'ADV') {
             servingTeam = 'a';
@@ -633,6 +675,8 @@ class Audio {
             servingTeam = this.lastServingTeam == 'a' ? 'b' : 'a';
             sounds.push('change_places');
         }
+
+        // Game over etc.
         if (teamAScore == 'W' || teamBScore == 'W') {
             sounds.push('game_over');
         }
