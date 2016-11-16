@@ -466,6 +466,7 @@ class RoomsController < ApplicationController
     end
 
     def private_game_end_post
+      puts("End game request received: #{request.inspect}")
       if memorable_game?(@room)
         save_history(@room)
       end

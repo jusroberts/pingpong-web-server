@@ -139,6 +139,14 @@ class RunningGameFunctions {
         this.audio = audio;
         this.lastTeamAScore = 0;
         this.lastTeamBScore = 0;
+
+        let quitButton = document.querySelector('.sf-quit');
+        if (quitButton) {
+            quitButton.addEventListener('click', function(event) {
+                let targetElement = event.target || event.srcElement;
+                console.log("Quit clicked by " + targetElement);
+            });
+        }
     }
 
     updateScore(teamAScore, teamBScore) {
@@ -212,6 +220,7 @@ class RunningGameFunctions {
     }
 
     static startContinueCountdown() {
+        console.log("startContinueCountdown");
         $("#continueButton").css({"display": "block"});
         $("#continueButton").focus();
         let counter = 10;
