@@ -578,8 +578,6 @@ class Audio {
         });
 
         this.lastPromise = promise;
-        this.lastTeamAScore = teamAScore;
-        this.lastTeamBScore = teamBScore;
     }
 
     getSoundsToPlay(teamAScore, teamBScore) {
@@ -593,11 +591,21 @@ class Audio {
         let wesTeam = Players.getPlayerTeam(playerIdHash, wesId);
 
         // Do some parsing
-        if (!isNaN(teamAScore)) {
+        if (isNaN(teamAScore)) {
+            if (teamAScore == "W" ||
+                (teamAScore == "G" && this.lastTeamAScore != "G")) {
+                teamAIncrement = 1;
+            }
+        } else {
             teamAScoreNumeric = parseInt(teamAScore, 10);
             teamAIncrement = teamAScoreNumeric - this.lastTeamAScore;
         }
-        if (!isNaN(teamBScore)) {
+        if (isNaN(teamBScore)) {
+            if (teamBScore == "W" ||
+                (teamBScore == "G" && this.lastTeamBScore != "G")) {
+                teamBIncrement = 1;
+            }
+        } else {
             teamBScoreNumeric = parseInt(teamBScore, 10);
             teamBIncrement = teamBScoreNumeric - this.lastTeamBScore;
         }
@@ -694,6 +702,8 @@ class Audio {
         }
 
         this.lastServingTeam = servingTeam;
+        this.lastTeamAScore = teamAScore;
+        this.lastTeamBScore = teamBScore;
         return sounds;
     }
 
