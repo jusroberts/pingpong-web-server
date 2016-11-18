@@ -85,6 +85,7 @@ class RoomsController < ApplicationController
       return
     end
     raise("invalid team") if params[:team].downcase != 'a' && params[:team].downcase != 'b'
+    @room.update_attribute(:increment_at, Time.now)
 
     if @room.game
       if should_reset?
@@ -99,7 +100,6 @@ class RoomsController < ApplicationController
       end
     end
     send_scores
-    @room.update_attribute(:increment_at, Time.now)
     render nothing: true
   end
 
@@ -346,8 +346,8 @@ class RoomsController < ApplicationController
       # Should be an even number of players
           room_players.length % 2 === 0 &&
           room_players.length == room.player_count &&
-      # Somebody should have points
-          (room.team_a_score > 0 || room.team_b_score > 0) &&
+      # Somebody should have won the game
+          (room.team_a_score > GameLogic::PENULTIMATE_SCORE || room.team_b_score > GameLogic::PENULTIMATE_SCORE) &&
           !room.game_session_id.nil?
     end
 
