@@ -21,19 +21,17 @@ class BathroomsController < ApplicationController
   def edit
   end
 
-  def add_stall
-    stall = Stall.new({ bathroom_id: @bathroom.id, state: false, number: @bathroom.stalls.count })
-    stall.save
-    redirect_to action: "index" 
-  end
-
   # POST /bathrooms
   # POST /bathrooms.json
   def create
-    @bathroom = Bathroom.new(bathroom_params)
+    @bathroom = Bathroom.new(bathroom_params.except(:stalls))
+    num_stalls = bathroom_params[:stalls].to_i
 
     respond_to do |format|
       if @bathroom.save
+        (0..(num_stalls - 1)).each do |i|
+          Stall.new({ bathroom_id: @bathroom.id, state: false, number: @bathroom.stalls.count }).save
+        end
         format.html { redirect_to @bathroom, notice: 'Bathroom was successfully created.' }
         format.json { render :show, status: :created, location: @bathroom }
       else
@@ -46,8 +44,18 @@ class BathroomsController < ApplicationController
   # PATCH/PUT /bathrooms/1
   # PATCH/PUT /bathrooms/1.json
   def update
+    num_stalls = bathroom_params[:stalls].to_i
     respond_to do |format|
-      if @bathroom.update(bathroom_params)
+      if @bathroom.update(bathroom_params.except(:stalls))
+        if num_stalls > @bathroom.stalls.count
+          (@bathroom.stalls.count..num_stalls).each do |i|
+            Stall.new({ bathroom_id: @bathroom.id, state: false, number: @bathroom.stalls.count }).save
+          end
+        elsif num_stalls < @bathroom.stalls.count && num_stalls >= 0
+          while num_stalls < @bathroom.stalls.count do
+            @bathroom.stalls.last.destroy
+          end
+        end
         format.html { redirect_to @bathroom, notice: 'Bathroom was successfully updated.' }
         format.json { render :show, status: :ok, location: @bathroom }
       else
@@ -70,11 +78,11 @@ class BathroomsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_bathroom
-      @bathroom = Bathroom.find(params[:id])
+      @bathroom = Bathroom.find(params[:id]) rescue Bathroom.find(params[:bathroom_id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def bathroom_params
-      params.require(:bathroom).permit(:name, :token)
+      params.require(:bathroom).permit(:name, :token, :stalls)
     end
 end

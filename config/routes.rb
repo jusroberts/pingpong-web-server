@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :bathrooms
   get 'reports' => 'reports#index', as: :report_index
   get 'reports/leaderboard' => 'reports#leaderboard', as: :report_leaderboard
   get 'reports/player/:player_id' => 'reports#player', as: :player_report
@@ -39,4 +38,7 @@ Rails.application.routes.draw do
   get '/api/rooms/:room_id/players/rank' => 'players#get_rank', as: :get_player_rank
   get '/api/rooms/:room_id/send_current_scores' => 'rooms#send_current_scores'
 
+
+  resources :bathrooms do
+  end
 end

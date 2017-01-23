@@ -12,5 +12,8 @@
   .field
     = f.label :token
     = f.text_field :token
+  .field
+    = f.label :stalls
+    = f.number_field :stalls, value: @bathroom.stalls.count
   .actions
     = f.submit 'Save'

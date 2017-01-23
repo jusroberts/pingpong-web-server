@@ -5,7 +5,15 @@
   = @bathroom.name
 %p
   %b Token:
-  = @bathroom.token
+  = @bathroom.token 
+
+%table.font-white
+  %th Stall
+  %th In use
+  -@bathroom.stalls.each do |stall|
+    %tr
+      %td= stall.number
+      %td= stall.state
 
 = link_to 'Edit', edit_bathroom_path(@bathroom)
 \|
