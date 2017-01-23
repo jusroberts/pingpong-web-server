@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  bathroom_id: 1
+  state: false
+  number: 1
+
+two:
+  bathroom_id: 1
+  state: false
+  number: 1

@@ -11,6 +11,7 @@ gem 'foundation-rails'
 gem 'websocket-rails'
 gem 'faye-websocket', '0.10.0'
 gem 'cloudinary'
+gem "rails-erd"
 
 group :development do
   gem 'spring'

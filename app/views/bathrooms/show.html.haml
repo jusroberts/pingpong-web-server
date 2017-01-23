@@ -1,0 +1,12 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @bathroom.name
+%p
+  %b Token:
+  = @bathroom.token
+
+= link_to 'Edit', edit_bathroom_path(@bathroom)
+\|
+= link_to 'Back', bathrooms_path

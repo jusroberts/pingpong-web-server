@@ -1,0 +1,23 @@
+%h1 Listing bathrooms
+
+%table
+  %thead
+    %tr
+      %th Name
+      %th Token
+      %th
+      %th
+      %th
+
+  %tbody
+    - @bathrooms.each do |bathroom|
+      %tr
+        %td= bathroom.name
+        %td= bathroom.token
+        %td= link_to 'Show', bathroom
+        %td= link_to 'Edit', edit_bathroom_path(bathroom)
+        %td= link_to 'Destroy', bathroom, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Bathroom', new_bathroom_path

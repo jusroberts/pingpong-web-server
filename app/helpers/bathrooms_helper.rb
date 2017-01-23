@@ -1,0 +1,2 @@
+module BathroomsHelper
+end

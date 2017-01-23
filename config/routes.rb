@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :bathrooms
   get 'reports' => 'reports#index', as: :report_index
   get 'reports/leaderboard' => 'reports#leaderboard', as: :report_leaderboard
   get 'reports/player/:player_id' => 'reports#player', as: :player_report
