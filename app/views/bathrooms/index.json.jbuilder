@@ -1,4 +1,6 @@
 json.array!(@bathrooms) do |bathroom|
-  json.extract! bathroom, :id, :name, :token
-  json.url bathroom_url(bathroom, format: :json)
+  json.(bathroom, :id, :name)
+  json.stalls(bathroom.stalls) do |stall|
+    json.extract! stall, :number, :state
+  end
 end
