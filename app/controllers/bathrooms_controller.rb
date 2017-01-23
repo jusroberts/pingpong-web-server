@@ -1,5 +1,5 @@
 class BathroomsController < ApplicationController
-  before_action :set_bathroom, only: [:show, :edit, :update, :destroy, :add_stall]
+  before_action :set_bathroom, only: [:show, :edit, :update, :destroy]
 
   # GET /bathrooms
   # GET /bathrooms.json
@@ -20,6 +20,19 @@ class BathroomsController < ApplicationController
   # GET /bathrooms/1/edit
   def edit
   end
+
+  def set_stall_status
+    begin
+      set_bathroom
+      stall = @bathroom.stalls.where(number: params[:stall_id])
+      state = to_boolean(params[:state])
+      stall.update_all(state: state)
+      render plain: "OK"
+    rescue => e 
+      render plain: "FAIL"
+    end
+  end
+
 
   # POST /bathrooms
   # POST /bathrooms.json
@@ -85,4 +98,10 @@ class BathroomsController < ApplicationController
     def bathroom_params
       params.require(:bathroom).permit(:name, :token, :stalls)
     end
+
+    def to_boolean(str)
+      str == 'true'
+    end
+
+
 end

@@ -40,5 +40,6 @@ Rails.application.routes.draw do
 
 
   resources :bathrooms do
+    get 'stalls/:stall_id' => 'bathrooms#set_stall_status'
   end
 end
