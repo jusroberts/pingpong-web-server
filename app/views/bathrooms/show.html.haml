@@ -1,20 +1,24 @@
 %p#notice= notice
-
-%p
-  %b Name:
+%h1.center
   = @bathroom.name
-%p
-  %b Token:
-  = @bathroom.token 
 
-%table.font-white
-  %th Stall
-  %th In use
-  -@bathroom.stalls.each do |stall|
-    %tr
-      %td= stall.number
-      %td= stall.state
+.row.medium-up-4
+  - @bathroom.stalls.each do |stall|
+    .column
+      .center
+        - if stall.state == false
+          = image_tag "toilet-icon-closed.jpg", height: 175, width:175
+        - else
+          = image_tag "toilet-icon-open.png", { height: 175, width:175 }
+      %h5.center
+        = stall.number + 1
+      %br
 
-= link_to 'Edit', edit_bathroom_path(@bathroom)
-\|
-= link_to 'Back', bathrooms_path
+.column
+  .row.small-12.small-12.center
+    = link_to 'Edit', edit_bathroom_path(@bathroom), { class: 'alert button' }
+    = link_to 'Back', bathrooms_path, { class: 'button' }
+
+
+
+
