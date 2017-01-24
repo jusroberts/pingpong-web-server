@@ -7,24 +7,27 @@
           %li= msg
 
   .row
-    .small-4.columns
+    .small-2.column
       %label.text-right.middle{ for: :name }
         = :name
-    .small-5.columns.end  
+    .small-10.column  
       = f.text_field :name
   .row
-    .small-4.columns
+    .small-2.column
       %label.text-right.middle{ for: :token }
         = :token
-    .small-5.columns.end
+    .small-10.column
       = f.text_field :token
   .row
-    .small-4.columns
+    .small-2.column
       %label.text-right.middle{ for: :stalls }
         = :stalls
-    .small-5.columns.end
+    .small-10.column
       = f.number_field :stalls, value: @bathroom.stalls.count
   .row
-    .small-12.columns.center
+    .small-8.small-centered.column
       = f.submit 'Save', { class: 'button expand' }
-      = link_to 'Bathroom', bathroom_path(@bathroom) , { class: 'button secondary' }
+      - if(@bathroom.id != nil)
+        = link_to 'Cancel', bathroom_path(@bathroom) , { class: 'button secondary' }
+      - else
+        = link_to 'Cancel', bathrooms_path, { class: 'button secondary'}
