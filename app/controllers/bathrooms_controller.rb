@@ -26,9 +26,22 @@ class BathroomsController < ApplicationController
       set_bathroom
       stall = @bathroom.stalls.where(number: params[:stall_id])
       state = to_boolean(params[:state])
-      stall.update_all(state: state)
+
+      if ( @bathroom.state != params[:state] )
+
+        array = Bathroom.all.map do |bathroom|
+          stalls = bathroom.stalls.map do |stall|
+            { id: stall.id, state: stall.state }
+          end
+          { id: bathroom.id, name: bathroom.name, stalls: stalls }
+        end
+
+        stall.update_all(state: state)
+        ::WebsocketRails[:"bathroom"].trigger "stall_update", array
+      end
+
       render plain: "OK"
-    rescue => e 
+    rescue => e
       render plain: "FAIL"
     end
   end
