@@ -20,4 +20,4 @@
   .column
     = link_to 'Edit', edit_bathroom_path(@bathroom), { class: 'secondary button' }
     = link_to 'Bathrooms', bathrooms_path , { class: 'button' }
-    = link_to 'Destroy Bathroom', @bathroom, { method: 'delete', data: { confirm: 'Are you sure?' }, class: 'alert button' }
+    = link_to 'Destroy', @bathroom, { method: 'delete', data: { confirm: 'Are you sure?' }, class: 'alert button' }
