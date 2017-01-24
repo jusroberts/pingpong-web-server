@@ -22,16 +22,14 @@ class BathroomsController < ApplicationController
   end
 
   def set_stall_status
-    begin
       set_bathroom
       stall = @bathroom.stalls.where(number: params[:stall_id])
       state = to_boolean(params[:state])
 
-      if ( @bathroom.state != params[:state] )
-
+      if ( stall[0].state != state )
         array = Bathroom.all.map do |bathroom|
-          stalls = bathroom.stalls.map do |stall|
-            { id: stall.id, state: stall.state }
+          stalls = bathroom.stalls.map do |s|
+            { id: s.id, state: s.state }
           end
           { id: bathroom.id, name: bathroom.name, stalls: stalls }
         end
@@ -41,9 +39,6 @@ class BathroomsController < ApplicationController
       end
 
       render plain: "OK"
-    rescue => e
-      render plain: "FAIL"
-    end
   end
 
 
