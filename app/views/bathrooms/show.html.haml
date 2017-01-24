@@ -10,10 +10,10 @@
 .row.small-up-2.medium-up-3
   - @bathroom.stalls.each do |stall|
     .column.center
-      - if stall.state == false
+      - if stall.state == true
         = image_tag "toilet-icon-closed.jpg", height: 175, width:175
       - else
-        = image_tag "toilet-icon-open.png", { height: 175, width:175 }
+        = image_tag "toilet-icon-open.png",  height: 175, width:175 
       %h5.center
         = stall.number + 1
 .row
