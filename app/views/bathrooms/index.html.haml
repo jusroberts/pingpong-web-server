@@ -1,25 +1,12 @@
-%h1 Listing bathrooms
-
-%table.font-white
-  %thead
-    %tr
-      %th Name
-      %th Token
-      %th
-      %th
-      %th
-      %th
-
-  %tbody
-    - @bathrooms.each do |bathroom|
-      %tr
-        %td= bathroom.name
-        %td= bathroom.token 
-        %td= bathroom.stalls.count
-        %td= link_to 'Show', bathroom
-        %td= link_to 'Edit', edit_bathroom_path(bathroom)
-        %td= link_to 'Destroy', bathroom, :method => :delete, :data => { :confirm => 'Are you sure?' }
-
+%h1.center
+  Bathrooms
 %br
-
-= link_to 'New Bathroom', new_bathroom_path
+.row.small-up-2.medium-up-4
+  - @bathrooms.each do |bathroom|
+    .column
+      .center
+        - border = bathroom.stalls.any?{|a| a.state == false } ? "vacant-border" : "occupied-border"
+        = link_to image_tag("bathroom-stall-icon", border: 0, height: 175, width: 175, class: border), bathroom_path(bathroom.id)
+      %h5.center
+        = bathroom.name
+      %br

@@ -1,20 +1,20 @@
-%p#notice= notice
+.row
+  .small-12.columns  
+    .alert-box.center
+      = notice
+.row
+  .small-12.columns
+    %h1.center
+      = @bathroom.name
 
-%p
-  %b Name:
-  = @bathroom.name
-%p
-  %b Token:
-  = @bathroom.token 
-
-%table.font-white
-  %th Stall
-  %th In use
-  -@bathroom.stalls.each do |stall|
-    %tr
-      %td= stall.number
-      %td= stall.state
-
-= link_to 'Edit', edit_bathroom_path(@bathroom)
-\|
-= link_to 'Back', bathrooms_path
+.row.small-up-2.medium-up-3
+  - @bathroom.stalls.each do |stall|
+    .column.center
+      - border = stall.state == false ?  "vacant-border" : "occupied-border"
+      - image = stall.state == false ? "toilet-icon-open.png" : "toilet-icon-closed.jpg"
+      = image_tag image, height: 175, width:175, class: border
+      %h5.center
+        = stall.number + 1
+.row
+  .small-10.small-centered.medium-6.medium-centered.center.column
+    = link_to 'Bathrooms', bathrooms_path , { class: 'button' }

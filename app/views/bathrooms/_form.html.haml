@@ -6,14 +6,28 @@
         - @bathroom.errors.full_messages.each do |msg|
           %li= msg
 
-  .field
-    = f.label :name
-    = f.text_field :name
-  .field
-    = f.label :token
-    = f.text_field :token
-  .field
-    = f.label :stalls
-    = f.number_field :stalls, value: @bathroom.stalls.count
-  .actions
-    = f.submit 'Save'
+  .row
+    .small-2.column
+      %label.text-right.middle{ for: :name }
+        = :name
+    .small-10.column  
+      = f.text_field :name
+  .row
+    .small-2.column
+      %label.text-right.middle{ for: :token }
+        = :token
+    .small-10.column
+      = f.text_field :token
+  .row
+    .small-2.column
+      %label.text-right.middle{ for: :stalls }
+        = :stalls
+    .small-10.column
+      = f.number_field :stalls, value: @bathroom.stalls.count
+  .row
+    .small-8.small-centered.column
+      = f.submit 'Save', { class: 'button expand' }
+      - if(@bathroom.id != nil)
+        = link_to 'Cancel', bathroom_path(@bathroom) , { class: 'button secondary' }
+      - else
+        = link_to 'Cancel', bathrooms_path, { class: 'button secondary'}

@@ -1,3 +1,19 @@
 // Place all the styles related to the bathrooms controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.vacant-border {
+  -webkit-box-shadow: -2px 3px 61px 2px rgba(123,250,97,1);
+  -moz-box-shadow: -2px 3px 61px 2px rgba(123,250,97,1);
+  box-shadow: -2px 3px 61px 2px rgba(123,250,97,1);
+  border-collapse: collapse;
+  border-radius: 46px;
+}
+
+.occupied-border {
+  -webkit-box-shadow: -2px 3px 61px 2px rgba(245,12,51,1);
+  -moz-box-shadow: -2px 3px 61px 2px rgba(245,12,51,1);
+  box-shadow: -2px 3px 61px 2px rgba(245,12,51,1);
+  border-collapse: collapse;
+  border-radius: 46px;
+}
