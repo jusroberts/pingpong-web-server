@@ -88,6 +88,11 @@ class SocketHandler {
         channel.bind('new_game_refresh', function () {
             location.reload();
         });
+
+        channel.bind('stall_update', function (bathRoomData) {
+          console.log('omg it worked!');
+          // let scanButton = $('#scanButton');
+        });
     }
 }
 
