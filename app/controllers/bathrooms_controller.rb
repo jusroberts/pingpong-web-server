@@ -27,6 +27,7 @@ class BathroomsController < ApplicationController
       state = to_boolean(params[:state])
 
       if ( stall[0].state != state )
+        stall.update_all(state: state)
         array = Bathroom.all.map do |bathroom|
           stalls = bathroom.stalls.map do |s|
             { id: s.id, state: s.state }
@@ -34,7 +35,7 @@ class BathroomsController < ApplicationController
           { id: bathroom.id, name: bathroom.name, stalls: stalls }
         end
 
-        stall.update_all(state: state)
+
         ::WebsocketRails[:"bathroom"].trigger "stall_update", array
       end
 

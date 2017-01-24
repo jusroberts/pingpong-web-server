@@ -47,6 +47,7 @@ class SocketHandler {
         let socketHandler = this;
         let roomId = $('#room-id').text();
         let channel = window.dispatcher.subscribe('room' + roomId);
+        let bathroomChannel = window.dispatcher.subscribe('bathroom' + roomId);
         console.log(window.location.host + '/websocket');
         console.log('room' + roomId);
 
@@ -89,9 +90,22 @@ class SocketHandler {
             location.reload();
         });
 
-        channel.bind('stall_update', function (bathRoomData) {
-          console.log('omg it worked!');
-          // let scanButton = $('#scanButton');
+        bathroomChannel.bind('stall_update', function (bathroomData) {
+          bathroomData.forEach(function(bathroom) {
+            var url = window.location.href;
+            //assumes the room id will always be at the end
+            var roomId = url.substring(url.lastIndexOf('/') + 1);
+            if (roomId != bathroom.id) {
+              return;
+            }
+            bathroom.stalls.forEach(function(stall) {
+              var isStallOccupied = (stall.state == true);
+              var className = isStallOccupied ? "occupied-border" : "vacant-border";
+              var srcUrl = isStallOccupied ? "/assets/toilet-icon-closed.jpg" : "/assets/toilet-icon-open.png";
+              $("#stall" + stall.id).attr("class", className);
+              $("#stall" + stall.id).attr("src", srcUrl);
+            });
+          });
         });
     }
 }
@@ -320,7 +334,7 @@ class NewGameFunctions {
                 NewGameFunctions.optimizeTeams();
             }
         });
-        $("#singlesButton").click(function () {
+      $("#singlesButton").click(function () {
             NewGameFunctions.updatePlayerCount(2, $("#singlesButton"), $("#doublesButton"));
         });
         $("#doublesButton").click(function () {
