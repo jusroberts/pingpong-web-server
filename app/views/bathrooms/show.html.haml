@@ -11,13 +11,11 @@
   - @bathroom.stalls.each do |stall|
     .column.center
       - if stall.state == true
-        = image_tag "toilet-icon-closed.jpg", height: 175, width:175
+        = image_tag "toilet-icon-closed.jpg", height: 175, width:175, class: "occupied-border"
       - else
-        = image_tag "toilet-icon-open.png",  height: 175, width:175 
+        = image_tag "toilet-icon-open.png",  height: 175, width:175, class: "vacant-border"
       %h5.center
         = stall.number + 1
 .row
   .small-10.small-centered.medium-6.medium-centered.center.column
-    = link_to 'Edit', edit_bathroom_path(@bathroom), { class: 'secondary button' }
     = link_to 'Bathrooms', bathrooms_path , { class: 'button' }
-    = link_to 'Destroy', @bathroom, { method: 'delete', data: { confirm: 'Are you sure?' }, class: 'alert button' }
