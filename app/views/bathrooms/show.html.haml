@@ -10,8 +10,9 @@
 .row.small-up-2.medium-up-3
   - @bathroom.stalls.each do |stall|
     .column.center
-      - border = stall.state = false ?  "vacant-border" : "occupied-border"
-      = image_tag "toilet-icon-closed.jpg", height: 175, width:175, class: border
+      - border = stall.state == false ?  "vacant-border" : "occupied-border"
+      - image = stall.state == false ? "toilet-icon-open.png" : "toilet-icon-closed.jpg"
+      = image_tag image, height: 175, width:175, class: border
       %h5.center
         = stall.number + 1
 .row
