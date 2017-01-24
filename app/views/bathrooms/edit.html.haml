@@ -1,7 +1,8 @@
-%h1 Editing bathroom
-
+.row
+  .small-12.columns
+    %h1.center
+      Editing bathroom
+      = @bathroom.name
+%br
 = render 'form'
 
-= link_to 'Show', @bathroom
-\|
-= link_to 'Back', bathrooms_path

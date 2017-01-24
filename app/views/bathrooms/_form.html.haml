@@ -6,14 +6,24 @@
         - @bathroom.errors.full_messages.each do |msg|
           %li= msg
 
-  .field
-    = f.label :name
-    = f.text_field :name
-  .field
-    = f.label :token
-    = f.text_field :token
-  .field
-    = f.label :stalls
-    = f.number_field :stalls, value: @bathroom.stalls.count
-  .actions
-    = f.submit 'Save'
+  .row
+    .small-4.columns
+      %label.text-right.middle{ for: :name }
+        = :name
+    .small-5.columns.end  
+      = f.text_field :name
+  .row
+    .small-4.columns
+      %label.text-right.middle{ for: :token }
+        = :token
+    .small-5.columns.end
+      = f.text_field :token
+  .row
+    .small-4.columns
+      %label.text-right.middle{ for: :stalls }
+        = :stalls
+    .small-5.columns.end
+      = f.number_field :stalls, value: @bathroom.stalls.count
+  .row
+    .small-12.columns.center
+      = f.submit 'Save', { class: 'button expand' }
