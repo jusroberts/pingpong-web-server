@@ -1,8 +1,13 @@
-%p#notice= notice
-%h1.center
-  = @bathroom.name
+.row
+  .small-12.columns  
+    .alert-box.center
+      = notice
+.row
+  .small-12.columns
+    %h1.center
+      = @bathroom.name
 
-.row.medium-up-4
+.row.small-up-2.medium-up-3
   - @bathroom.stalls.each do |stall|
     .column
       .center
@@ -12,12 +17,8 @@
           = image_tag "toilet-icon-open.png", { height: 175, width:175 }
       %h5.center
         = stall.number + 1
-      %br
-
-.column
-  .row.small-12.small-12.center
-    = link_to 'Edit', edit_bathroom_path(@bathroom), { class: 'alert button' }
-
-
-
-
+.row.small-12.small-12.center
+  .column
+    = link_to 'Edit', edit_bathroom_path(@bathroom), { class: 'secondary button' }
+    = link_to 'Bathrooms', bathrooms_path , { class: 'button' }
+    = link_to 'Destroy Bathroom', @bathroom, { method: 'delete', data: { confirm: 'Are you sure?' }, class: 'alert button' }

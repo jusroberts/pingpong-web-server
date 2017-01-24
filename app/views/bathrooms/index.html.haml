@@ -1,15 +1,15 @@
 %h1.center
   Bathrooms
 %br
-.row.medium-up-4
+.row.small-up-2.medium-up-4
   - @bathrooms.each do |bathroom|
     .column
-      %h5.center
-        = bathroom.name
       .center
         = link_to image_tag("bathroom-stall-icon", border: 0, height: 175, width: 175), bathroom_path(bathroom.id)
-
-%br
-%br
-.center
-  = link_to 'New Bathroom', new_bathroom_path, { class: 'button'}
+      %h5.center
+        = bathroom.name
+      %br
+.row
+  .small-12.columns
+    .center
+      = link_to 'New Bathroom', new_bathroom_path, { class: 'button' }
