@@ -5,10 +5,8 @@
   - @bathrooms.each do |bathroom|
     .column
       .center
-        - if (bathroom.stalls.any?{|a| a.state == false})
-          = link_to image_tag("bathroom-stall-icon", border: 0, height: 175, width: 175, class: "vacant-border"), bathroom_path(bathroom.id)
-        - else
-          = link_to image_tag("bathroom-stall-icon", border: 0, height: 175, width: 175, class: "occupied-border"), bathroom_path(bathroom.id)
+        - border = bathroom.stalls.any?{|a| a.state == false } ? "vacant-border" : "occupied-border"
+        = link_to image_tag("bathroom-stall-icon", border: 0, height: 175, width: 175, class: border), bathroom_path(bathroom.id)
       %h5.center
         = bathroom.name
       %br
