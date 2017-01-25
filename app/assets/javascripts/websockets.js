@@ -68,7 +68,7 @@ class SocketHandler {
             location.reload();
         });
 
-        bathroomChannel.bind('stall_update', function (bathroomData) {
+        bathroomChannel.bind('bathroom_update', function (bathroomData) {
             let bathroomFunctions = new BathroomFunctions();
             bathroomFunctions.updateBathroomStallStatus(bathroomData);
         });
