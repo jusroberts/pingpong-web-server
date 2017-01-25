@@ -1,5 +1,5 @@
 .row
-  .small-12.columns  
+  .small-12.columns
     .alert-box.center
       = notice
 .row
@@ -12,9 +12,12 @@
     .column.center
       - border = stall.state == false ?  "vacant-border" : "occupied-border"
       - image = stall.state == false ? "toilet-icon-open.png" : "toilet-icon-closed.jpg"
-      = image_tag image, height: 175, width:175, class: border
+      = image_tag image, height: 175, width:175, class: border, id:"stall" + (stall.number + 1).to_s
       %h5.center
         = stall.number + 1
 .row
   .small-10.small-centered.medium-6.medium-centered.center.column
     = link_to 'Bathrooms', bathrooms_path , { class: 'button' }
+
+:javascript
+  let pageType = 'bathroom_index';

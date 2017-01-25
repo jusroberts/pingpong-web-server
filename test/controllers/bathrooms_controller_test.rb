@@ -35,7 +35,7 @@ class BathroomsControllerTest < ActionController::TestCase
   end
 
   test "should update bathroom" do
-    patch :update, id: @bathroom, bathroom: { name: @bathroom.name, token: @bathroom.token }
+    patch :update, id: @bathroom, bathroom: { name: "NewName", token: "NewToken" }
     assert_redirected_to bathroom_path(assigns(:bathroom))
   end
 
