@@ -7,7 +7,7 @@
       .center
         - border = bathroom.stalls.any?{|a| a.state == false } ? "vacant-border" : "occupied-border"
         = link_to bathroom_path(bathroom.id) do
-          = image_tag("bathroom-stall-icon", border: 0, height: 175, width: 175, class: border)
+          = image_tag("bathroom-stall-icon.jpg", border: 0, height: 175, width: 175, class: border)
       %h5.center
         = bathroom.name
       %br

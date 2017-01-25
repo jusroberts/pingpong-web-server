@@ -18,7 +18,7 @@ class BathroomsControllerTest < ActionController::TestCase
 
   test "should create bathroom" do
     assert_difference('Bathroom.count') do
-      post :create, bathroom: { name: "TestName", token: "TestToken" }
+      post :create, bathroom: { name: "New Bathroom", token: "New Token" }
     end
 
     assert_redirected_to bathroom_path(assigns(:bathroom))
