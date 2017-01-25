@@ -743,7 +743,7 @@ class BathroomFunctions {
       bathroom.stalls.forEach(function(stall) {
         var isStallOccupied = (stall.state == true);
         var className = isStallOccupied ? "occupied-border" : "vacant-border";
-        var srcUrl = isStallOccupied ? "/assets/toilet-icon-closed.jpg" : "/assets/toilet-icon-open.png";
+        var srcUrl = isStallOccupied ? "<%= image_path("toilet-icon-closed.jpg") %>"  : "<%= image_path("toilet-icon-open.png") %>";
         $("#stall" + stall.id).attr("class", className);
         $("#stall" + stall.id).attr("src", srcUrl);
       });
