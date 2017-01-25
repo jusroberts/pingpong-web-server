@@ -34,10 +34,10 @@ class BathroomsController < ApplicationController
           stalls = b.stalls.map do |s|
             { id: s.id, state: s.state }
           end
-          { id: b.id, name: b.name, stalls: stalls }
+          { id: b.id, name: b.name, stalls: stalls, is_full: b.is_full? }
         end
-        
-        ::WebsocketRails[:"bathroom"].trigger "stall_update", bathroomData
+
+        ::WebsocketRails[:"bathroom"].trigger "bathroom_update", bathroomData
       end
 
       render plain: "OK"

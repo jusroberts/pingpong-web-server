@@ -5,9 +5,12 @@
   - @bathrooms.each do |bathroom|
     .column
       .center
-        - border = bathroom.stalls.any?{|a| a.state == false } ? "vacant-border" : "occupied-border"
+        - border = bathroom.is_full? ? "occupied-border" : "vacant-border"
         = link_to bathroom_path(bathroom.id) do
-          = image_tag("bathroom-stall-icon.jpg", border: 0, height: 175, width: 175, class: border)
+          = image_tag("bathroom-stall-icon.jpg", border: 0, height: 175, width: 175, class: border, id: "bathroom#{bathroom.id}")
       %h5.center
         = bathroom.name
       %br
+
+:javascript
+  let pageType = 'bathroom_index';
