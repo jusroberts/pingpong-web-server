@@ -3,7 +3,3 @@
 one:
   name: MyString
   token: MyString
-
-two:
-  name: MyString
-  token: MyString

@@ -6,6 +6,7 @@ one:
   team_a_score: 1
   team_b_score: 1
   name: MyString
+  game: true
 
 two:
   id: 2
@@ -13,3 +14,4 @@ two:
   team_a_score: 1
   team_b_score: 1
   name: MyString
+  game: true
