@@ -22,6 +22,7 @@ class BathroomsController < ApplicationController
   end
 
   def set_stall_status
+    begin
       set_bathroom
       stall = @bathroom.stalls.where(number: params[:stall_id])
       state = to_boolean(params[:state])
@@ -40,6 +41,9 @@ class BathroomsController < ApplicationController
       end
 
       render plain: "OK"
+    rescue => e
+      render plain: "FAIL"
+    end
   end
 
 
