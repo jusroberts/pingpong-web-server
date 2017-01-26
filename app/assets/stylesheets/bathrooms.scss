@@ -4,6 +4,7 @@
 
 $primary: #001871;
 $secondary: #00a1e0;
+$poop: #9a6334;
 
 .white{
   color: white;
@@ -23,22 +24,6 @@ $secondary: #00a1e0;
 
 .bottom-border-primary {
   border-bottom: 10px solid $primary;
-}
-
-.vacant-status-bar {
-  display:block;
-  margin: 0 auto;
-  height: 20px;
-  width: 70%;
-  background-color: #00a1e0;
-}
-
-.occupied-status-bar {
-  display:block;
-  margin: 0 auto;
-  height: 20px;
-  width: 70%;
-  background-color: #9a6334;
 }
 
 .no-margin-row {
@@ -70,4 +55,20 @@ $secondary: #00a1e0;
   border-style: solid;
   top: -15px;
   font-size: 16px;
+}
+
+.occupied-text {
+  background-color: $poop;
+  color: white;
+  font-size: 16px;
+  border-radius: 20px;
+  padding: 5px;
+}
+
+.vacant-text {
+  background-color: $secondary;
+  color: white;
+  font-size: 16px;
+  border-radius: 20px;
+  padding: 5px;
 }
