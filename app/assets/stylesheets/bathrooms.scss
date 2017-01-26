@@ -2,18 +2,76 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.vacant-border {
-  -webkit-box-shadow: -2px 3px 61px 2px rgba(123,250,97,1);
-  -moz-box-shadow: -2px 3px 61px 2px rgba(123,250,97,1);
-  box-shadow: -2px 3px 61px 2px rgba(123,250,97,1);
-  border-collapse: collapse;
-  border-radius: 46px;
+$primary: #001871;
+$secondary: #00a1e0;
+
+.white{
+  color: white;
 }
 
-.occupied-border {
-  -webkit-box-shadow: -2px 3px 61px 2px rgba(245,12,51,1);
-  -moz-box-shadow: -2px 3px 61px 2px rgba(245,12,51,1);
-  box-shadow: -2px 3px 61px 2px rgba(245,12,51,1);
-  border-collapse: collapse;
-  border-radius: 46px;
+.background-color-primary {
+  background-color: $primary;
+}
+
+.background-color-secondary {
+  background-color: $secondary;
+}
+
+.background-color-ternary {
+  background-color: white;
+}
+
+.bottom-border-primary {
+  border-bottom: 10px solid $primary;
+}
+
+.vacant-status-bar {
+  display:block;
+  margin: 0 auto;
+  height: 20px;
+  width: 70%;
+  background-color: #00a1e0;
+}
+
+.occupied-status-bar {
+  display:block;
+  margin: 0 auto;
+  height: 20px;
+  width: 70%;
+  background-color: #9a6334;
+}
+
+.full-height {
+  height: 100%;
+}
+
+.no-margin-row {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+.margin-bottom-15 {
+  margin-bottom: 15%;
+}
+
+.margin-bottom-10 {
+  margin-bottom: 10%
+}
+
+.margin-bottom-5 {
+  margin-bottom: 5%;
+}
+
+.bathroom-header {
+  position: relative;
+  display: inline-block;
+  color: white;
+  background-color: $secondary;
+  border-radius: 50px;
+  padding: 12px;
+  border-color: white;
+  border-width: 3px;
+  border-style: solid;
+  top: -15px;
+  font-size: 16px;
 }

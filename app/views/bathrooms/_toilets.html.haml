@@ -1,0 +1,18 @@
+%h5.center
+  = 'Stall: ' + (stall.number + 1).to_s
+- image = stall.state == false ? "toilet-open.png" : "toilet-closed.png"
+= image_tag image, height: 175, width:175,  id:"stall" + (stall.number + 1).to_s
+- occupancy_text = stall.occupied? ? "Occupied" : "Vacant"
+.margin-bottom-5
+.row
+  .small-12.columns.center
+    - if stall.occupied?
+      .occupied-status-bar
+    - else
+      .vacant-status-bar
+    .margin-bottom-5
+.row
+  .small-12.columns.center
+    %span
+      = occupancy_text
+.margin-bottom-15
