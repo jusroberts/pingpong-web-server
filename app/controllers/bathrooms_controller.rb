@@ -1,6 +1,5 @@
 class BathroomsController < ApplicationController
   before_action :set_bathroom, only: [:show, :edit, :update, :destroy]
-  before_action :show_topbar
 
   # GET /bathrooms
   # GET /bathrooms.json
