@@ -37,19 +37,8 @@ class BathroomsController < ApplicationController
 
         bathroomData = Bathroom.all.map do |b|
           stalls = b.stalls.map do |s|
+            log_stall_session(s)
             { id: s.id, state: s.state }
-            if (s.state == true)
-              stallStats = StallStats.create(usage_start: Time.now, stall_id: s.id)
-            else
-              begin
-                stallStats = StallStats.find_by(stall_id: s.id, usage_end: nil)
-                stallStats.usage_end = Time.now
-                stallStats.save
-              rescue
-                # prevent error from bubbling up
-              end
-            end
-
           end
           { id: b.id, name: b.name, stalls: stalls, is_full: b.is_full? }
         end
@@ -133,5 +122,18 @@ class BathroomsController < ApplicationController
       str == 'true'
     end
 
+    def log_stall_session(stall)
+      if (stall.state == true)
+        stallStats = StallStats.create(usage_start: Time.now, stall_id: stall.id)
+      else
+        begin
+          stallStats = StallStats.find_by(stall_id: stall.id, usage_end: nil)
+          stallStats.usage_end = Time.now
+          stallStats.save
+        rescue
+          # prevent error from bubbling up
+        end
+      end
+    end
 
 end
