@@ -33,7 +33,6 @@ class BathroomsController < ApplicationController
 
         bathroomData = Bathroom.all.map do |b|
           stalls = b.stalls.map do |s|
-            { id: s.id, state: s.state }
             if (s.state == true)
               stallStats = StallStats.create(usage_start: Time.now.utc, stall_id: s.id)
             else
@@ -45,7 +44,7 @@ class BathroomsController < ApplicationController
                 # prevent error from bubbling up
               end
             end
-
+            { id: s.id, state: s.state }
           end
           { id: b.id, name: b.name, stalls: stalls, is_full: b.is_full? }
         end
