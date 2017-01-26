@@ -15,6 +15,8 @@
 //= require foundation
 //= require jquery-readyselector
 //= require websocket_rails/main
+//= require Chart.bundle
+//= require chartkick
 //= require_tree .
 
 $(function(){ $(document).foundation(); });

@@ -1,6 +1,6 @@
 class Stall < ActiveRecord::Base
     belongs_to :bathroom
-    has_many :stall_stats
+    
 
     def occupied?
       state
@@ -8,5 +8,9 @@ class Stall < ActiveRecord::Base
 
     def handicap?
       bathroom.stalls.count - 1 == number
+    end
+
+    def stall_stats
+      StallStats.all.where(stall_id: id) rescue []
     end
 end
