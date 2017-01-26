@@ -14,10 +14,10 @@ class BathroomFunctions {
           var srcUrl = isStallOccupied ? "<%= image_path("toilet-closed.png") %>"  : "<%= image_path("toilet-open.png") %>";
           var stallStatusText = isStallOccupied ? "Occupied" : "Vacant";
           var stallStatusBarClass = isStallOccupied ? "occupied-text" : "vacant-text";
-          $("#stall" + stall.id).attr("src", srcUrl);
-          $("#stallStatusBar" + stall.id).attr("class", isStallOccupied ? "occupied-status-bar" : "vacant-status-bar");
-          $("#stallStatusText" + stall.id).text(stallStatusText);
-          $("#stallStatusText" + stall.id).attr("class", "small-6 small-offset-3 columns center end " + stallStatusBarClass);
+
+          $("#stallImg" + bathroom.id + "-" + stall.id).attr("src", srcUrl);
+          $("#stallStatus" + bathroom.id + "-" + stall.id).text(stallStatusText);
+          $("#stallStatus" + bathroom.id + "-" + stall.id).attr("class", "small-6 small-offset-3 columns center end " + stallStatusBarClass);
         });
       }
     });
