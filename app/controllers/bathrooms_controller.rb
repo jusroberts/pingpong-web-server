@@ -1,5 +1,6 @@
 class BathroomsController < ApplicationController
   before_action :set_bathroom, only: [:show, :edit, :update, :destroy]
+  before_action :show_topbar
 
   # GET /bathrooms
   # GET /bathrooms.json
@@ -21,6 +22,10 @@ class BathroomsController < ApplicationController
   def edit
   end
 
+  def stats
+    render json: StallStatsAggregate::create_buckets(Bathroom.all.first, 30, Time.now.beginning_of_day)
+  end
+
   def set_stall_status
     begin
       set_bathroom
@@ -33,6 +38,18 @@ class BathroomsController < ApplicationController
         bathroomData = Bathroom.all.map do |b|
           stalls = b.stalls.map do |s|
             { id: s.id, state: s.state }
+            if (s.state == true)
+              stallStats = StallStats.create(usage_start: Time.now, stall_id: s.id)
+            else
+              begin
+                stallStats = StallStats.find_by(stall_id: s.id, usage_end: nil)
+                stallStats.usage_end = Time.now
+                stallStats.save
+              rescue
+                # prevent error from bubbling up
+              end
+            end
+
           end
           { id: b.id, name: b.name, stalls: stalls, is_full: b.is_full? }
         end

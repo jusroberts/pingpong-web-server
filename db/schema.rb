@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170123151813) do
+ActiveRecord::Schema.define(version: 20170126152852) do
 
   create_table "bathrooms", force: true do |t|
     t.string   "name"
@@ -91,6 +91,14 @@ ActiveRecord::Schema.define(version: 20170123151813) do
     t.integer  "player_count",    default: 4, null: false
     t.string   "game_session_id"
     t.datetime "increment_at"
+  end
+
+  create_table "stall_stats", force: true do |t|
+    t.datetime "usage_start"
+    t.datetime "usage_end"
+    t.integer  "stall_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "stalls", force: true do |t|

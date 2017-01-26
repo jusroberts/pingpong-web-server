@@ -38,6 +38,7 @@ GEM
       debug_inspector (>= 0.0.1)
     builder (3.2.2)
     byebug (8.2.2)
+    chartkick (2.2.2)
     choice (0.2.0)
     cloudinary (1.1.4)
       aws_cf_signer
@@ -229,6 +230,7 @@ PLATFORMS
 DEPENDENCIES
   better_errors
   binding_of_caller
+  chartkick
   cloudinary
   coffee-rails (~> 4.0.0)
   connection_pool
