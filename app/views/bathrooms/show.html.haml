@@ -8,7 +8,7 @@
       = @bathroom.name
 
 .row.small-up-2.medium-up-3
-  - @bathroom.stalls.each do |stall|
+  - @bathroom.stalls.order('number ASC').each do |stall|
     .column.center
       - border = stall.state == false ?  "vacant-border" : "occupied-border"
       - image = stall.state == false ? "toilet-icon-open.png" : "toilet-icon-closed.jpg"
@@ -20,4 +20,4 @@
     = link_to 'Bathrooms', bathrooms_path , { class: 'button' }
 
 :javascript
-  let pageType = 'bathroom_index';
+  let pageType = 'bathroom_show';
