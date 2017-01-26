@@ -1,16 +1,25 @@
-%h1.center
-  Bathrooms
-%br
-.row.small-up-2.medium-up-4
-  - @bathrooms.each do |bathroom|
-    .column
-      .center
-        - border = bathroom.is_full? ? "occupied-border" : "vacant-border"
-        = link_to bathroom_path(bathroom.id) do
-          = image_tag("bathroom-stall-icon.jpg", border: 0, height: 175, width: 175, class: border, id: "bathroom#{bathroom.id}")
-      %h5.center
-        = bathroom.name
-      %br
 
-:javascript
-  let pageType = 'bathroom_index';
+.background-color-primary.full-height
+  .row
+    .small-12.medium-8.medium-offset-2.end.background-color-secondary
+      .row
+        .small-8.small-offset-2.medium-8.medium-offset-2.columns.end
+          %h3.center.white.margin-bottom-10
+            Atlanta Hub Bathroom Stall Availability
+      .row
+        .small-12.medium-10.medium-offset-1.columns.end
+          - @bathrooms.each do |bathroom|
+            .row.background-color-ternary
+              .small-12.center.columns
+                %span.bathroom-header
+                  =bathroom.name
+            .row.background-color-ternary.bottom-border-primary.margin-bottom-10
+              .small-12.small-up-2.columns
+                - bathroom.stalls.each_with_index do |stall, index|
+                  - if (index + 1 == bathroom.stalls.count)
+                    .small-2.columns.center.end
+                      = render partial: 'toilets', locals: { stall: stall }
+                  - else
+                    .small-2.columns.center
+                      = render partial: 'toilets', locals: { stall: stall }
+            %br

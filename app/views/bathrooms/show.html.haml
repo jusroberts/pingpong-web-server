@@ -2,12 +2,12 @@
   .small-12.columns
     .alert-box.center
       = notice
-.row
-  .small-12.columns
-    %h1.center
-      = @bathroom.name
 
 .row.small-up-2.medium-up-3
+  .row
+    .small-12.columns.background-salesforce-light-blue
+      %h1.center
+        = @bathroom.name
   - @bathroom.stalls.each do |stall|
     .column.center
       - border = stall.state == false ?  "vacant-border" : "occupied-border"
