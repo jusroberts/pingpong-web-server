@@ -1,4 +1,4 @@
-.background-color-primary.full-height
+.background-color-primary
   .row
     .small-12.medium-8.medium-offset-2.end.background-color-secondary
       .row
@@ -23,4 +23,5 @@
                       = render partial: 'toilets', locals: { stall: stall }
             %br
 
+  .clear
 =# column_chart bathroom_stall_stats_path(bathroom_id: @bathrooms[0].id)
