@@ -20,7 +20,6 @@ class ReportsController < ApplicationController
       else
         @records = GameHistoryDao::get_per_game_histories(primary_player_id)
       end
-      @records = @records.sort_by{|k,v| k}.reverse
     else
       @records = GameHistory.all.order(id: :desc)
     end
