@@ -24,7 +24,8 @@ $(document).ready( function() {
         // If we actually have a history table element, fire up the DataTables JS
         if (historyTableDiv.length) {
             historyTableDiv.DataTable({
-                paging: true
+                paging: true,
+                order: [[6, "desc"]]
             });
         }
         DataTableStyling.applyStyling();
