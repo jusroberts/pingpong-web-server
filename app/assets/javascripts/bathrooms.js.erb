@@ -8,17 +8,14 @@ class BathroomFunctions {
       var url = window.location.href;
       var bathroomIdentifier = url.substring(url.lastIndexOf('/') + 1);
       if (bathroomIdentifier == "bathrooms") {
-        //bathroom index page
-        var bathroomClass = (bathroom.is_full) ? "occupied-border" : "vacant-border";
-        $("#bathroom" + bathroom.id).attr("class", bathroomClass);
-      } else {
         bathroom.stalls.forEach(function(stall) {
           //bathroom show page
           var isStallOccupied = (stall.state == true);
-          var className = isStallOccupied ? "occupied-border" : "vacant-border";
-          var srcUrl = isStallOccupied ? "<%= image_path("toilet-icon-closed.jpg") %>"  : "<%= image_path("toilet-icon-open.png") %>";
-          $("#stall" + stall.id).attr("class", className);
+          var srcUrl = isStallOccupied ? "<%= image_path("toilet-closed.png") %>"  : "<%= image_path("toilet-open.png") %>";
+          var stallStatusText = isStallOccupied ? "Occupied" : "Vacant"
           $("#stall" + stall.id).attr("src", srcUrl);
+          $("#stallStatusBar" + stall.id).attr("class", isStallOccupied ? "occupied-status-bar" : "vacant-status-bar");
+          $("#stallStatusText" + stall.id).text(stallStatusText);
         });
       }
     });

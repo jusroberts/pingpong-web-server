@@ -7,12 +7,12 @@
 .row
   .small-12.columns.center
     - if stall.occupied?
-      .occupied-status-bar
+      .occupied-status-bar{:id => "stallStatusBar" + (stall.number + 1).to_s}
     - else
-      .vacant-status-bar
+      .vacant-status-bar{:id => "stallStatusBar" + (stall.number + 1).to_s}
     .margin-bottom-5
 .row
-  .small-12.columns.center
+  .small-12.columns.center{:id => "stallStatusText" + (stall.number + 1).to_s}
     %span
       = occupancy_text
 .margin-bottom-15
