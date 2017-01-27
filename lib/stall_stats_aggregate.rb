@@ -5,7 +5,7 @@ class StallStatsAggregate
   def self.create_buckets(bathroom, minutes, day)
     time = day
 
-    stats = bathroom.stalls.map { |stall| stall.stall_stats.where("usage_end > ? AND usage_start < ?", day, day + 1.day) }
+    stats = bathroom.stalls.map { |stall| stall.stall_stats.where("usage_end > ? AND usage_start < ? AND usage_end IS NOT NULL", day, day + 1.day) }
     buckets = {}
     (0..(((day + 1.day) - day) / minutes.minutes)).each do |i|
       buckets[time + (i * minutes).minutes] = 0
