@@ -122,14 +122,17 @@ class BathroomsController < ApplicationController
     end
 
     def log_stall_session(stall)
-      if (stall.state == true)
+      if (stall.state == true && StallStats.find_by(stall_id: stall.id, usage_end: nil).nil?)
         stallStats = StallStats.create(usage_start: Time.now, stall_id: stall.id)
       else
         begin
           stallStats = StallStats.find_by(stall_id: stall.id, usage_end: nil)
-          stallStats.usage_end = Time.now
-          stallStats.save
-        rescue
+          unless stallStats.nil?
+            stallStats.usage_end = Time.now
+            stallStats.save
+          end
+        rescue => e
+          NewRelic.notice_error(e)
           # prevent error from bubbling up
         end
       end
