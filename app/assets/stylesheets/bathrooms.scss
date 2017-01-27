@@ -10,6 +10,10 @@ $poop: #9a6334;
   color: white;
 }
 
+.inline {
+  display: inline-block;
+}
+
 .background-color-primary {
   background-color: $primary;
 }
@@ -74,5 +78,10 @@ $poop: #9a6334;
 }
 
 .no-overflow {
-    overflow: hidden; 
+    overflow: hidden;
+}
+
+.handicap-image {
+  position: relative;
+  top: -5px; 
 }
