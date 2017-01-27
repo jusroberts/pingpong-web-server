@@ -28,7 +28,7 @@ class StallStatsAggregate
         end
       end
     end
-    buckets.map { |k, v| [k.strftime('%I:%M %p').gsub(/^0/, ''), v] }
+    buckets.map { |k, v| [k.in_time_zone('Eastern Time (US & Canada)').strftime('%I:%M %p').gsub(/^0/, ''), v] }
   end
 
   def self.time_to_previous_bucket_key(bucket_duration, time)
