@@ -10,7 +10,7 @@ class StallStatsAggregate
     (0..(((day + 1.day) - day) / minutes.minutes)).each do |i|
       buckets[time + (i * minutes).minutes] = 0
     end
-
+    Rails.logger.fatal "CREATING BUCKETS"
     stats.each do |stall_stats|
       stall_stats.each do |stat|
         start_bucket = self.time_to_previous_bucket_key(minutes, stat.usage_start)
@@ -22,12 +22,17 @@ class StallStatsAggregate
           buckets[start_bucket] += ((start_bucket + minutes.minutes) - stat.usage_start) / minutes.minutes
           buckets[end_bucket] += ((stat.usage_end - end_bucket) / minutes.minutes)
           long_poop_bucket = start_bucket + minutes.minutes
+          Rails.logger.fatal "START #{((start_bucket + minutes.minutes) - stat.usage_start) / minutes.minutes}"
+          Rails.logger.fatal "END #{((stat.usage_end - end_bucket) / minutes.minutes)}"
+          Rails.logger.fatal "LONG POOP BUCKET #{start_bucket + minutes.minutes}"
           (0..((end_bucket - long_poop_bucket) / minutes.minutes)).each do |i|
+            Rails.logger.fatal "LONG POOP #{((start_bucket + minutes.minutes) - stat.usage_start) / minutes.minutes}"
             buckets[long_poop_bucket + (i * minutes).minutes] += 1
           end
         end
       end
     end
+    Rails.logger.fatal "CREATING BUCKETS FINISHED"
     buckets.map { |k, v| [k.in_time_zone('Eastern Time (US & Canada)').strftime('%I:%M %p').gsub(/^0/, ''), v] }
   end
 
