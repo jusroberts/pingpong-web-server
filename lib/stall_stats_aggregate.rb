@@ -19,7 +19,6 @@ class StallStatsAggregate
         if start_bucket == end_bucket
           buckets[start_bucket] += (stat.usage_end - stat.usage_start) / minutes.minutes
         else #Harder case
-          asdf
           buckets[start_bucket] += ((start_bucket + minutes.minutes) - stat.usage_start) / minutes.minutes
           buckets[end_bucket] += ((stat.end_bucket) / minutes.minutes)
           long_poop_bucket = start_bucket + minutes.minutes
