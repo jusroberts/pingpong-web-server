@@ -1,4 +1,4 @@
-.background-color-primary
+.background-color-primary.no-overflow
   .row
     .small-12.medium-8.medium-offset-2.end.background-color-secondary
       .row
@@ -14,7 +14,7 @@
                   =bathroom.name
             .row.background-color-ternary.bottom-border-primary.margin-bottom-10
               .small-12.small-up-2.columns
-                - bathroom.stalls.each_with_index do |stall, index|
+                - bathroom.stalls.order("number ASC").each_with_index do |stall, index|
                   - if (index + 1 == bathroom.stalls.count)
                     .small-2.columns.center.end
                       = render partial: 'toilets', locals: { stall: stall, bathroom: bathroom }
