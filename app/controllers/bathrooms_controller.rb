@@ -33,10 +33,10 @@ class BathroomsController < ApplicationController
 
       if ( stall[0].state != state )
         stall.update_all(state: state)
+        log_stall_session(stall[0])
 
         bathroomData = Bathroom.all.map do |b|
           stalls = b.stalls.map do |s|
-            log_stall_session(s)
             { id: s.id, state: s.state }
           end
           { id: b.id, name: b.name, stalls: stalls, is_full: b.is_full? }
