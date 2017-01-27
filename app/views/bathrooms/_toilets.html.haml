@@ -1,14 +1,14 @@
 %h5.center
   = 'Stall: ' + (stall.number + 1).to_s
 - image = stall.state == false ? "toilet-open.png" : "toilet-closed.png"
-= image_tag image, height: 175, width:175,  id:"stallImg" + (bathroom.id).to_s + "-" + (stall.number + 1).to_s
+= image_tag image, height: 175, width:175,  id:"stallImg" + (bathroom.id).to_s + "-" + (stall.id).to_s
 - occupancy_text = stall.occupied? ? "Occupied" : "Vacant"
 .margin-bottom-5
 .row
   - if stall.occupied?
-    .small-6.small-offset-3.columns.center.end.occupied-text{:id => "stallStatus" + (bathroom.id).to_s + "-" + (stall.number + 1).to_s}
+    .small-6.small-offset-3.columns.center.end.occupied-text{:id => "stallStatus" + (bathroom.id).to_s + "-" + (stall.id).to_s}
       = occupancy_text
   - else
-    .small-6.small-offset-3.columns.center.end.vacant-text{:id => "stallStatus" + (bathroom.id).to_s + "-" + (stall.number + 1).to_s}
+    .small-6.small-offset-3.columns.center.end.vacant-text{:id => "stallStatus" + (bathroom.id).to_s + "-" + (stall.id).to_s}
       = occupancy_text
 .margin-bottom-15
