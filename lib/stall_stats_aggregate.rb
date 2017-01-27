@@ -19,9 +19,8 @@ class StallStatsAggregate
         if start_bucket == end_bucket
           buckets[start_bucket] += (stat.usage_end - stat.usage_start) / minutes.minutes
         else #Harder case
-          asdf
           buckets[start_bucket] += ((start_bucket + minutes.minutes) - stat.usage_start) / minutes.minutes
-          buckets[end_bucket] += ((stat.end_bucket) / minutes.minutes)
+          buckets[end_bucket] += ((stat.usage_end - end_bucket) / minutes.minutes)
           long_poop_bucket = start_bucket + minutes.minutes
           (0..((end_bucket - long_poop_bucket) / minutes.minutes)).each do |i|
             buckets[long_poop_bucket + (i * minutes).minutes] += 1
@@ -29,7 +28,7 @@ class StallStatsAggregate
         end
       end
     end
-    buckets.map { |k, v| [k.strftime('%I:%M %p').gsub(/^0/, ''), v] }
+    buckets.map { |k, v| [k.in_time_zone('Eastern Time (US & Canada)').strftime('%I:%M %p').gsub(/^0/, ''), v] }
   end
 
   def self.time_to_previous_bucket_key(bucket_duration, time)
