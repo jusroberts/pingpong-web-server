@@ -17,10 +17,10 @@
                 - bathroom.stalls.order("number ASC").each_with_index do |stall, index|
                   - if (index + 1 == bathroom.stalls.count)
                     .small-2.columns.center.end
-                      = render partial: 'toilets', locals: { stall: stall, bathroom: bathroom }
+                      = render partial: 'toilets', locals: { stall: stall, bathroom: bathroom, last: true }
                   - else
                     .small-2.columns.center
-                      = render partial: 'toilets', locals: { stall: stall, bathroom: bathroom }
+                      = render partial: 'toilets', locals: { stall: stall, bathroom: bathroom, last: false }
             %br
 
 =# column_chart bathroom_stall_stats_path(bathroom_id: @bathrooms[0].id)
