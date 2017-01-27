@@ -16,15 +16,17 @@ class StallStatsAggregate
         start_bucket = self.time_to_previous_bucket_key(minutes, stat.usage_start)
         end_bucket = self.time_to_previous_bucket_key(minutes, stat.usage_end)
         #Easy case
+        Rails.logger.fatal "MINUTES #{minutes} #{minutes.minutes}"
         if start_bucket == end_bucket
           buckets[start_bucket] += (stat.usage_end - stat.usage_start) / minutes.minutes
+          Rails.logger.fatal "EASY CASE #{stat.usage_start} -> #{stat.usage_end} = #{(stat.usage_end - stat.usage_start) / minutes.minutes}"
         else #Harder case
           buckets[start_bucket] += ((start_bucket + minutes.minutes) - stat.usage_start) / minutes.minutes
           buckets[end_bucket] += ((stat.usage_end - end_bucket) / minutes.minutes)
           long_poop_bucket = start_bucket + minutes.minutes
-          Rails.logger.fatal "START #{((start_bucket + minutes.minutes) - stat.usage_start) / minutes.minutes}"
-          Rails.logger.fatal "END #{((stat.usage_end - end_bucket) / minutes.minutes)}"
-          Rails.logger.fatal "LONG POOP BUCKET #{start_bucket + minutes.minutes}"
+          Rails.logger.fatal "START #{stat.usage_start} -> #{stat.usage_end} #{((start_bucket + minutes.minutes) - stat.usage_start) / minutes.minutes}"
+          Rails.logger.fatal "END #{stat.usage_start} -> #{stat.usage_end} #{((stat.usage_end - end_bucket) / minutes.minutes)}"
+          Rails.logger.fatal "LONG POOP BUCKET #{stat.usage_start} -> #{stat.usage_end} #{start_bucket + minutes.minutes}"
           (0..((end_bucket - long_poop_bucket) / minutes.minutes)).each do |i|
             Rails.logger.fatal "LONG POOP #{((start_bucket + minutes.minutes) - stat.usage_start) / minutes.minutes}"
             buckets[long_poop_bucket + (i * minutes).minutes] += 1
