@@ -19,7 +19,7 @@ class StallStatsAggregate
         Rails.logger.fatal "MINUTES #{minutes} #{minutes.minutes} STALL: #{stat.stall_id}"
         if start_bucket == end_bucket
           buckets[start_bucket] += (stat.usage_end - stat.usage_start) / minutes.minutes
-          Rails.logger.fatal "EASY CASE #{stat.usage_start} -> #{stat.usage_end} = #{(stat.usage_end - stat.usage_start) / minutes.minutes}"
+          Rails.logger.fatal "EASY CASE #{stat.usage_start} -> #{stat.usage_end} = #{(stat.usage_end - stat.usage_start).to_i} / #{minutes.minutes} = #{(stat.usage_end - stat.usage_start) / minutes.minutes}"
         else #Harder case
           buckets[start_bucket] += ((start_bucket + minutes.minutes) - stat.usage_start) / minutes.minutes
           buckets[end_bucket] += ((stat.usage_end - end_bucket) / minutes.minutes)
