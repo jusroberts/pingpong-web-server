@@ -20,7 +20,7 @@ class StallStatsAggregate
           buckets[start_bucket] += (stat.usage_end - stat.usage_start) / minutes.minutes
         else #Harder case
           buckets[start_bucket] += ((start_bucket + minutes.minutes) - stat.usage_start) / minutes.minutes
-          buckets[end_bucket] += ((stat.end_bucket) / minutes.minutes)
+          buckets[end_bucket] += ((stat.usage_end - end_bucket) / minutes.minutes)
           long_poop_bucket = start_bucket + minutes.minutes
           (0..((end_bucket - long_poop_bucket) / minutes.minutes)).each do |i|
             buckets[long_poop_bucket + (i * minutes).minutes] += 1
