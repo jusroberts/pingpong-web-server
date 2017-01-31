@@ -13,6 +13,7 @@ class StallStatsAggregate
     # Rails.logger.fatal "CREATING BUCKETS"
     stats.each do |stall_stats|
       stall_stats.each do |stat|
+        next if stat.usage_start.nil? or stat.usage_end.nil?
         start_bucket = self.time_to_previous_bucket_key(minutes, stat.usage_start)
         end_bucket = self.time_to_previous_bucket_key(minutes, stat.usage_end)
         #Easy case
