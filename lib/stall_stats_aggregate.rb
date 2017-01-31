@@ -10,6 +10,7 @@ class StallStatsAggregate
     (0..(((day + 1.day) - day) / minutes.minutes)).each do |i|
       buckets[time + (i * minutes).minutes] = 0
     end
+    Rails.logger.fatal "Buckets: #{buckets.keys.to_s}"
     # Rails.logger.fatal "CREATING BUCKETS"
     stats.each do |stall_stats|
       stall_stats.each do |stat|
