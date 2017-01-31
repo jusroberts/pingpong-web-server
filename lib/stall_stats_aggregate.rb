@@ -8,16 +8,16 @@ class StallStatsAggregate
     stats = bathroom.stalls.map { |stall| stall.stall_stats.where("usage_end > ? AND usage_start < ? AND usage_end IS NOT NULL", day, day + 1.day) }
     buckets = {}
     (0..(((day + 1.day) - day) / minutes.minutes)).each do |i|
-      buckets[time + (i * minutes).minutes] = 0
+      buckets[time.in_time_zone('Eastern Time (US & Canada)') + (i * minutes).minutes] = 0
     end
-    Rails.logger.fatal "Buckets: #{buckets.keys.to_s}"
+    # Rails.logger.fatal "Buckets: #{buckets.keys.to_s}"
     # Rails.logger.fatal "CREATING BUCKETS"
     stats.each do |stall_stats|
       stall_stats.each do |stat|
         next if stat.usage_start.nil? or stat.usage_end.nil?
         start_bucket = self.time_to_previous_bucket_key(minutes, stat.usage_start)
         end_bucket = self.time_to_previous_bucket_key(minutes, stat.usage_end)
-        Rails.logger.fatal "Start bucket: #{start_bucket} --- #{buckets[start_bucket]}"
+        # Rails.logger.fatal "Start bucket: #{start_bucket} --- #{buckets[start_bucket]}"
         #Easy case
         # Rails.logger.fatal "MINUTES #{minutes} #{minutes.minutes} STALL: #{stat.stall_id}"
         if start_bucket == end_bucket
@@ -46,7 +46,7 @@ class StallStatsAggregate
     quarter = ((array[1] % 60) / (bucket_duration.to_f)).floor
     array[1] = (quarter * bucket_duration) % 60
     array[0] = 0
-    Time.local(*array)
+    Time.local(*array).in_time_zone('Eastern Time (US & Canada)')
   end
 
 end
