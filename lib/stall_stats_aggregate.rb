@@ -16,6 +16,7 @@ class StallStatsAggregate
         next if stat.usage_start.nil? or stat.usage_end.nil?
         start_bucket = self.time_to_previous_bucket_key(minutes, stat.usage_start)
         end_bucket = self.time_to_previous_bucket_key(minutes, stat.usage_end)
+        Rails.logger.fatal "Start bucket: #{start_bucket} --- #{buckets[start_bucket]}"
         #Easy case
         # Rails.logger.fatal "MINUTES #{minutes} #{minutes.minutes} STALL: #{stat.stall_id}"
         if start_bucket == end_bucket
