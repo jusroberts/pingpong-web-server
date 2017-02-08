@@ -39,9 +39,8 @@ class StallStatsAggregate
       return bucket_end - usage_start
     elsif (usage_end >= bucket_start && usage_end <= bucket_end)
       return usage_end - bucket_start
-    else
-      return bucket_end - bucket_start
     end
+    return bucket_end - bucket_start
   end
 
   def self.time_to_previous_bucket_key(bucket_duration, time)
