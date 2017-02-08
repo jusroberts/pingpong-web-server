@@ -15,30 +15,33 @@ class StallStatsAggregate
     stats.each do |stall_stats|
       stall_stats.each do |stat|
         next if stat.usage_start.nil? or stat.usage_end.nil?
-        start_bucket = self.time_to_previous_bucket_key(minutes, stat.usage_start)
-        end_bucket = self.time_to_previous_bucket_key(minutes, stat.usage_end)
-        # Rails.logger.fatal "Start bucket: #{start_bucket} --- #{buckets[start_bucket]}"
-        #Easy case
-        # Rails.logger.fatal "MINUTES #{minutes} #{minutes.minutes} STALL: #{stat.stall_id}"
-        if start_bucket == end_bucket
-          buckets[start_bucket] += (stat.usage_end - stat.usage_start) / minutes.minutes
-          # Rails.logger.fatal "EASY CASE #{stat.usage_start} -> #{stat.usage_end} = #{(stat.usage_end - stat.usage_start).to_i} / #{minutes.minutes} = #{(stat.usage_end - stat.usage_start) / minutes.minutes}"
-        else #Harder case
-          buckets[start_bucket] += ((start_bucket + minutes.minutes) - stat.usage_start) / minutes.minutes
-          buckets[end_bucket] += ((stat.usage_end - end_bucket) / minutes.minutes)
-          long_poop_bucket = start_bucket + minutes.minutes
-          # Rails.logger.fatal "START #{stat.usage_start} -> #{stat.usage_end} #{((start_bucket + minutes.minutes) - stat.usage_start) / minutes.minutes}"
-          # Rails.logger.fatal "END #{stat.usage_start} -> #{stat.usage_end} #{((stat.usage_end - end_bucket) / minutes.minutes)}"
-          # Rails.logger.fatal "LONG POOP BUCKET #{stat.usage_start} -> #{stat.usage_end} #{start_bucket + minutes.minutes}"
-          (0..((end_bucket - long_poop_bucket) / minutes.minutes)).each do |i|
-            # Rails.logger.fatal "LONG POOP #{((start_bucket + minutes.minutes) - stat.usage_start) / minutes.minutes}"
-            buckets[long_poop_bucket + (i * minutes).minutes] += 1
-          end
+        buckets.each do |key, _|
+          buckets[key] += self.percentage_in_slot(key, key + minutes.minutes, stat.usage_start, stat.usage_end)
         end
       end
     end
     # Rails.logger.fatal "CREATING BUCKETS FINISHED"
     buckets.map { |k, v| [k.in_time_zone('Eastern Time (US & Canada)').strftime('%I:%M %p').gsub(/^0/, ''), v] }
+  end
+
+  #Returns the percentage of a buckets time that a time slot occupies
+  def self.percentage_in_slot(bucket_start, bucket_end, usage_start, usage_end)
+    return self.time_in_slot(bucket_start, bucket_end, usage_start, usage_end) / (bucket_end - bucket_start)
+  end
+
+  #Returns the amount of time spent in a given time slot
+  def self.time_in_slot(bucket_start, bucket_end, usage_start, usage_end)
+    if (usage_start > bucket_end || usage_end < bucket_start) {
+      return 0
+    } elsif (usage_start >= bucket_start && usage_end <= bucket_end) {
+      return usage_end - usage_start
+    } elsif (usage_start <= bucket_ending && usage_start >= bucket_start) {
+      return bucket_end - usage_start
+    } elsif (usage_end >= bucket_start && usage_end <= bucket_end) {
+      return usage_end - bucket_start
+    } else {
+      return bucket_end - bucket_start
+    }
   end
 
   def self.time_to_previous_bucket_key(bucket_duration, time)
