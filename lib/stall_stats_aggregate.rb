@@ -31,17 +31,17 @@ class StallStatsAggregate
 
   #Returns the amount of time spent in a given time slot
   def self.time_in_slot(bucket_start, bucket_end, usage_start, usage_end)
-    if (usage_start > bucket_end || usage_end < bucket_start) {
+    if (usage_start > bucket_end || usage_end < bucket_start) do
       return 0
-    } elsif (usage_start >= bucket_start && usage_end <= bucket_end) {
+    elsif (usage_start >= bucket_start && usage_end <= bucket_end)
       return usage_end - usage_start
-    } elsif (usage_start <= bucket_ending && usage_start >= bucket_start) {
+    elsif (usage_start <= bucket_ending && usage_start >= bucket_start)
       return bucket_end - usage_start
-    } elsif (usage_end >= bucket_start && usage_end <= bucket_end) {
+    elsif (usage_end >= bucket_start && usage_end <= bucket_end)
       return usage_end - bucket_start
-    } else {
+    else
       return bucket_end - bucket_start
-    }
+    end
   end
 
   def self.time_to_previous_bucket_key(bucket_duration, time)
