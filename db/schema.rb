@@ -11,13 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170126152852) do
+ActiveRecord::Schema.define(version: 20170208131728) do
 
   create_table "bathrooms", force: true do |t|
     t.string   "name"
     t.string   "token"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.datetime "last_heard_from_time"
   end
 
   create_table "daily_stats", force: true do |t|

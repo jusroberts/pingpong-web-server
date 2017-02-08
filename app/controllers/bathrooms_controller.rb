@@ -28,6 +28,10 @@ class BathroomsController < ApplicationController
   def set_stall_status
     begin
       set_bathroom
+      #Set offline status
+      @bathroom.last_heard_from_time = Time.now.in_time_zone('Eastern Time (US & Canada)')
+      @bathroom.save
+
       stall = @bathroom.stalls.where(number: params[:stall_id])
       state = to_boolean(params[:state])
 
@@ -39,7 +43,7 @@ class BathroomsController < ApplicationController
           stalls = b.stalls.map do |s|
             { id: s.id, state: s.state }
           end
-          { id: b.id, name: b.name, stalls: stalls, is_full: b.is_full? }
+          { id: b.id, name: b.name, offline: b.offline?, stalls: stalls.sort { |left, right| left['id'] <=> right['id'] }, is_full: b.is_full? }
         end
 
         ::WebsocketRails[:"bathroom"].trigger "bathroom_update", bathroomData
@@ -47,7 +51,7 @@ class BathroomsController < ApplicationController
 
       render plain: "OK"
     rescue => e
-      render plain: "FAIL"
+      render plain: e
     end
   end
 
