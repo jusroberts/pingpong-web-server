@@ -36,7 +36,7 @@ class StallStatsAggregate
       return 0
     elsif (usage_start >= bucket_start && usage_end <= bucket_end)
       return usage_end - usage_start
-    elsif (usage_start <= bucket_ending && usage_start >= bucket_start)
+    elsif (usage_start <= bucket_end && usage_start >= bucket_start)
       return bucket_end - usage_start
     elsif (usage_end >= bucket_start && usage_end <= bucket_end)
       return usage_end - bucket_start
