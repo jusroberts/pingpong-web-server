@@ -7,8 +7,9 @@ class StallStatsAggregate
 
     stats = bathroom.stalls.map { |stall| stall.stall_stats.where("usage_start > ? AND usage_end < ? AND usage_end IS NOT NULL", day, day + 1.day) }
     buckets = {}
-    (0..(((day + 1.day) - day) / minutes.minutes)).each do |i|
-      buckets[time.in_time_zone('Eastern Time (US & Canada)') + (i * minutes).minutes] = 0
+    #For a twelve hour block of time, starting at 6AM
+    (0..(12.hours / minutes.minutes)).each do |i|
+      buckets[time.in_time_zone('Eastern Time (US & Canada)') + (i * minutes).minutes + 6.hours] = 0
     end
     # Rails.logger.fatal "Buckets: #{buckets.keys.to_s}"
     # Rails.logger.fatal "CREATING BUCKETS"
@@ -35,7 +36,7 @@ class StallStatsAggregate
       return 0
     elsif (usage_start >= bucket_start && usage_end <= bucket_end)
       return usage_end - usage_start
-    elsif (usage_start <= bucket_end && usage_start >= bucket_start)
+    elsif (usage_start <= bucket_ending && usage_start >= bucket_start)
       return bucket_end - usage_start
     elsif (usage_end >= bucket_start && usage_end <= bucket_end)
       return usage_end - bucket_start
