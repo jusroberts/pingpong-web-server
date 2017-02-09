@@ -1,2 +1,3 @@
 -(0..7).each do |i|
+  =(Time.now.in_time_zone('Eastern Time (US & Canada)').beginning_of_day - i.days).strftime("%A, %d/%m/%Y")
   =column_chart bathroom_stall_stats_path(bathroom_id: @bathroom.id, days_ago: i)
