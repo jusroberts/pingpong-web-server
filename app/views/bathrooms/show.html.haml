@@ -1,1 +1,2 @@
-=column_chart bathroom_stall_stats_path(bathroom_id: @bathroom.id)
+-(0..7).each do |i|
+  =column_chart bathroom_stall_stats_path(bathroom_id: @bathroom.id, days_ago: i)

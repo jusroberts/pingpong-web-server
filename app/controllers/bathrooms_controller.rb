@@ -22,7 +22,8 @@ class BathroomsController < ApplicationController
   end
 
   def stats
-    render json: StallStatsAggregate::create_buckets(Bathroom.all.first, 30, Time.now.in_time_zone('Eastern Time (US & Canada)').beginning_of_day)
+    days_ago = params[:days_ago].to_i.days
+    render json: StallStatsAggregate::create_buckets(Bathroom.all.first, 30, Time.now.in_time_zone('Eastern Time (US & Canada)').beginning_of_day - days_ago)
   end
 
   def set_stall_status

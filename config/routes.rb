@@ -41,6 +41,6 @@ Rails.application.routes.draw do
 
   resources :bathrooms do
     get 'stalls/:stall_id/:state' => 'bathrooms#set_stall_status'
-    get 'stalls_stats' => 'bathrooms#stats', as: :stall_stats
+    get 'stalls_stats/:days_ago' => 'bathrooms#stats', as: :stall_stats
   end
 end
