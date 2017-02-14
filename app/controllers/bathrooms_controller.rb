@@ -29,6 +29,8 @@ class BathroomsController < ApplicationController
   def set_stall_status
     begin
       set_bathroom
+
+      raise StandardError.new("invalid request") if params['client_token'].nil? || params['client_token'] != @bathroom.token
       #Set offline status
       @bathroom.last_heard_from_time = Time.now.in_time_zone('Eastern Time (US & Canada)')
       @bathroom.save
@@ -52,7 +54,11 @@ class BathroomsController < ApplicationController
 
       render plain: "OK"
     rescue => e
-      render plain: e
+      if e.to_s == "invalid request"
+        redirect_to "https://www.youtube.com/watch?v=fmz-K2hLwSI"
+      else
+        render plain: e
+      end
     end
   end
 
@@ -119,7 +125,7 @@ class BathroomsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def bathroom_params
-      params.require(:bathroom).permit(:name, :token, :stalls)
+      params.require(:bathroom).permit(:name, :stalls)
     end
 
     def to_boolean(str)
