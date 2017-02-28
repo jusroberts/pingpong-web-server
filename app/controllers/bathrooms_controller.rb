@@ -22,8 +22,6 @@ class BathroomsController < ApplicationController
   end
 
   def stats
-    #clean up some stats
-    StallStats.where("created_at < ?", Time.now.in_time_zone('Eastern Time (US & Canada)').beginning_of_day - 2.weeks).delete_all
     days_ago = params[:days_ago].to_i.days
     render json: StallStatsAggregate::create_buckets(Bathroom.all.first, 30, Time.now.in_time_zone('Eastern Time (US & Canada)').beginning_of_day - days_ago)
   end
