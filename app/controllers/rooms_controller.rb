@@ -103,8 +103,6 @@ class RoomsController < ApplicationController
     render nothing: true
   end
 
-<<<<<<< Updated upstream
-=======
   # /api/rooms/1/team/a/decrement
   def decrement_score
     team = params[:team].downcase
@@ -156,7 +154,6 @@ class RoomsController < ApplicationController
     render nothing: true
   end
 
->>>>>>> Stashed changes
 # /api/rooms/1/send_current_scores
   def send_current_scores
     send_scores
