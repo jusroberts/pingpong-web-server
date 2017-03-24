@@ -90,6 +90,10 @@ class RunningGameFunctions {
         this.audio.handleScoreUpdate(teamAScore, teamBScore);
     }
 
+    taunt(team) {
+        this.audio.playTaunt(team);
+    }
+
     scoreA(score) {
         this.lastTeamAScore = score;
         console.log("TEAM A SCORE = " + score);
@@ -480,6 +484,10 @@ class Audio {
         this.interSoundDelayMillis = 200;
         this.lastPromise = new Promise(function(resolve) {resolve()});
         this.lastServingTeam = null;
+    }
+
+    playTaunt(team) {
+        return this.playSound('pong_beep');
     }
 
     /**
