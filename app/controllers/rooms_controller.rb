@@ -103,6 +103,39 @@ class RoomsController < ApplicationController
     render nothing: true
   end
 
+  # /api/rooms/1/team/a/decrement
+  def decrement_score
+    team = params[:team].downcase
+    unless ['a', 'b'].include?(team)
+      raise "Invalid team #{team} passed to increment score function"
+    end
+
+    # Times when this call shouldn't happen
+    # Just use the increment_at time to debounce decrement as well
+    if @room.increment_at && @room.increment_at > 1.seconds.ago
+      return
+    end
+    raise("invalid team") if params[:team].downcase != 'a' && params[:team].downcase != 'b'
+    @room.update_attribute(:increment_at, Time.now)
+
+    if @room.game
+      if should_reset?
+        @room.update_attributes(team_a_score: 0, team_b_score: 0)
+      else
+        current_score = @room.method("team_#{team}_score".to_sym).call()
+        if current_score > 0
+          @room.update_attribute("team_#{team}_score", current_score - 1)
+          end
+      end
+      set_room
+      if GameLogic.new(@room.team_a_score, @room.team_b_score).game_over?
+        @room.update_attribute(:game, false)
+      end
+    end
+    send_scores
+    render nothing: true
+  end
+
 # /api/rooms/1/send_current_scores
   def send_current_scores
     send_scores
