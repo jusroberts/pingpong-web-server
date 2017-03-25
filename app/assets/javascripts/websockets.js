@@ -68,6 +68,10 @@ class SocketHandler {
             location.reload();
         });
 
+        channel.bind("taunt", function (team) {
+            socketHandler.runningGame.taunt(team);
+        });
+
         bathroomChannel.bind('bathroom_update', function (bathroomData) {
             let bathroomFunctions = new BathroomFunctions();
             bathroomFunctions.updateBathroomStallStatus(bathroomData);

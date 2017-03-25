@@ -136,6 +136,24 @@ class RoomsController < ApplicationController
     render nothing: true
   end
 
+  def taunt
+    team = params[:team].downcase
+    unless ['a', 'b'].include?(team)
+      raise "Invalid team #{team} passed to increment score function"
+    end
+
+    # Times when this call shouldn't happen
+    # Just use the increment_at time to debounce taunt as well
+    if @room.increment_at && @room.increment_at > 1.seconds.ago
+      return
+    end
+
+    if @room.game
+      ::WebsocketRails[:"room#{@room.id}"].trigger "taunt", team
+    end
+    render nothing: true
+  end
+
 # /api/rooms/1/send_current_scores
   def send_current_scores
     send_scores

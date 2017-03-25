@@ -90,6 +90,10 @@ class RunningGameFunctions {
         this.audio.handleScoreUpdate(teamAScore, teamBScore);
     }
 
+    taunt(team) {
+        this.audio.playTaunt(team);
+    }
+
     scoreA(score) {
         this.lastTeamAScore = score;
         console.log("TEAM A SCORE = " + score);
@@ -472,6 +476,7 @@ class Players {
  * @property {number} scoringStreak Number of unanswered points scored; positive is team A and vice versa
  */
 class Audio {
+
     constructor() {
         this.audioElements = {};
         this.lastTeamAScore = 0;
@@ -480,6 +485,49 @@ class Audio {
         this.interSoundDelayMillis = 200;
         this.lastPromise = new Promise(function(resolve) {resolve()});
         this.lastServingTeam = null;
+        //Add all the taunts to this list
+        this.taunts = ["evil_laugh",
+            "homer_doh",
+            "horn_fail",
+            "last_chance",
+            "king_of_the_hill_loser",
+            "mocking_laugh",
+            "patrick_pain_train",
+            "sad_trombone",
+            "say_bye_bye",
+            "tf2_you_failed",
+            "trololo",
+            "wrecked_son",
+            "you_are_dead",
+            "you_failed",
+            "you_loose",
+            "you_shall_not_pass",
+            "you_suck"];
+        this.lastTauntIndex = 0;
+    }
+
+    playTaunt(team) {
+        let wesTeam = Players.getPlayerTeam(playerIdHash, wesId);
+        if (wesTeam == team) {
+            //If wes is playing, add these taunts
+            this.taunts.push("dammit_wes2");
+            this.taunts.push("dammit_wes");
+        }
+
+        //Play a random taunt and avoid playing the same taunt twice in a row
+        let numberOfTries = 0;
+        let tauntIndex = this.lastTauntIndex;
+        do {
+            tauntIndex = Math.floor(Math.random() * this.taunts.length);
+            numberOfTries++;
+        } while (numberOfTries < 10 && tauntIndex == this.lastTauntIndex);
+
+        this.lastTauntIndex = tauntIndex;
+        let tauntKey = this.taunts[tauntIndex];
+
+        this.playSound(tauntKey);
+        Utilities.sleep(this.interSoundDelayMillis);
+        console.log('Playing taunt: ' + tauntKey);
     }
 
     /**
@@ -589,7 +637,7 @@ class Audio {
             sounds.push('dammit_wes');
         }
         if (wesTeam == 'b' && this.scoringStreak >= 5) {
-            sounds.push('dammit_wes');
+            sounds.push('dammit_wes2');
         }
 
         // Serving change logic
