@@ -541,8 +541,24 @@ class Audio {
 
         // Populate some sounds
 
+        //decrement score
+        if (teamAIncrement < 0) {
+            sounds.push("oopsie");
+            //fix the streak
+            if (this.scoringStreak > 0) {
+                this.scoringStreak--;
+            }
+        }
+        else if (teamBIncrement < 0) {
+            sounds.push("oops");
+            //fix the streak
+            if (this.scoringStreak < 0) {
+                this.scoringStreak++;
+            }
+        }
+
         // Streak logic
-        if (teamAIncrement > 0) {
+        else if (teamAIncrement > 0) {
             // Team A scored
             if (wesTeam) {
                 sounds.push('beep');
@@ -556,7 +572,7 @@ class Audio {
             }
             this.scoringStreak++;
         }
-        if (teamBIncrement > 0) {
+        else if (teamBIncrement > 0) {
             // Team B scored
             if (wesTeam) {
                 sounds.push('boop');
@@ -583,7 +599,6 @@ class Audio {
         if (Math.abs(this.scoringStreak) == 20) {
             sounds.push('inconceivable');
         }
-
         // Yell at Wes
         if (wesTeam == 'a' && this.scoringStreak <= -5) {
             sounds.push('dammit_wes');
