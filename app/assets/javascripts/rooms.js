@@ -508,7 +508,7 @@ class Audio {
 
     playTaunt(team) {
         let wesTeam = Players.getPlayerTeam(playerIdHash, wesId);
-        if (wesTeam == team) {
+        if (wesTeam) {
             //If wes is playing, add these taunts
             this.taunts.push("dammit_wes2");
             this.taunts.push("dammit_wes");
