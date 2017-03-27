@@ -69,6 +69,11 @@ class RoomsController < ApplicationController
 
   # /api/rooms/1/team/a/increment
   def increment_score
+    if handle_request_id(params[:request_id].to_i) == false
+      #ignore old requests
+      return
+    end
+
     if should_reset?
       private_game_end_post
       ::WebsocketRails[:"room#{@room.id}"].trigger "new_game_refresh"
@@ -105,6 +110,11 @@ class RoomsController < ApplicationController
 
   # /api/rooms/1/team/a/decrement
   def decrement_score
+    if handle_request_id(params[:request_id].to_i) == false
+      #ignore old requests
+      return
+    end
+
     team = params[:team].downcase
     unless ['a', 'b'].include?(team)
       raise "Invalid team #{team} passed to increment score function"
@@ -137,6 +147,11 @@ class RoomsController < ApplicationController
   end
 
   def taunt
+    if handle_request_id(params[:request_id].to_i) == false
+      #ignore old requests
+      return
+    end
+
     team = params[:team].downcase
     unless ['a', 'b'].include?(team)
       raise "Invalid team #{team} passed to increment score function"
@@ -318,6 +333,21 @@ class RoomsController < ApplicationController
   end
 
   private
+
+  def handle_request_id (request_id)
+    if request_id == 0 || @room.last_request_id == nil
+      #Request Id has been reset to 0. Likely the client has power cycled
+        @room.update_attribute(:last_request_id, 0)
+        return true
+    end
+
+    if request_id > @room.last_request_id
+      @room.update_attribute(:last_request_id, request_id)
+      return true
+    end
+    return false
+
+  end
 
     # @param room [Room]
     # @param player_count [Integer]
