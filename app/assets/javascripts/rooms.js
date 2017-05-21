@@ -486,33 +486,42 @@ class Audio {
         this.lastPromise = new Promise(function(resolve) {resolve()});
         this.lastServingTeam = null;
         //Add all the taunts to this list
-        this.taunts = ["evil_laugh",
+        this.taunts = [
+            "bitelegs",
+            "bleed",
+            "evil_laugh",
+            "fart",
+            "hamster",
             "homer_doh",
             "horn_fail",
             "last_chance",
             "king_of_the_hill_loser",
             "mocking_laugh",
             "patrick_pain_train",
+            "runaway",
             "sad_trombone",
             "say_bye_bye",
             "tf2_you_failed",
             "trololo",
+            "trololo_full",
             "wrecked_son",
             "you_are_dead",
             "you_failed",
             "you_loose",
             "you_shall_not_pass",
             "you_suck"];
-        this.lastTauntIndex = 0;
-    }
 
-    playTaunt(team) {
-        let wesTeam = Players.getPlayerTeam(playerIdHash, wesId);
-        if (wesTeam) {
+        this.wesTeam = Players.getPlayerTeam(playerIdHash, wesId);
+        if (this.wesTeam) {
+            this.
             //If wes is playing, add these taunts
             this.taunts.push("dammit_wes2");
             this.taunts.push("dammit_wes");
         }
+        this.lastTauntIndex = 0;
+    }
+
+    playTaunt(team) {
 
         //Play a random taunt and avoid playing the same taunt twice in a row
         let numberOfTries = 0;
