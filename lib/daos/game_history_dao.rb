@@ -10,7 +10,9 @@ class GameHistoryDao
                    .having('count(*) >= ?', player_ids.length)
                    .pluck(:game_id)
 
-    histories = GameHistory.where(:game_id => game_ids)
+    histories = GameHistory
+		    .where(:game_id => game_ids)
+		    .order(id: :desc)
 
     # @type game_history [GameHistory]
     histories.group_by do |game_history|
