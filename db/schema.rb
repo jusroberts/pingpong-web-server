@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180125143737) do
+ActiveRecord::Schema.define(version: 20180821180653) do
 
   create_table "bathrooms", force: true do |t|
     t.string   "name"
@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(version: 20180125143737) do
     t.float    "rating_skill",     default: 25.0
     t.float    "rating_deviation", default: 8.333333333333334
     t.string   "wallet"
+    t.boolean  "is_archived",      default: false
   end
 
   add_index "players", ["rfid_hash"], name: "index_players_on_rfid_hash"
