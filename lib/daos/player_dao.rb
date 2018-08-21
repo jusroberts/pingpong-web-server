@@ -8,6 +8,7 @@ class PlayerDao
     end
     Player
         .where('rating_deviation < ?', deviation_cutoff)
+        .where('is_archived = ?', false)
         .limit(limit)
         .order(rating_skill: :desc)
   end

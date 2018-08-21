@@ -23,7 +23,7 @@
         - running_rank = 0
         - @players.each do |player|
           - if player
-            - if player.rating_deviation < PlayerDao::LEADERBOARD_DEVIATION_CUTOFF
+            - if player.rating_deviation < PlayerDao::LEADERBOARD_DEVIATION_CUTOFF && !player.is_archived
               - running_rank += 1
               - current_rank = running_rank
             - else
