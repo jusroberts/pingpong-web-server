@@ -101,9 +101,6 @@ class RoomsController < ApplicationController
         @room.update_attribute("team_#{team}_score", current_score + 1)
       end
       set_room
-      # if GameLogic.new(@room.team_a_score, @room.team_b_score).game_over?
-      #  @room.update_attribute(:game, false)
-      # end
     end
     send_scores
     render nothing: true
