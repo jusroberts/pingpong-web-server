@@ -87,6 +87,7 @@ class RunningGameFunctions {
             this.scoreB(teamBScore);
             this.lastTeamBScore = teamBScore;
         }
+        console.log("HandleScoreUpdate teamA: " + teamAScore + ", teamB: " + teamBScore);
         this.audio.handleScoreUpdate(teamAScore, teamBScore);
     }
 
@@ -513,7 +514,6 @@ class Audio {
 
         this.wesTeam = Players.getPlayerTeam(playerIdHash, wesId);
         if (this.wesTeam) {
-            this.
             //If wes is playing, add these taunts
             this.taunts.push("dammit_wes2");
             this.taunts.push("dammit_wes");
