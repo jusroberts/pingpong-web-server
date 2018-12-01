@@ -96,6 +96,10 @@ ActiveRecord::Schema.define(version: 20180821180653) do
     t.datetime "increment_at"
     t.integer  "last_request_id"
     t.integer  "initial_serving_team", default: 0
+    t.integer  "streak", default: 0
+    # A comma separated history of the streak of the current game ex: -1,-2,-3,1,2,-1,-2,-3,-4,-5,1
+    # This is used to keep track of and persist the score streaks as the score is incremented or decremented
+    t.string   "streak_history", default: ""
   end
 
   create_table "stall_stats", force: true do |t|

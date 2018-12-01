@@ -1,10 +1,13 @@
 require 'time'
+require 'json'
 
 class RoomsController < ApplicationController
   before_action :set_room, except: [:index, :new, :create, :home]
   before_action :show_topbar, only: [:home]
 
   VALID_PLAYER_COUNTS = [2, 4]
+
+  #-------------------------------------------------------- START API--------------------------------------------------
 
   # GET /rooms
   # GET /rooms.json
@@ -75,7 +78,7 @@ class RoomsController < ApplicationController
     end
 
     if should_reset?
-      @room.update_attribute(:game, false)
+      @room.update_attributes(game: false, team_a_score: 0, team_b_score: 0, streak: 0, streak_history: "")
       private_game_end_post
       ::WebsocketRails[:"room#{@room.id}"].trigger "new_game_refresh"
       return
@@ -95,10 +98,11 @@ class RoomsController < ApplicationController
 
     if @room.game
       if should_reset?
-        @room.update_attributes(team_a_score: 0, team_b_score: 0)
+        @room.update_attributes(team_a_score: 0, team_b_score: 0, streak: 0, streak_history: "")
       else
         current_score = @room.method("team_#{team}_score".to_sym).call()
         @room.update_attribute("team_#{team}_score", current_score + 1)
+        update_streak(true, team)
       end
       set_room
     end
@@ -135,6 +139,7 @@ class RoomsController < ApplicationController
         end
         @room.update_attribute(:game, true)
         @room.update_attribute("team_#{team}_score", current_score - 1)
+        update_streak(false, team)
       end
       set_room
     end
@@ -230,6 +235,8 @@ class RoomsController < ApplicationController
     render :json => out
   end
 
+  #-------------------------------------------------------- END API----------------------------------------------------
+
   def game_new
     @id = params[:id] || params[:room_id]
     @game_type = params[:game_type]
@@ -287,7 +294,7 @@ class RoomsController < ApplicationController
 
   def game_new_post
 
-    @room.update_attributes(team_a_score: 0, team_b_score: 0, game: true)
+    @room.update_attributes(game: true, team_a_score: 0, team_b_score: 0, streak: 0, streak_history: "")
 
     redirect_to :room_game_play
 
@@ -413,6 +420,7 @@ class RoomsController < ApplicationController
       ::WebsocketRails[:"room#{@room.id}"].trigger "score_update", {
           :teamAScore => game_logic.showable_team_a_score,
           :teamBScore => game_logic.showable_team_b_score,
+          :streak => @room.streak,
       }
     end
 
@@ -534,6 +542,27 @@ class RoomsController < ApplicationController
       return GameLogic.new(@room.team_a_score, @room.team_b_score).game_over?
     end
 
+  # @param increment_or_decrement boolean
+  # @param team String
+    def update_streak(increment_or_decrement, team)
+      if increment_or_decrement
+        new_streak = StreakHelper.new().update_streak_increment(team, get_streak_history)
+      else
+        new_streak = StreakHelper.new().update_streak_decrement(team, get_streak_history)
+      end
+      @room.update_attribute(:streak, StreakHelper.new().get_new_streak(new_streak))
+      @room.update_attribute(:streak_history, new_streak.join(","))
+    end
+
+  #@return [int]
+    def get_streak_history
+      string_streak_history = @room.streak_history
+      if string_streak_history == nil
+        return []
+      else
+        return string_streak_history.split(",").map(&:to_i)
+      end
+    end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_room
