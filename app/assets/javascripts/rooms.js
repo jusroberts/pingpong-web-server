@@ -78,7 +78,7 @@ class RunningGameFunctions {
         }
     }
 
-    updateScore(teamAScore, teamBScore, streak) {
+    updateScore(teamAScore, teamBScore) {
         if (teamAScore != this.lastTeamAScore) {
             this.scoreA(teamAScore);
             this.lastTeamAScore = teamAScore;
@@ -87,8 +87,8 @@ class RunningGameFunctions {
             this.scoreB(teamBScore);
             this.lastTeamBScore = teamBScore;
         }
-        console.log("HandleScoreUpdate teamA: " + teamAScore + ", teamB: " + teamBScore + ", streak = " + streak);
-        this.audio.handleScoreUpdate(teamAScore, teamBScore, streak);
+        console.log("HandleScoreUpdate teamA: " + teamAScore + ", teamB: " + teamBScore);
+        this.audio.handleScoreUpdate(teamAScore, teamBScore);
     }
 
     taunt(team) {
@@ -482,6 +482,7 @@ class Audio {
         this.audioElements = {};
         this.lastTeamAScore = 0;
         this.lastTeamBScore = 0;
+        this.scoringStreak = 0;
         this.interSoundDelayMillis = 200;
         this.lastPromise = new Promise(function(resolve) {resolve()});
         this.lastServingTeam = null;
@@ -542,10 +543,10 @@ class Audio {
      * @param {number} teamAScore
      * @param {number} teamBScore
      */
-    handleScoreUpdate(teamAScore, teamBScore, streak) {
+    handleScoreUpdate(teamAScore, teamBScore) {
         let audio = this;
         // Get an array of sounds to play
-        let sounds = this.getSoundsToPlay(teamAScore, teamBScore, streak);
+        let sounds = this.getSoundsToPlay(teamAScore, teamBScore);
         console.log('Playing sounds: ' + JSON.stringify(sounds));
 
         // Play each sound in sequence, to completion
@@ -565,7 +566,7 @@ class Audio {
         this.lastPromise = promise;
     }
 
-    getSoundsToPlay(teamAScore, teamBScore, streak) {
+    getSoundsToPlay(teamAScore, teamBScore) {
         // Add the filename strings for any sounds that should play for this scoring event to the sounds array
         let sounds = [];
         let teamAScoreNumeric = null;
@@ -600,9 +601,17 @@ class Audio {
         //decrement score
         if (teamAIncrement < 0) {
             sounds.push("oopsie");
+            //fix the streak
+            if (this.scoringStreak > 0) {
+                this.scoringStreak--;
+            }
         }
         else if (teamBIncrement < 0) {
             sounds.push("oops");
+            //fix the streak
+            if (this.scoringStreak < 0) {
+                this.scoringStreak++;
+            }
         }
 
         // Streak logic
@@ -613,6 +622,12 @@ class Audio {
             } else {
                 sounds.push('pong_beep');
             }
+            // If Team B has a streak going
+            if (this.scoringStreak < 0) {
+                // Reset the streak
+                this.scoringStreak = 0;
+            }
+            this.scoringStreak++;
         }
         else if (teamBIncrement > 0) {
             // Team B scored
@@ -621,26 +636,31 @@ class Audio {
             } else {
                 sounds.push('pong_boop');
             }
+            // If Team A has a streak going
+            if (this.scoringStreak > 0) {
+                // Reset the streak
+                this.scoringStreak = 0;
+            }
+            this.scoringStreak--;
         }
-        console.log('Scoring streak: ' + streak);
-        let absolute_streak = Math.abs(streak);
-        if (Math.abs(absolute_streak) == 5) {
+        console.log('Scoring streak: ' + this.scoringStreak);
+        if (Math.abs(this.scoringStreak) == 5) {
             sounds.push('rampage');
         }
-        if (Math.abs(absolute_streak) == 10) {
+        if (Math.abs(this.scoringStreak) == 10) {
             sounds.push('untouchable');
         }
-        if (Math.abs(absolute_streak) == 15) {
+        if (Math.abs(this.scoringStreak) == 15) {
             sounds.push('invincible');
         }
-        if (Math.abs(absolute_streak) == 20) {
+        if (Math.abs(this.scoringStreak) == 20) {
             sounds.push('inconceivable');
         }
         // Yell at Wes
-        if (wesTeam == 'a' && streak <= -5) {
+        if (wesTeam == 'a' && this.scoringStreak <= -5) {
             sounds.push('dammit_wes');
         }
-        if (wesTeam == 'b' && streak >= 5) {
+        if (wesTeam == 'b' && this.scoringStreak >= 5) {
             sounds.push('dammit_wes2');
         }
 

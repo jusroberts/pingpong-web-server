@@ -48,8 +48,8 @@ class SocketHandler {
         });
 
         channel.bind('score_update', function (score) {
-            let {teamAScore, teamBScore, streak} = score;
-            socketHandler.runningGame.updateScore(teamAScore, teamBScore, streak);
+            let {teamAScore, teamBScore} = score;
+            socketHandler.runningGame.updateScore(teamAScore, teamBScore);
         });
         channel.bind('user_scan_new', function (player_id) {
             window.location.replace("/rooms/" + roomId + "/game/new/players/create?player_id=" + player_id);
