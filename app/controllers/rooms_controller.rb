@@ -1,5 +1,4 @@
 require 'time'
-require 'json'
 
 class RoomsController < ApplicationController
   before_action :set_room, except: [:index, :new, :create, :home]
