@@ -9,6 +9,7 @@ class BathroomsController < ApplicationController
 
   # GET /bathrooms/1
   # GET /bathrooms/1.json
+	#### dafdaf
   def show
   end
 
