@@ -13,7 +13,7 @@
 
 ActiveRecord::Schema.define(version: 20181201175626) do
 
-  create_table "bathrooms", force: true do |t|
+  create_table "bathrooms", force: :cascade do |t|
     t.string   "name"
     t.string   "token"
     t.datetime "created_at"
@@ -21,7 +21,7 @@ ActiveRecord::Schema.define(version: 20181201175626) do
     t.datetime "last_heard_from_time"
   end
 
-  create_table "daily_stats", force: true do |t|
+  create_table "daily_stats", force: :cascade do |t|
     t.integer "player_id"
     t.date    "day"
     t.boolean "has_completed_aggregation"
@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 20181201175626) do
   add_index "daily_stats", ["player_id", "day", "has_completed_aggregation", "player_count"], name: "daily_stats_lookup"
   add_index "daily_stats", ["player_id"], name: "index_daily_stats_on_player_id"
 
-  create_table "game_histories", force: true do |t|
+  create_table "game_histories", force: :cascade do |t|
     t.integer  "room_id"
     t.integer  "player_id"
     t.integer  "game_id"
@@ -59,7 +59,7 @@ ActiveRecord::Schema.define(version: 20181201175626) do
   add_index "game_histories", ["player_id"], name: "index_game_histories_on_player_id"
   add_index "game_histories", ["room_id"], name: "index_game_histories_on_room_id"
 
-  create_table "players", force: true do |t|
+  create_table "players", force: :cascade do |t|
     t.string   "rfid_hash"
     t.string   "name"
     t.string   "image_url"
@@ -73,7 +73,7 @@ ActiveRecord::Schema.define(version: 20181201175626) do
 
   add_index "players", ["rfid_hash"], name: "index_players_on_rfid_hash"
 
-  create_table "room_players", force: true do |t|
+  create_table "room_players", force: :cascade do |t|
     t.integer "room_id"
     t.integer "player_id"
     t.string  "team",          limit: 5
@@ -83,7 +83,7 @@ ActiveRecord::Schema.define(version: 20181201175626) do
   add_index "room_players", ["player_id"], name: "index_room_players_on_player_id"
   add_index "room_players", ["room_id"], name: "index_room_players_on_room_id"
 
-  create_table "rooms", force: true do |t|
+  create_table "rooms", force: :cascade do |t|
     t.string   "client_token"
     t.integer  "team_a_score"
     t.integer  "team_b_score"
@@ -100,7 +100,7 @@ ActiveRecord::Schema.define(version: 20181201175626) do
     t.text     "streak_history",       default: ""
   end
 
-  create_table "stall_stats", force: true do |t|
+  create_table "stall_stats", force: :cascade do |t|
     t.datetime "usage_start"
     t.datetime "usage_end"
     t.integer  "stall_id"
@@ -108,7 +108,7 @@ ActiveRecord::Schema.define(version: 20181201175626) do
     t.datetime "updated_at"
   end
 
-  create_table "stalls", force: true do |t|
+  create_table "stalls", force: :cascade do |t|
     t.integer  "bathroom_id"
     t.boolean  "state"
     t.integer  "number"
@@ -116,7 +116,7 @@ ActiveRecord::Schema.define(version: 20181201175626) do
     t.datetime "updated_at"
   end
 
-  create_table "weekly_stats", force: true do |t|
+  create_table "weekly_stats", force: :cascade do |t|
     t.integer "player_id"
     t.date    "week_start"
     t.boolean "has_completed_aggregation"
