@@ -23,6 +23,7 @@ group :development do
   gem 'guard'
   gem 'guard-minitest'
   gem 'dotenv-rails'
+  gem 'faker'
 end
 
 group :test do
