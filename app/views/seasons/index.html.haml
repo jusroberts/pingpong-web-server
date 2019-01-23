@@ -4,6 +4,7 @@
   %thead
     %tr
       %th Name
+      %th Room
       %th Active
       %th
       %th
@@ -13,6 +14,7 @@
     - @seasons.each do |season|
       %tr
         %td= season.name
+        %td= season.room
         %td= season.active
         %td= link_to 'Show', season
         %td= link_to 'Edit', edit_season_path(season)

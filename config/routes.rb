@@ -1,15 +1,13 @@
 Rails.application.routes.draw do
-  resources :seasons
   resources :season_stats
   resources :player_ratings
-  resources :seasons
-  resources :seasons
   get 'reports' => 'reports#index', as: :report_index
   get 'reports/leaderboard' => 'reports#leaderboard', as: :report_leaderboard
   get 'reports/player/:player_id' => 'reports#player', as: :player_report
   get 'reports/historyTable/:player_id_1(/:player_id_2)' => 'reports#history', as: :history_table
 
   resources :rooms do
+      resources :seasons
       get 'controller' => 'rooms#controller'
       get 'game/interstitial' => 'rooms#interstitial', as: :game_interstitial
       get 'game/new' => 'rooms#game_new', as: :game_new

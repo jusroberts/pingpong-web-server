@@ -2,8 +2,10 @@
 
 one:
   name: MyString
+  room_id: 
   active: false
 
 two:
   name: MyString
+  room_id: 
   active: false
