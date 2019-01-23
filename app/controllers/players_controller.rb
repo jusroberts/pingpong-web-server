@@ -46,6 +46,9 @@ class PlayersController < ApplicationController
   def new_post
     raise("Failed to find player for id #{params[:player_id]}") if @player.nil?
     @player.name = params[:name]
+    if params[:pin]
+      @player.pin = params[:pin]
+    end
     @player.save
     redirect_to room_game_player_attach_image_path(room_id: @id, player_id: @player.id)
   end
