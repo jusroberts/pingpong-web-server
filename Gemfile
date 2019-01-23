@@ -7,12 +7,13 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'hamlit-rails' #faster haml, uses slightly different syntax
-gem 'foundation-rails'
+gem "foundation-rails", "6.1.2.0"
 gem 'websocket-rails'
 gem 'faye-websocket', '0.10.0'
 gem 'cloudinary'
 gem "rails-erd"
 gem "chartkick"
+gem 'sprockets-es6'
 
 group :development do
   gem 'spring'
