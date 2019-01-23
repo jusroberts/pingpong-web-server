@@ -10,7 +10,9 @@
         =text_field_tag :name, "", class: "player-name-text-input"
         .keyboard
           .characters
-            -alphabet.each do |letter|
+            -alphabet.each_with_index do |letter, i|
+              -if i%10 == 0
+                <br>
               =link_to letter, '#', class: 'keyboard-buttons character', onclick: "append_character('#{letter}')"
           .characters#delete-and-submit
             =link_to "DEL", '#', class: 'keyboard-buttons delete', onclick: "remove_character()"
@@ -31,3 +33,7 @@
         var inputValue = $(".player-name-text-input").val();
         $(".player-name-text-input").val(inputValue.substring(0, inputValue.length-1));
     }
+
+    window.onload = function() {
+      document.getElementById("name").focus();
+    };
