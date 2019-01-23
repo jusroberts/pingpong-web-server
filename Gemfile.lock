@@ -283,7 +283,7 @@ DEPENDENCIES
   jquery-rails
   minitest-reporters
   newrelic_rpm
-  pg
+  pg (= 1.1.4)
   pry-byebug
   rails (= 4.2.11)
   rails-erd
