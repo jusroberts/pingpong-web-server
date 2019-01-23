@@ -1,0 +1,22 @@
+= form_for @player_rating do |f|
+  - if @player_rating.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@player_rating.errors.count, "error")} prohibited this player_rating from being saved:"
+      %ul
+        - @player_rating.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :player_id
+    = f.number_field :player_id
+  .field
+    = f.label :season_id
+    = f.number_field :season_id
+  .field
+    = f.label :skill
+    = f.text_field :skill
+  .field
+    = f.label :deviation
+    = f.text_field :deviation
+  .actions
+    = f.submit 'Save'

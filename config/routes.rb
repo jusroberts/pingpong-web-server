@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+  resources :seasons
+  resources :season_stats
+  resources :player_ratings
+  resources :seasons
+  resources :seasons
   get 'reports' => 'reports#index', as: :report_index
   get 'reports/leaderboard' => 'reports#leaderboard', as: :report_leaderboard
   get 'reports/player/:player_id' => 'reports#player', as: :player_report

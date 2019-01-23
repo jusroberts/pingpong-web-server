@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181201175626) do
+ActiveRecord::Schema.define(version: 20190123191013) do
 
   create_table "bathrooms", force: :cascade do |t|
     t.string   "name"
@@ -59,6 +59,15 @@ ActiveRecord::Schema.define(version: 20181201175626) do
   add_index "game_histories", ["player_id"], name: "index_game_histories_on_player_id"
   add_index "game_histories", ["room_id"], name: "index_game_histories_on_room_id"
 
+  create_table "player_ratings", force: :cascade do |t|
+    t.integer  "player_id"
+    t.integer  "season_id"
+    t.float    "skill",      default: 25.0
+    t.float    "deviation",  default: 8.333333333333334
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+  end
+
   create_table "players", force: :cascade do |t|
     t.string   "rfid_hash"
     t.string   "name"
@@ -98,6 +107,30 @@ ActiveRecord::Schema.define(version: 20181201175626) do
     t.integer  "initial_serving_team", default: 0
     t.integer  "streak",               default: 0
     t.text     "streak_history",       default: ""
+  end
+
+  create_table "season_stats", force: :cascade do |t|
+    t.integer  "player_id"
+    t.integer  "season_id"
+    t.boolean  "has_completed_aggregation"
+    t.integer  "player_count"
+    t.integer  "wins"
+    t.integer  "losses"
+    t.integer  "most_defeated_player_id"
+    t.integer  "most_defeated_by_player_id"
+    t.float    "average_win_margin"
+    t.float    "average_loss_margin"
+    t.integer  "total_points_scored"
+    t.integer  "total_points_scored_against"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  create_table "seasons", force: :cascade do |t|
+    t.string   "name"
+    t.boolean  "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "stall_stats", force: :cascade do |t|
