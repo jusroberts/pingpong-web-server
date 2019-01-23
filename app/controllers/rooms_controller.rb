@@ -101,7 +101,7 @@ class RoomsController < ApplicationController
       else
         current_score = @room.method("team_#{team}_score".to_sym).call()
         @room.update_attribute("team_#{team}_score", current_score + 1)
-        update_streak(true, team)
+        @room.update_streak(true, team)
       end
       set_room
     end
@@ -138,7 +138,7 @@ class RoomsController < ApplicationController
         end
         @room.update_attribute(:game, true)
         @room.update_attribute("team_#{team}_score", current_score - 1)
-        update_streak(false, team)
+        @room.update_streak(false, team)
       end
       set_room
     end
@@ -424,97 +424,6 @@ class RoomsController < ApplicationController
     end
 
     # @param room [Room]
-    # @return boolean
-    def memorable_game?(room)
-      # @type [Array<RoomPlayer>]
-      room_players = room.room_players
-
-      room_players.length > 0 &&
-      # Should be an even number of players
-          room_players.length % 2 === 0 &&
-          room_players.length == room.player_count &&
-      # Somebody should have won the game
-          (room.team_a_score > GameLogic::PENULTIMATE_SCORE || room.team_b_score > GameLogic::PENULTIMATE_SCORE) &&
-          !room.game_session_id.nil?
-    end
-
-    # @param room [Room]
-    def save_history(room)
-      room_players = @room.room_players
-
-      # @type [Array<RoomPlayer>]
-      team_a_players = room_players.select {|room_player| room_player.team == PlayersController::TEAM_A_ID}
-      # @type [Array<RoomPlayer>]
-      team_b_players = room_players.select {|room_player| room_player.team == PlayersController::TEAM_B_ID}
-
-      # We should batch this but ActiveRecord makes it a pain in the ass and I don't care that much
-      # @type [Hash{Integer => GameHistory}]
-      histories = {}
-      # @type [Array<Player>]
-      winning_players = []
-      # @type [Array<Player>]
-      losing_players = []
-      if room.team_a_score > room.team_b_score
-        # Yay for team A
-        team_a_players.each do |room_player|
-          history = new_game_history(room, room_player, true)
-          histories[room_player.player_id] = history
-          winning_players << Player.find_by(:id => room_player.player_id)
-        end
-        team_b_players.each do |room_player|
-          history = new_game_history(room, room_player, false)
-          histories[room_player.player_id] = history
-          losing_players << Player.find_by(:id => room_player.player_id)
-        end
-      else
-        team_a_players.each do |room_player|
-          history = new_game_history(room, room_player, false)
-          histories[room_player.player_id] = history
-          losing_players << Player.find_by(:id => room_player.player_id)
-        end
-        # All glory to team B
-        team_b_players.each do |room_player|
-          history = new_game_history(room, room_player, true)
-          histories[room_player.player_id] = history
-          winning_players << Player.find_by(:id => room_player.player_id)
-        end
-      end
-
-      # Use the first player's history PK as the game ID because it's an easy way to generate a unique, sequential integer
-      game_id = histories.values[0].id
-      histories.each do |player_id, history|
-        history.update_attributes(game_id: game_id)
-      end
-
-      starting_skills = {}
-      starting_deviations = {}
-
-      # Store starting ratings so we can calculate differential
-      players = winning_players + losing_players
-      players.each do |player|
-        starting_skills[player.id] = player.rating_skill
-        starting_deviations[player.id] = player.rating_deviation
-      end
-
-      # Update skills
-      margin = (room.team_a_score - room.team_b_score).abs
-      manager = RatingManager.new
-      manager.process_game(winning_players, margin, losing_players, -margin)
-      winning_players.each { |player| player.save }
-      losing_players.each { |player| player.save }
-
-      # Calculate and store rating differentials
-      # @type player [Player]
-      players.each do |player|
-        # @type [GameHistory]
-        player_history = histories[player.id]
-        player_history.skill_change = player.rating_skill - starting_skills[player.id]
-        player_history.deviation_change = player.rating_deviation - starting_deviations[player.id]
-        player_history.save
-      end
-    end
-
-    # @param room [Room]
     # @param room_player [RoomPlayer]
     # @param win [boolean]
     # @return [GameHistory]
@@ -541,27 +450,6 @@ class RoomsController < ApplicationController
       return GameLogic.new(@room.team_a_score, @room.team_b_score).game_over?
     end
 
-  # @param increment_or_decrement boolean
-  # @param team String
-    def update_streak(increment_or_decrement, team)
-      if increment_or_decrement
-        new_streak = StreakHelper.new().update_streak_increment(team, get_streak_history)
-      else
-        new_streak = StreakHelper.new().update_streak_decrement(team, get_streak_history)
-      end
-      @room.update_attribute(:streak, StreakHelper.new().get_new_streak(new_streak))
-      @room.update_attribute(:streak_history, new_streak.join(","))
-    end
-
-  #@return [int]
-    def get_streak_history
-      string_streak_history = @room.streak_history
-      if string_streak_history == nil
-        return []
-      else
-        return string_streak_history.split(",").map(&:to_i)
-      end
-    end
 
     # Use callbacks to share common setup or constraints between actions.
     def set_room
@@ -575,25 +463,7 @@ class RoomsController < ApplicationController
 
     def private_game_end_post
       puts("End game request received: #{request.inspect}")
-      if memorable_game?(@room)
-        save_history(@room)
-      end
-
-      @room.update_attributes(team_a_score: 0, team_b_score: 0, game: false)
-      if params[:quit].present?
-        @room.room_players.delete_all
-        @room.update_attribute(:game_session_id, nil)
-      else
-        @room.update_attributes(team_a_score: 0, team_b_score: 0, game: true)
-        @room.room_players.each do |room_player|
-          if room_player.team == "a"
-            room_player.update_attribute(:team, "b")
-          elsif room_player.team == "b"
-            room_player.update_attribute(:team, "a")
-          end
-        end
-
-      end
+      @room.end_game(params[:quit].present?)
     end
 
 end
