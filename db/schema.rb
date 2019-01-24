@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190123225514) do
+ActiveRecord::Schema.define(version: 20190124154215) do
 
   create_table "bathrooms", force: :cascade do |t|
     t.string   "name"
@@ -77,11 +77,11 @@ ActiveRecord::Schema.define(version: 20190123225514) do
     t.string   "image_url"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.float    "rating_skill",     default: 25.0
-    t.float    "rating_deviation", default: 8.333333333333334
-    t.string   "wallet"
-    t.boolean  "is_archived",      default: false
-    t.string   "pin",              default: "0000",            null: false
+    t.float    "rating_skill",                 default: 25.0
+    t.float    "rating_deviation",             default: 8.333333333333334
+    t.string   "wallet",           limit: 255
+    t.boolean  "is_archived",                  default: false
+    t.string   "pin",                          default: "0000",            null: false
   end
 
   add_index "players", ["rfid_hash"], name: "index_players_on_rfid_hash"
@@ -108,9 +108,11 @@ ActiveRecord::Schema.define(version: 20190123225514) do
     t.string   "game_session_id"
     t.datetime "increment_at"
     t.integer  "last_request_id"
-    t.integer  "initial_serving_team", default: 0
-    t.integer  "streak",               default: 0
-    t.text     "streak_history",       default: ""
+    t.integer  "initial_serving_team",             default: 0
+    t.integer  "streak",                           default: 0
+    t.text     "streak_history",                   default: ""
+    t.datetime "start_time"
+    t.datetime "end_time"
   end
 
   create_table "score_histories", force: :cascade do |t|
