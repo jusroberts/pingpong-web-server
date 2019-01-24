@@ -61,7 +61,7 @@ hr.players {
 
 .square {
   color: white;
-  font-size: 15em;
+  font-size: 16em;
   vertical-align: middle;
   text-align: center;
   border-style: solid;
@@ -72,7 +72,7 @@ hr.players {
   padding:50% 20%;
 }
 
-#name-input-section {
+#name-input-section, #pin-input-section {
   padding: 4%;
   border-style: solid;
   border-color: white;
@@ -84,13 +84,13 @@ hr.players {
   height: 100%;
 }
 
-.name-text {
+.name-text, .pin-text {
   color: white;
-  font-size: 3em;
+  font-size: 2em;
   display: inline-block;
 }
 
-.player-name-text-input {
+.player-name-text-input, .player-pin-text-input {
   width: 56%;
   background: none;
   border-top: none;
@@ -104,7 +104,7 @@ hr.players {
   display: inline;
 }
 
-.player-name-text-input:focus {
+.player-name-text-input:focus, .player-pin-text-input:focus {
   background: none;
   background-color: none;
   border: none;
@@ -129,19 +129,33 @@ hr.players {
 
 .keyboard-buttons {
   background: none;
-  font-size: 4em;
+  font-size: 3em;
 }
 
 .characters {
   width: 100%;
 }
 
-.keyboard-buttons.character {
+.digits {
+  width: 50%;
+  margin-left: 25%;
+  margin-right: 25%;
+}
+
+.characters.delete-row, .digits.delete-row {
+  padding-top: 10px;
+}
+
+.keyboard-buttons.character, .keyboard-buttons.digit {
   background: none;
   line-height: 150%;
 }
 
-.keyboard-buttons.characters:hover {
+.keyboard-buttons.digit.zero {
+  margin-left: 1em;
+}
+
+.keyboard-buttons.characters:hover, .keyboard-buttons.digits:hover {
   background: none;
 }
 
@@ -155,29 +169,120 @@ hr.players {
   background: none;
 }
 
-.submit {
-  width: 85%;
-  border: none;
-  color: rgb(102, 102, 102);
-  text-align: right;
-}
+// .submit {
+//   width: 85%;
+//   border: none;
+//   color: rgb(102, 102, 102);
+//   text-align: right;
+// }
 
-.submit:hover {
-  color: white;
-}
+// .submit:hover {
+//   color: white;
+// }
 
-.cancel-button-container {
+.submit-cancel-button-container {
   padding-left: 10%;
+  padding-right: 10%;
 }
 
-.cancel-button {
+.cancel-button, .submit-button {
   font-size: 4em;
   background: none;
   color: white;
   border-style: solid;
   border-width: thick;
+  display: inline-block;
+}
+.cancel-button:hover, .submit-button:hover {
+  background: none;
 }
 
-.cancel-button:hover {
+.cancel-button { float: left; }
+.submit-button { float: right; }
+
+.player-select {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.player-select .player {
+  width: 20%;
+  text-align: center;
+  padding: 10px;
+  border: 5px solid white;
+  margin: 10px 5px;
+  color: white;
+}
+
+.player-select .player:hover {
+  background: white;
+  color: black;
+  cursor: pointer;
+}
+
+.player-select .player .player-name {
+  text-align: center;
+  font-size: 2em;
+  padding-top: 20px;
+}
+
+.login-as-player {
+  color: white;
+  font-size: 2.5em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin: 0;
+}
+
+.login-as-player * {
+  margin: 10px;
+}
+
+.login-as-player .player-icon {
+  border: 5px solid white;
+  margin-bottom: 0px;
+}
+
+.login-as-player .player-name, .login-as-player .pin-entry-label, .login-as-player .pin-entry {
+  padding-top: 20px;
+}
+.login-as-player .pin-entry-label {
+  font-size: 0.8em;
+  color: white;
+}
+.login-as-player .pin-entry {
+  width: 10em;
   background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom-style: dashed;
+  border-width: medium;;
+  color: white;
+  letter-spacing: 0.25em;
+  text-align: center;
+}
+.login-as-player .submit-pin-entry {
+  margin-top: 20px;
+  padding: 10px;
+  border: 5px solid white;
+  background: none;
+}
+
+.login-as-player .error {
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: center;
+  background: red;
+  line-height: 1.5em;
+  margin: 0;
+  padding: 0;
+  width: 100%;
 }

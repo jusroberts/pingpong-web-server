@@ -304,7 +304,7 @@ body.rooms.game_newfull {
 .sf-label {
   font-family: 'street fighter';
   font-weight: normal;
-  font-size: 2em;
+  font-size: 1.6em;
   flex: 1;
   align-self: stretch;
   display: flex;
@@ -315,12 +315,17 @@ body.rooms.game_newfull {
 .sf-button {
   border: 5px solid #2595CA;
   background-color: #1262A6;
-  height: 70px;
+  height: 50px;
   width: 400px;
   display: flex;
   align-items: center;
   justify-content: center;
   // Easier to put this here so border and text color can be changed for .selected
+  color: #21297E;
+}
+
+a.sf-button:visited {
+  // make sure that any buttons that are links don't get jacked-up coloring
   color: #21297E;
 }
 
@@ -338,6 +343,10 @@ body.rooms.game_newfull {
   box-shadow:
           0 0 0 5px #E29C36,
           0 0 0 10px #E7DE0A;
+
+  // Override in case of links
+  color: #212972;
+  background-color: #1262A6;
 }
 
 .sf-label.hoverable:hover {

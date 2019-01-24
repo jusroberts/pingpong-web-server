@@ -14,6 +14,9 @@ Rails.application.routes.draw do
       post 'game/end' => 'rooms#game_end_post', as: :game_end
       get 'game/newfull' => 'rooms#game_newfull', as: :game_newfull
       post 'game/player_count' => 'rooms#game_player_count_post', as: :game_player_count_post
+      get 'game/lookup_player' => 'players#lookup_player', as: :game_lookup_player
+      get 'game/login_as/:player_id' => 'players#login_as_player', as: :game_login_as_player
+      post 'game/login_as/:player_id' => 'players#login_as_player_post', as: :game_login_as_player_post
 
       post 'game/new/players/clear' => 'rooms#players_clear_post', as: :game_players_clear_post
       get 'game/new/players/create' => 'players#new', as: :game_new_player
@@ -39,6 +42,7 @@ Rails.application.routes.draw do
   get '/api/rooms/:room_id/players/optimize' => 'players#optimize_teams', as: :optimize_teams
   get '/api/rooms/:room_id/players/rank' => 'players#get_rank', as: :get_player_rank
   get '/api/rooms/:room_id/send_current_scores' => 'rooms#send_current_scores'
+  get '/api/players' => 'players#list_all_players'
 
 
   resources :bathrooms do

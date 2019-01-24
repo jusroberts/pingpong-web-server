@@ -12,7 +12,8 @@ if Rails.env == "development"
             rfid_hash: Faker::Crypto.md5,
             rating_skill: Faker::Number.number(1),
             rating_deviation: Faker::Number.number(1),
-            image_url: Faker::Avatar.image
+            image_url: Faker::Avatar.image,
+            pin: Faker::Number.number(6).to_s,
         ).save
     end
 
