@@ -136,6 +136,14 @@ class PlayersController < ApplicationController
 
   def lookup_player
     @players = Player.where.not(name: nil).sort_by(&:name)
+
+    # If we got here from the "already in the system?" link after scanning an
+    # unrecognized badge, we want to pass the new-badge player through the process
+    # so that we can update the chosen player's badge hash from the new-badge 
+    # "empty" player entry, and then delete that "empty" entry.
+    if params[:badged_player_id]
+      @badged_player_id = params[:badged_player_id]
+    end
   end
 
   def login_as_player
@@ -143,6 +151,15 @@ class PlayersController < ApplicationController
     @player = Player.find(player_id)
     raise "No player found for id '#{player_id}'" unless @player
 
+    # If we got here from the "already in the system?" link after scanning an
+    # unrecognized badge, we want to pass the new-badge player through the process
+    # so that we can update the chosen player's badge hash from the new-badge 
+    # "empty" player entry, and then delete that "empty" entry.
+    if params[:badged_player_id]
+      @badged_player_id = params[:badged_player_id]
+    end
+
+    # If an error was passed to this page, show that error.
     if params[:error]
       @error = params[:error]
     end
@@ -155,9 +172,19 @@ class PlayersController < ApplicationController
     pin = params[:pin]
     if pin && pin.strip == @player.pin
       add_player_and_update_room(@player)
+
+      # If we got here from the "already in the system?" link after scanning an
+      # unrecognized badge, we want to take the new badge's hash from the 
+      # "empty" player entry that badged in, and apply it to the player that was
+      # just selected (allowing players to update their badge), then delete 
+      # "empty" player entry since it doesn't mean anything anymore.
+      if params[:badged_player_id]
+        update_player_badge(@player, params[:badged_player_id])
+      end
+
       redirect_to room_game_newfull_path
     else
-      redirect_to room_game_login_as_player_path(id: @id, player_id: player_id, error: "Incorrect pin!")
+      redirect_to room_game_login_as_player_path(id: @id, player_id: @player.id, error: "Incorrect pin!")
     end
   end
 
@@ -232,6 +259,21 @@ class PlayersController < ApplicationController
 
   def set_room_id
     @id = Room.find(params[:room_id]).id
+  end
+
+  def update_player_badge(player_to_update, badged_player_id)
+    badged_player = Player.find(badged_player_id)
+    raise "Badged-in player not found for id '#{badged_player_id}'" unless badged_player
+
+    player_to_update.rfid_hash = badged_player.rfid_hash
+    remove_player_from_room_if_present(badged_player)
+    badged_player.delete
+    player_to_update.save
+  end
+
+  def remove_player_from_room_if_present(player)
+    room_player = RoomPlayer.find_by room_id: @id, player_id: player.id
+    room_player.delete if room_player
   end
 
   def cloudinary_auth
