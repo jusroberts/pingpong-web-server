@@ -1,6 +1,7 @@
 class Room < ActiveRecord::Base
   has_many :room_players, dependent: :destroy
   has_many :players, through: :room_players
+  has_many :seasons, dependent: :destroy
 
   NO_TEAM_SERVING = 0
   TEAM_A_SERVING = 1
