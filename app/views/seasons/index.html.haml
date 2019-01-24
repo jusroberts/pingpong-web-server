@@ -16,9 +16,9 @@
         %td= season.name
         %td= season.room
         %td= season.active
-        %td= link_to 'Show', season
-        %td= link_to 'Edit', edit_season_path(season)
-        %td= link_to 'Destroy', season, :method => :delete, :data => { :confirm => 'Are you sure?' }
+        %td= link_to 'Show', room_season_url(@room, season)
+        %td= link_to 'Edit', edit_room_season_path(@room, season)
+        %td= link_to 'Destroy', room_season_url(@room, season), :method => :delete, :data => { :confirm => 'Are you sure?' }
 
 %br
 
