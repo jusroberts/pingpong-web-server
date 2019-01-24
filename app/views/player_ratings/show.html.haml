@@ -1,0 +1,18 @@
+%p#notice= notice
+
+%p
+  %b Player:
+  = @player_rating.player_id
+%p
+  %b Season:
+  = @player_rating.season_id
+%p
+  %b Skill:
+  = @player_rating.skill
+%p
+  %b Deviation:
+  = @player_rating.deviation
+
+= link_to 'Edit', edit_player_rating_path(@player_rating)
+\|
+= link_to 'Back', player_ratings_path

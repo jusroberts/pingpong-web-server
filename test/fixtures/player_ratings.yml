@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  player_id: 1
+  season_id: 1
+  skill: 1.5
+  deviation: 1.5
+
+two:
+  player_id: 1
+  season_id: 1
+  skill: 1.5
+  deviation: 1.5

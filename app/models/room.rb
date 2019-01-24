@@ -111,6 +111,21 @@ class Room < ActiveRecord::Base
     end
   end
 
+  def handle_request_id (request_id)
+    if request_id == 0 || last_request_id == nil
+      #Request Id has been reset to 0. Likely the client has power cycled
+        update_attribute(:last_request_id, 0)
+        return true
+    end
+
+    if request_id > last_request_id
+      update_attribute(:last_request_id, request_id)
+      return true
+    end
+    return false
+
+  end
+
   # @param increment_or_decrement boolean
   # @param team String
   def update_streak(increment_or_decrement, team)

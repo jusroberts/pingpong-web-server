@@ -1,0 +1,42 @@
+%p#notice= notice
+
+%p
+  %b Player:
+  = @season_stat.player_id
+%p
+  %b Season:
+  = @season_stat.season_id
+%p
+  %b Has completed aggregation:
+  = @season_stat.has_completed_aggregation
+%p
+  %b Player count:
+  = @season_stat.player_count
+%p
+  %b Wins:
+  = @season_stat.wins
+%p
+  %b Losses:
+  = @season_stat.losses
+%p
+  %b Most defeated player:
+  = @season_stat.most_defeated_player_id
+%p
+  %b Most defeated by player:
+  = @season_stat.most_defeated_by_player_id
+%p
+  %b Average win margin:
+  = @season_stat.average_win_margin
+%p
+  %b Average loss margin:
+  = @season_stat.average_loss_margin
+%p
+  %b Total points scored:
+  = @season_stat.total_points_scored
+%p
+  %b Total points scored against:
+  = @season_stat.total_points_scored_against
+
+= link_to 'Edit', edit_season_stat_path(@season_stat)
+\|
+= link_to 'Back', season_stats_path
