@@ -234,6 +234,11 @@ class RoomsController < ApplicationController
     render :json => out
   end
 
+  #/api/rooms/1/end
+  def end_game
+    
+  end
+
   #-------------------------------------------------------- END API----------------------------------------------------
 
   def game_new
