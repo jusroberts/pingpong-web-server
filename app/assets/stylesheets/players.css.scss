@@ -199,3 +199,89 @@ hr.players {
 
 .cancel-button { float: left; }
 .submit-button { float: right; }
+
+.player-select {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.player-select .player {
+  width: 20%;
+  text-align: center;
+  padding: 10px;
+  border: 5px solid white;
+  margin: 10px 5px;
+  color: white;
+}
+
+.player-select .player:hover {
+  background: white;
+  color: black;
+  cursor: pointer;
+}
+
+.player-select .player .player-name {
+  text-align: center;
+  font-size: 2em;
+  padding-top: 20px;
+}
+
+.login-as-player {
+  color: white;
+  font-size: 2.5em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  margin: 0;
+}
+
+.login-as-player * {
+  margin: 10px;
+}
+
+.login-as-player .player-icon {
+  border: 5px solid white;
+  margin-bottom: 0px;
+}
+
+.login-as-player .player-name, .login-as-player .pin-entry-label, .login-as-player .pin-entry {
+  padding-top: 20px;
+}
+.login-as-player .pin-entry-label {
+  font-size: 0.8em;
+  color: white;
+}
+.login-as-player .pin-entry {
+  width: 10em;
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom-style: dashed;
+  border-width: medium;;
+  color: white;
+  letter-spacing: 0.25em;
+}
+.login-as-player .submit-pin-entry {
+  margin-top: 20px;
+  padding: 10px;
+  border: 5px solid white;
+  background: none;
+}
+
+.login-as-player .error {
+  position: absolute;
+  top: 0;
+  left: 0;
+  text-align: center;
+  background: red;
+  line-height: 1.5em;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}

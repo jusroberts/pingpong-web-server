@@ -4,7 +4,7 @@ class PlayersController < ApplicationController
   TEAM_IDS = [TEAM_A_ID, TEAM_B_ID]
 
   before_action :set_player, only: [:new_post, :confirm, :delete, :attach_image, :attach_image_post]
-  before_action :set_room_id
+  before_action :set_room_id, except: [:list_all_players]
 
   def handle_player_hash
     # @type [String]
@@ -134,6 +134,47 @@ class PlayersController < ApplicationController
     render :json => playerIdHash
   end
 
+  def lookup_player
+    @players = Player.where.not(name: nil).sort_by(&:name)
+  end
+
+  def login_as_player
+    player_id = params[:player_id]
+    @player = Player.find(player_id)
+    raise "No player found for id '#{player_id}'" unless @player
+
+    if params[:error]
+      @error = params[:error]
+    end
+  end
+  def login_as_player_post
+    player_id = params[:player_id]
+    @player = Player.find(player_id)
+    raise "No player found for id '#{player_id}'" unless @player
+
+    pin = params[:pin]
+    if pin && pin.strip == @player.pin
+      add_player_and_update_room(@player)
+      redirect_to room_game_newfull_path
+    else
+      redirect_to room_game_login_as_player_path(id: @id, player_id: player_id, error: "Incorrect pin!")
+    end
+  end
+
+  # Used by the ajax player search
+  def list_all_players
+    json_output = Player.all.map do |player|
+      {
+        id: player.id,
+        name: player.name,
+        image_url: player.image_url,
+      }
+    end
+
+    render :json => json_output
+  end
+  
+
   private
 
   # @param player [Player]
@@ -192,7 +233,7 @@ class PlayersController < ApplicationController
   def set_room_id
     @id = Room.find(params[:room_id]).id
   end
-  
+
   def cloudinary_auth
     {
       cloud_name: ENV["CLOUDINARY_NAME"],

@@ -34,12 +34,15 @@
           .sf-label.hoverable DOUBLES
 
       #scan_section{:style => "padding: 2%;"}
-        .sf-button#scanButton{:style => "width: 400px; margin: 10px auto; height: 70px; background-size: 100% 100%"}
+        .sf-button#scanButton{:style => "margin: 10px auto; background-size: 100% 100%"}
           .sf-label#scanLabel SCAN PLAYER
 
-        .sf-button.hoverable#clearButton{:style => "margin: 20px auto; background-size: 100% 100%;"}
+        =link_to room_game_lookup_player_path(id: @id), :class => 'sf-button hoverable', :style => 'margin: 10px auto' do
+          .sf-label.hoverable#lookupPlayerLabel LOOKUP PLAYER
+
+        .sf-button.hoverable#clearButton{:style => "margin: 10px auto; background-size: 100% 100%;"}
           .sf-label.hoverable CLEAR PLAYERS
-        =form_tag room_game_new_post_path(id: @id), :style => 'margin: 20px' do
+        =form_tag room_game_new_post_path(id: @id), :style => 'margin: 10px auto' do
           =submit_tag '* START GAME *', id: 'startButton', class: 'sf-button sf-label hoverable', style: "margin: 0 auto; display: inline-block; background-size: 100% 100%"
 
 
