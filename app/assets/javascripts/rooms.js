@@ -173,6 +173,10 @@ class RunningGameFunctions {
             }
         }, 1000);
     }
+
+    endGame() {
+        $(".sf-quit").trigger('click');
+    }
 }
 
 class ApiActions {

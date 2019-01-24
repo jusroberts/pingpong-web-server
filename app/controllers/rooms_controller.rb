@@ -71,7 +71,7 @@ class RoomsController < ApplicationController
 
   # /api/rooms/1/team/a/increment
   def increment_score
-    if handle_request_id(params[:request_id].to_i) == false
+    if @room.handle_request_id(params[:request_id].to_i) == false
       #ignore old requests
       return
     end
@@ -111,7 +111,7 @@ class RoomsController < ApplicationController
 
   # /api/rooms/1/team/a/decrement
   def decrement_score
-    if handle_request_id(params[:request_id].to_i) == false
+    if @room.handle_request_id(params[:request_id].to_i) == false
       #ignore old requests
       return
     end
@@ -134,6 +134,8 @@ class RoomsController < ApplicationController
       current_score = @room.method("team_#{team}_score".to_sym).call()
       if current_score > 0
         if GameLogic.new(@room.team_a_score, @room.team_b_score).game_over?
+          #If the game is already over and a decrement is called,
+          # then decrement the score and refresh the game to stop it from ending.
           should_reload = true
         end
         @room.update_attribute(:game, true)
@@ -150,7 +152,7 @@ class RoomsController < ApplicationController
   end
 
   def taunt
-    if handle_request_id(params[:request_id].to_i) == false
+    if @room.handle_request_id(params[:request_id].to_i) == false
       #ignore old requests
       return
     end
@@ -236,7 +238,10 @@ class RoomsController < ApplicationController
 
   #/api/rooms/1/end
   def end_game
-    
+    if @room.client_token == params[:code]
+      ::WebsocketRails[:"room#{@room.id}"].trigger "end_game"
+    end
+    render :json => {}
   end
 
   #-------------------------------------------------------- END API----------------------------------------------------
@@ -298,7 +303,7 @@ class RoomsController < ApplicationController
 
   def game_new_post
 
-    @room.update_attributes(game: true, team_a_score: 0, team_b_score: 0, streak: 0, streak_history: "")
+    @room.update_attributes(game: true, team_a_score: 0, team_b_score: 0, streak: 0, streak_history: "", start_time: Time.now, end_time: nil)
 
     redirect_to :room_game_play
 
@@ -307,7 +312,7 @@ class RoomsController < ApplicationController
   end
 
   def game_end_post
-
+    @room.update_attributes(end_time: Time.now)
     private_game_end_post
     if params[:quit].present?
       redirect_to :room_game_interstitial
@@ -341,23 +346,8 @@ class RoomsController < ApplicationController
 
   def controller
   end
-
+  
   private
-
-  def handle_request_id (request_id)
-    if request_id == 0 || @room.last_request_id == nil
-      #Request Id has been reset to 0. Likely the client has power cycled
-        @room.update_attribute(:last_request_id, 0)
-        return true
-    end
-
-    if request_id > @room.last_request_id
-      @room.update_attribute(:last_request_id, request_id)
-      return true
-    end
-    return false
-
-  end
 
     # @param room [Room]
     # @param player_count [Integer]
@@ -428,29 +418,6 @@ class RoomsController < ApplicationController
       }
     end
 
-    # @param room [Room]
-    # @param room_player [RoomPlayer]
-    # @param win [boolean]
-    # @return [GameHistory]
-    def new_game_history(room, room_player, win)
-      game_history = GameHistory.new(
-          room_id: @room.id,
-          player_id: room_player.player_id,
-          game_session_id: room.game_session_id,
-          player_count: room.player_count,
-          win: win
-      )
-      if room_player.team == PlayersController::TEAM_A_ID
-        game_history.player_team_score = room.team_a_score
-        game_history.opponent_team_score = room.team_b_score
-      else
-        game_history.player_team_score = room.team_b_score
-        game_history.opponent_team_score = room.team_a_score
-      end
-      game_history.save
-      game_history
-    end
-
     def should_reset?
       return GameLogic.new(@room.team_a_score, @room.team_b_score).game_over?
     end
@@ -468,7 +435,7 @@ class RoomsController < ApplicationController
 
     def private_game_end_post
       puts("End game request received: #{request.inspect}")
-      @room.end_game(params[:quit].present?)
+      @room.end_game(params[:quit].present?, @room)
     end
 
 end

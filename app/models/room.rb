@@ -7,9 +7,10 @@ class Room < ActiveRecord::Base
   TEAM_A_SERVING = 1
   TEAM_B_SERVING = 2
 
-  def end_game(quit)
+  # @param quit [boolean]
+  def end_game(quit, room)
     if memorable_game?
-      save_history
+      save_history(room)
     end
 
     update_attributes(team_a_score: 0, team_b_score: 0, game: false)
@@ -39,7 +40,7 @@ class Room < ActiveRecord::Base
         !game_session_id.nil?
   end
 
-  def save_history
+  def save_history(room)
     # @type [Array<RoomPlayer>]
     team_a_players = room_players.select {|room_player| room_player.team == PlayersController::TEAM_A_ID}
     # @type [Array<RoomPlayer>]
@@ -110,6 +111,43 @@ class Room < ActiveRecord::Base
       player_history.deviation_change = player.rating_deviation - starting_deviations[player.id]
       player_history.save
     end
+  end
+
+  # @param room_player [RoomPlayer]
+  # @param win [boolean]
+  # @return [GameHistory]
+  def new_game_history(room, room_player, win)
+    game_history = GameHistory.new(
+        room_id: room.id,
+        player_id: room_player.player_id,
+        game_session_id: room.game_session_id,
+        player_count: room.player_count,
+        win: win,
+        duration_seconds: (room.end_time - room.start_time).to_i
+    )
+    if room_player.team == PlayersController::TEAM_A_ID
+      game_history.player_team_score = room.team_a_score
+      game_history.opponent_team_score = room.team_b_score
+    else
+      game_history.player_team_score = room.team_b_score
+      game_history.opponent_team_score = room.team_a_score
+    end
+    game_history.save
+    game_history
+  end
+
+  def handle_request_id (request_id)
+    if request_id == 0 || last_request_id == nil
+      #Request Id has been reset to 0. Likely the client has power cycled
+        update_attribute(:last_request_id, 0)
+        return true
+    end
+
+    if request_id > last_request_id
+      update_attribute(:last_request_id, request_id)
+      return true
+    end
+    return false
   end
 
   # @param increment_or_decrement boolean
