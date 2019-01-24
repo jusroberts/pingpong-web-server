@@ -1,0 +1,43 @@
+%h1 Listing season_stats
+
+%table
+  %thead
+    %tr
+      %th Player
+      %th Season
+      %th Has completed aggregation
+      %th Player count
+      %th Wins
+      %th Losses
+      %th Most defeated player
+      %th Most defeated by player
+      %th Average win margin
+      %th Average loss margin
+      %th Total points scored
+      %th Total points scored against
+      %th
+      %th
+      %th
+
+  %tbody
+    - @season_stats.each do |season_stat|
+      %tr
+        %td= season_stat.player_id
+        %td= season_stat.season_id
+        %td= season_stat.has_completed_aggregation
+        %td= season_stat.player_count
+        %td= season_stat.wins
+        %td= season_stat.losses
+        %td= season_stat.most_defeated_player_id
+        %td= season_stat.most_defeated_by_player_id
+        %td= season_stat.average_win_margin
+        %td= season_stat.average_loss_margin
+        %td= season_stat.total_points_scored
+        %td= season_stat.total_points_scored_against
+        %td= link_to 'Show', season_stat
+        %td= link_to 'Edit', edit_season_stat_path(season_stat)
+        %td= link_to 'Destroy', season_stat, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Season stat', new_season_stat_path

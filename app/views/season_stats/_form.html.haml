@@ -1,0 +1,46 @@
+= form_for @season_stat do |f|
+  - if @season_stat.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@season_stat.errors.count, "error")} prohibited this season_stat from being saved:"
+      %ul
+        - @season_stat.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :player_id
+    = f.number_field :player_id
+  .field
+    = f.label :season_id
+    = f.number_field :season_id
+  .field
+    = f.label :has_completed_aggregation
+    = f.check_box :has_completed_aggregation
+  .field
+    = f.label :player_count
+    = f.number_field :player_count
+  .field
+    = f.label :wins
+    = f.number_field :wins
+  .field
+    = f.label :losses
+    = f.number_field :losses
+  .field
+    = f.label :most_defeated_player_id
+    = f.number_field :most_defeated_player_id
+  .field
+    = f.label :most_defeated_by_player_id
+    = f.number_field :most_defeated_by_player_id
+  .field
+    = f.label :average_win_margin
+    = f.text_field :average_win_margin
+  .field
+    = f.label :average_loss_margin
+    = f.text_field :average_loss_margin
+  .field
+    = f.label :total_points_scored
+    = f.number_field :total_points_scored
+  .field
+    = f.label :total_points_scored_against
+    = f.number_field :total_points_scored_against
+  .actions
+    = f.submit 'Save'

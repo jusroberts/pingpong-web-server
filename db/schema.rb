@@ -13,6 +13,7 @@
 
 ActiveRecord::Schema.define(version: 20190124154215) do
 
+
   create_table "bathrooms", force: :cascade do |t|
     t.string   "name",                 limit: 255
     t.string   "token",                limit: 255
@@ -34,10 +35,12 @@ ActiveRecord::Schema.define(version: 20190124154215) do
     t.float   "average_loss_margin"
     t.integer "total_points_scored"
     t.integer "total_points_scored_against"
+    t.integer "season_id"
   end
 
   add_index "daily_stats", ["player_id", "day", "has_completed_aggregation", "player_count"], name: "daily_stats_lookup"
   add_index "daily_stats", ["player_id"], name: "index_daily_stats_on_player_id"
+  add_index "daily_stats", ["season_id"], name: "index_daily_stats_on_season_id"
 
   create_table "game_histories", force: :cascade do |t|
     t.integer  "room_id"
@@ -59,6 +62,15 @@ ActiveRecord::Schema.define(version: 20190124154215) do
   add_index "game_histories", ["player_id", "win", "player_count"], name: "index_game_histories_on_player_id_and_win_and_player_count"
   add_index "game_histories", ["player_id"], name: "index_game_histories_on_player_id"
   add_index "game_histories", ["room_id"], name: "index_game_histories_on_room_id"
+
+  create_table "player_ratings", force: :cascade do |t|
+    t.integer  "player_id"
+    t.integer  "season_id"
+    t.float    "skill",      default: 25.0
+    t.float    "deviation",  default: 8.333333333333334
+    t.datetime "created_at",                             null: false
+    t.datetime "updated_at",                             null: false
+  end
 
   create_table "players", force: :cascade do |t|
     t.string   "rfid_hash",        limit: 255
@@ -112,6 +124,33 @@ ActiveRecord::Schema.define(version: 20190124154215) do
     t.datetime "updated_at",   null: false
   end
 
+  create_table "season_stats", force: :cascade do |t|
+    t.integer  "player_id"
+    t.integer  "season_id"
+    t.boolean  "has_completed_aggregation"
+    t.integer  "player_count"
+    t.integer  "wins"
+    t.integer  "losses"
+    t.integer  "most_defeated_player_id"
+    t.integer  "most_defeated_by_player_id"
+    t.float    "average_win_margin"
+    t.float    "average_loss_margin"
+    t.integer  "total_points_scored"
+    t.integer  "total_points_scored_against"
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+  end
+
+  create_table "seasons", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "room_id"
+    t.boolean  "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "seasons", ["room_id"], name: "index_seasons_on_room_id"
+
   create_table "stall_stats", force: :cascade do |t|
     t.datetime "usage_start"
     t.datetime "usage_end"
@@ -141,9 +180,11 @@ ActiveRecord::Schema.define(version: 20190124154215) do
     t.float   "average_loss_margin"
     t.integer "total_points_scored"
     t.integer "total_points_scored_against"
+    t.integer "season_id"
   end
 
   add_index "weekly_stats", ["player_id", "week_start", "has_completed_aggregation", "player_count"], name: "weekly_stats_lookup"
   add_index "weekly_stats", ["player_id"], name: "index_weekly_stats_on_player_id"
+  add_index "weekly_stats", ["season_id"], name: "index_weekly_stats_on_season_id"
 
 end
