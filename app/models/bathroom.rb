@@ -1,4 +1,4 @@
-class Bathroom < ActiveRecord::Base
+class Bathroom < ApplicationRecord
     has_many :stalls
     validates_uniqueness_of :name
 

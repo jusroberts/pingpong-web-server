@@ -1,4 +1,4 @@
-class Stall < ActiveRecord::Base
+class Stall < ApplicationRecord
     belongs_to :bathroom
     
 

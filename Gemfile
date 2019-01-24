@@ -1,10 +1,10 @@
 source 'https://rubygems.org'
 ruby "2.6.0"
 
-gem 'rails', '4.2.11'
+gem 'rails', '5.0.7.1'
 gem 'sass-rails', '~> 5.0.0'
 gem 'uglifier', '>= 1.3.0'
-gem 'coffee-rails', '~> 4.0.0'
+gem 'coffee-rails', '~> 4.2'
 gem 'jquery-rails'
 gem 'jbuilder', '~> 2.0'
 gem 'hamlit-rails' #faster haml, uses slightly different syntax

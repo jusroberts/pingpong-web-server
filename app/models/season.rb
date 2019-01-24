@@ -1,3 +1,3 @@
-class Season < ActiveRecord::Base
+class Season < ApplicationRecord
   belongs_to :room
 end

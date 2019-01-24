@@ -1,4 +1,4 @@
-class GameHistory < ActiveRecord::Base
+class GameHistory < ApplicationRecord
   belongs_to :room
   belongs_to :player
 end

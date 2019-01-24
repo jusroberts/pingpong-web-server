@@ -1,4 +1,4 @@
-class Player < ActiveRecord::Base
+class Player < ApplicationRecord
   has_many :room_players
   has_many :daily_stats
   has_many :weekly_stats

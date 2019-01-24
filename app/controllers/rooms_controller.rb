@@ -275,7 +275,7 @@ class RoomsController < ApplicationController
   def players_clear_post
     # Wipe all the players for this room
     @room.room_players.delete_all
-    render text: 'OK'
+    render plain: 'OK'
   end
 
   def game_newfull

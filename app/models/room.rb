@@ -1,4 +1,4 @@
-class Room < ActiveRecord::Base
+class Room < ApplicationRecord
   has_many :room_players, dependent: :destroy
   has_many :players, through: :room_players
 

@@ -1,4 +1,4 @@
-class SeasonStat < ActiveRecord::Base
+class SeasonStat < ApplicationRecord
   belongs_to :player
   belongs_to :season
 end

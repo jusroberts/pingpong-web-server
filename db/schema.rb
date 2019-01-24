@@ -1,4 +1,3 @@
-# encoding: UTF-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190123185753) do
+ActiveRecord::Schema.define(version: 20190124161935) do
 
   create_table "bathrooms", force: :cascade do |t|
     t.string   "name"
@@ -35,11 +34,10 @@ ActiveRecord::Schema.define(version: 20190123185753) do
     t.integer "total_points_scored"
     t.integer "total_points_scored_against"
     t.integer "season_id"
+    t.index ["player_id", "day", "has_completed_aggregation", "player_count"], name: "daily_stats_lookup"
+    t.index ["player_id"], name: "index_daily_stats_on_player_id"
+    t.index ["season_id"], name: "index_daily_stats_on_season_id"
   end
-
-  add_index "daily_stats", ["player_id", "day", "has_completed_aggregation", "player_count"], name: "daily_stats_lookup"
-  add_index "daily_stats", ["player_id"], name: "index_daily_stats_on_player_id"
-  add_index "daily_stats", ["season_id"], name: "index_daily_stats_on_season_id"
 
   create_table "game_histories", force: :cascade do |t|
     t.integer  "room_id"
@@ -54,14 +52,13 @@ ActiveRecord::Schema.define(version: 20190123185753) do
     t.datetime "updated_at"
     t.float    "skill_change"
     t.float    "deviation_change"
-    t.text     "team",                            default: ""
-    t.integer  "duration_seconds",                default: 0
+    t.text     "team",                default: ""
+    t.integer  "duration_seconds",    default: 0
+    t.index ["game_id", "game_session_id"], name: "index_game_histories_on_game_id_and_game_session_id"
+    t.index ["player_id", "win", "player_count"], name: "index_game_histories_on_player_id_and_win_and_player_count"
+    t.index ["player_id"], name: "index_game_histories_on_player_id"
+    t.index ["room_id"], name: "index_game_histories_on_room_id"
   end
-
-  add_index "game_histories", ["game_id", "game_session_id"], name: "index_game_histories_on_game_id_and_game_session_id"
-  add_index "game_histories", ["player_id", "win", "player_count"], name: "index_game_histories_on_player_id_and_win_and_player_count"
-  add_index "game_histories", ["player_id"], name: "index_game_histories_on_player_id"
-  add_index "game_histories", ["room_id"], name: "index_game_histories_on_room_id"
 
   create_table "player_ratings", force: :cascade do |t|
     t.integer  "player_id"
@@ -78,24 +75,22 @@ ActiveRecord::Schema.define(version: 20190123185753) do
     t.string   "image_url"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.float    "rating_skill",                 default: 25.0
-    t.float    "rating_deviation",             default: 8.333333333333334
-    t.string   "wallet",           limit: 255
-    t.boolean  "is_archived",                  default: false
-    t.string   "pin",                          default: "0000",            null: false
+    t.float    "rating_skill",     default: 25.0
+    t.float    "rating_deviation", default: 8.333333333333334
+    t.string   "wallet"
+    t.boolean  "is_archived",      default: false
+    t.string   "pin",              default: "0000",            null: false
+    t.index ["rfid_hash"], name: "index_players_on_rfid_hash"
   end
-
-  add_index "players", ["rfid_hash"], name: "index_players_on_rfid_hash"
 
   create_table "room_players", force: :cascade do |t|
     t.integer "room_id"
     t.integer "player_id"
     t.string  "team",          limit: 5
     t.integer "player_number"
+    t.index ["player_id"], name: "index_room_players_on_player_id"
+    t.index ["room_id"], name: "index_room_players_on_room_id"
   end
-
-  add_index "room_players", ["player_id"], name: "index_room_players_on_player_id"
-  add_index "room_players", ["room_id"], name: "index_room_players_on_room_id"
 
   create_table "rooms", force: :cascade do |t|
     t.string   "client_token"
@@ -109,9 +104,9 @@ ActiveRecord::Schema.define(version: 20190123185753) do
     t.string   "game_session_id"
     t.datetime "increment_at"
     t.integer  "last_request_id"
-    t.integer  "initial_serving_team",             default: 0
-    t.integer  "streak",                           default: 0
-    t.text     "streak_history",                   default: ""
+    t.integer  "initial_serving_team", default: 0
+    t.integer  "streak",               default: 0
+    t.text     "streak_history",       default: ""
     t.datetime "start_time"
     t.datetime "end_time"
   end
@@ -147,9 +142,8 @@ ActiveRecord::Schema.define(version: 20190123185753) do
     t.boolean  "active"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["room_id"], name: "index_seasons_on_room_id"
   end
-
-  add_index "seasons", ["room_id"], name: "index_seasons_on_room_id"
 
   create_table "stall_stats", force: :cascade do |t|
     t.datetime "usage_start"
@@ -181,10 +175,9 @@ ActiveRecord::Schema.define(version: 20190123185753) do
     t.integer "total_points_scored"
     t.integer "total_points_scored_against"
     t.integer "season_id"
+    t.index ["player_id", "week_start", "has_completed_aggregation", "player_count"], name: "weekly_stats_lookup"
+    t.index ["player_id"], name: "index_weekly_stats_on_player_id"
+    t.index ["season_id"], name: "index_weekly_stats_on_season_id"
   end
-
-  add_index "weekly_stats", ["player_id", "week_start", "has_completed_aggregation", "player_count"], name: "weekly_stats_lookup"
-  add_index "weekly_stats", ["player_id"], name: "index_weekly_stats_on_player_id"
-  add_index "weekly_stats", ["season_id"], name: "index_weekly_stats_on_season_id"
 
 end

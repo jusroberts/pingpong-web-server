@@ -1,2 +1,2 @@
-class ScoreHistory < ActiveRecord::Base
+class ScoreHistory < ApplicationRecord
 end
