@@ -1,6 +1,6 @@
 %div.player-select
   - @players.each do |player|
-    =link_to room_game_login_as_player_path(id: @id, player_id: player.id), class: "player" do
+    =link_to room_game_login_as_player_path(id: @id, player_id: player.id, badged_player_id: @badged_player_id), class: "player" do
       =image_tag "#{player.image_url}", alt: "#{player.name}", height: '175', width: '175', class: 'player-icon'
       %div.player-name
         #{player.name}
