@@ -35,7 +35,8 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'rooms#home'
-
+  
+  get '/api/rooms/:id/end' => 'rooms#end_game'
   get '/api/rooms/:id/team/:team/increment/:request_id' => 'rooms#increment_score', as: :increment_score
   get '/api/rooms/:id/team/:team/decrement/:request_id' => 'rooms#decrement_score', as: :decrement_score
   get '/api/rooms/:id/team/:team/taunt/:request_id' => 'rooms#taunt', as: :taunt

@@ -11,11 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190123222319) do
+ActiveRecord::Schema.define(version: 20190123225514) do
 
   create_table "bathrooms", force: :cascade do |t|
-    t.string   "name",                 limit: 255
-    t.string   "token",                limit: 255
+    t.string   "name"
+    t.string   "token"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "last_heard_from_time"
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 20190123222319) do
     t.integer  "room_id"
     t.integer  "player_id"
     t.integer  "game_id"
-    t.string   "game_session_id",     limit: 255
+    t.string   "game_session_id"
     t.integer  "player_count"
     t.integer  "player_team_score"
     t.integer  "opponent_team_score"
@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 20190123222319) do
     t.datetime "updated_at"
     t.float    "skill_change"
     t.float    "deviation_change"
-    t.text     "team",                            default: ""
+    t.text     "team",                default: ""
   end
 
   add_index "game_histories", ["game_id", "game_session_id"], name: "index_game_histories_on_game_id_and_game_session_id"
@@ -72,14 +72,14 @@ ActiveRecord::Schema.define(version: 20190123222319) do
   end
 
   create_table "players", force: :cascade do |t|
-    t.string   "rfid_hash",        limit: 255
-    t.string   "name",             limit: 255
-    t.string   "image_url",        limit: 255
+    t.string   "rfid_hash"
+    t.string   "name"
+    t.string   "image_url"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "rating_skill",     default: 25.0
     t.float    "rating_deviation", default: 8.333333333333334
-    t.string   "wallet",           limit: 255
+    t.string   "wallet"
     t.boolean  "is_archived",      default: false
     t.string   "pin",              default: "0000",            null: false
   end
@@ -97,20 +97,20 @@ ActiveRecord::Schema.define(version: 20190123222319) do
   add_index "room_players", ["room_id"], name: "index_room_players_on_room_id"
 
   create_table "rooms", force: :cascade do |t|
-    t.string   "client_token",         limit: 255
+    t.string   "client_token"
     t.integer  "team_a_score"
     t.integer  "team_b_score"
-    t.string   "name",                 limit: 255
+    t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "game"
-    t.integer  "player_count",                     default: 4,  null: false
-    t.string   "game_session_id",      limit: 255
+    t.integer  "player_count",         default: 4,  null: false
+    t.string   "game_session_id"
     t.datetime "increment_at"
     t.integer  "last_request_id"
-    t.integer  "initial_serving_team",             default: 0
-    t.integer  "streak",                           default: 0
-    t.text     "streak_history",                   default: ""
+    t.integer  "initial_serving_team", default: 0
+    t.integer  "streak",               default: 0
+    t.text     "streak_history",       default: ""
   end
 
   create_table "score_histories", force: :cascade do |t|

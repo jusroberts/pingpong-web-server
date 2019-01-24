@@ -236,7 +236,10 @@ class RoomsController < ApplicationController
 
   #/api/rooms/1/end
   def end_game
-    
+    if @room.client_token == params[:code]
+      ::WebsocketRails[:"room#{@room.id}"].trigger "end_game"
+    end
+    render :json => {}
   end
 
   #-------------------------------------------------------- END API----------------------------------------------------

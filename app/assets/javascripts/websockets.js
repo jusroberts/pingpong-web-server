@@ -67,6 +67,9 @@ class SocketHandler {
         channel.bind('new_game_refresh', function () {
             location.reload();
         });
+        channel.bind('end_game', function () {
+            socketHandler.runningGame.endGame();
+        });
 
         channel.bind("taunt", function (team) {
             socketHandler.runningGame.taunt(team);
