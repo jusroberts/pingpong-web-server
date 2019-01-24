@@ -6,6 +6,6 @@
   %div.player-name 
     #{@player.name}
   =label_tag "pin", "Enter PIN", class:"pin-entry-label"
-  =text_field_tag "pin", nil, class:"pin-entry"
+  =password_field_tag "pin", nil, class:"pin-entry", autofocus: true
   = submit_tag "OK!", class:"submit-pin-entry"
     
