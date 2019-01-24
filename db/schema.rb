@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190123225514) do
+ActiveRecord::Schema.define(version: 20190123185753) do
 
   create_table "bathrooms", force: :cascade do |t|
     t.string   "name"
@@ -54,7 +54,8 @@ ActiveRecord::Schema.define(version: 20190123225514) do
     t.datetime "updated_at"
     t.float    "skill_change"
     t.float    "deviation_change"
-    t.text     "team",                default: ""
+    t.text     "team",                            default: ""
+    t.integer  "duration_seconds",                default: 0
   end
 
   add_index "game_histories", ["game_id", "game_session_id"], name: "index_game_histories_on_game_id_and_game_session_id"
