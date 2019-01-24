@@ -1,0 +1,29 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  player_id: 1
+  season_id: 1
+  has_completed_aggregation: false
+  player_count: 1
+  wins: 1
+  losses: 1
+  most_defeated_player_id: 1
+  most_defeated_by_player_id: 1
+  average_win_margin: 1.5
+  average_loss_margin: 1.5
+  total_points_scored: 1
+  total_points_scored_against: 1
+
+two:
+  player_id: 1
+  season_id: 1
+  has_completed_aggregation: false
+  player_count: 1
+  wins: 1
+  losses: 1
+  most_defeated_player_id: 1
+  most_defeated_by_player_id: 1
+  average_win_margin: 1.5
+  average_loss_margin: 1.5
+  total_points_scored: 1
+  total_points_scored_against: 1

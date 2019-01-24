@@ -1,0 +1,15 @@
+%p#notice= notice
+
+%p
+  %b Name:
+  = @season.name
+%p
+  %b Room:
+  = @season.room
+%p
+  %b Active:
+  = @season.active
+
+= link_to 'Edit', edit_season_path(@season)
+\|
+= link_to 'Back', seasons_path
