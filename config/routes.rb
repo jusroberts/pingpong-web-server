@@ -9,6 +9,7 @@ Rails.application.routes.draw do
   resources :rooms do
       resources :seasons
       get 'controller' => 'rooms#controller'
+      get 'leaderboard' => 'rooms#leaderboard'
       get 'game/interstitial' => 'rooms#interstitial', as: :game_interstitial
       get 'game/new' => 'rooms#game_new', as: :game_new
       post 'game/new' => 'rooms#game_new_post', as: :game_new_post
@@ -46,6 +47,7 @@ Rails.application.routes.draw do
   get '/api/rooms/:room_id/players/optimize' => 'players#optimize_teams', as: :optimize_teams
   get '/api/rooms/:room_id/players/rank' => 'players#get_rank', as: :get_player_rank
   get '/api/rooms/:room_id/send_current_scores' => 'rooms#send_current_scores'
+  get '/api/rooms/:id/activeseason' => 'rooms#active_season'
   get '/api/players' => 'players#list_all_players'
 
 

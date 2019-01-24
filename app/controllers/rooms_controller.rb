@@ -244,6 +244,12 @@ class RoomsController < ApplicationController
     render :json => {}
   end
 
+  # /api/rooms/1/activeseason
+  def active_season
+    active_season = @room.get_active_season
+    render :json => {:id => active_season.id, :name => active_season.name}
+  end
+
   #-------------------------------------------------------- END API----------------------------------------------------
 
   def game_new
@@ -345,6 +351,22 @@ class RoomsController < ApplicationController
   end
 
   def controller
+  end
+
+  def leaderboard
+    season_id = @room.get_active_season.id
+    if params[:ignore_deviation]
+      @allPlayers = PlayerDao::get_leaderboard_players(RatingManager::TRUESKILL_SIGMA, 500, season_id)
+    else
+      @allPlayers = PlayerDao::get_leaderboard_players(PlayerDao::LEADERBOARD_DEVIATION_CUTOFF, 50, season_id)
+    end
+    @players = []
+    @allPlayers.each do |player|
+      if player && player.rating_deviation < PlayerDao::LEADERBOARD_DEVIATION_CUTOFF && !player.is_archived
+        @players << player
+      end
+    end
+    @players
   end
   
   private

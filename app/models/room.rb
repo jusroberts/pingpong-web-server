@@ -110,6 +110,17 @@ class Room < ActiveRecord::Base
       player_history.skill_change = player.rating_skill - starting_skills[player.id]
       player_history.deviation_change = player.rating_deviation - starting_deviations[player.id]
       player_history.save
+      active_season_id = room.get_active_season.id
+      player_rating = player.player_ratings.where(:season_id => active_season_id).first
+      if player_rating == nil
+        player_rating = PlayerRating.new(
+          player_id: player.id,
+          season_id: active_season_id
+        )
+      end
+      player_rating.skill = player.rating_skill
+      player_rating.deviation = player.rating_deviation
+      player_rating.save
     end
   end
 
@@ -169,5 +180,9 @@ class Room < ActiveRecord::Base
     else
       return streak_history.split(",").map(&:to_i)
     end
+  end
+
+  def get_active_season
+    return seasons.where(:active => true).first
   end
 end
