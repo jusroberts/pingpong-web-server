@@ -183,22 +183,27 @@ hr.players {
 .submit-cancel-button-container {
   padding-left: 10%;
   padding-right: 10%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
-.cancel-button, .submit-button {
+.cancel-button, 
+.submit-button, 
+.new-badge-for-existing-player-button {
   font-size: 4em;
   background: none;
   color: white;
   border-style: solid;
   border-width: thick;
   display: inline-block;
+  line-height: 1em;
 }
-.cancel-button:hover, .submit-button:hover {
+.cancel-button:hover, 
+.submit-button:hover, 
+.new-badge-for-existing-player-button:hover {
   background: none;
 }
-
-.cancel-button { float: left; }
-.submit-button { float: right; }
 
 .player-select {
   display: flex;
