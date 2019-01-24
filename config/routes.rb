@@ -1,10 +1,13 @@
 Rails.application.routes.draw do
+  resources :season_stats
+  resources :player_ratings
   get 'reports' => 'reports#index', as: :report_index
   get 'reports/leaderboard' => 'reports#leaderboard', as: :report_leaderboard
   get 'reports/player/:player_id' => 'reports#player', as: :player_report
   get 'reports/historyTable/:player_id_1(/:player_id_2)' => 'reports#history', as: :history_table
 
   resources :rooms do
+      resources :seasons
       get 'controller' => 'rooms#controller'
       get 'game/interstitial' => 'rooms#interstitial', as: :game_interstitial
       get 'game/new' => 'rooms#game_new', as: :game_new
@@ -32,7 +35,8 @@ Rails.application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'rooms#home'
-
+  
+  get '/api/rooms/:id/end' => 'rooms#end_game'
   get '/api/rooms/:id/team/:team/increment/:request_id' => 'rooms#increment_score', as: :increment_score
   get '/api/rooms/:id/team/:team/decrement/:request_id' => 'rooms#decrement_score', as: :decrement_score
   get '/api/rooms/:id/team/:team/taunt/:request_id' => 'rooms#taunt', as: :taunt
