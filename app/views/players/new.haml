@@ -14,12 +14,24 @@
               -if i%10 == 0
                 <br>
               =link_to letter, '#', class: 'keyboard-buttons character', onclick: "append_character('#{letter}')"
-          .characters#delete-and-submit
+          .characters.delete-row
             =link_to "DEL", '#', class: 'keyboard-buttons delete', onclick: "remove_character()"
-            =submit_tag "OK!", class: "keyboard-buttons submit"
+    .game-column#pin-input-section
+      %div#block-inline
+        =label_tag :pin, "pin:", class:"pin-text"
+        =text_field_tag :pin, "", class: "player-pin-text-input"
+        .keyboard
+          .digits
+            -digits.each_with_index do |digit, i|
+              -if i%3 == 0
+                <br>
+              =link_to digit, '#', class: "keyboard-buttons digit #{digit == '0' ? 'zero' : ''}", onclick: "append_pin_digit('#{digit}')"
+          .digits.delete-row
+            =link_to "DEL", '#', class: 'keyboard-buttons delete', onclick: "remove_pin_digit()"
   %hr.players
-  .cancel-button-container
-    =link_to "CANCEL", '#', class: 'cancel-button', onclick: "history.go(-1);"
+  .submit-cancel-button-container
+    =button_tag "CANCEL", type: "button", class: 'cancel-button', onclick: "history.go(-1);"
+    =submit_tag "OK!", class: 'submit-button'
 
   :javascript
     function append_character(letter) {
@@ -32,6 +44,18 @@
     function remove_character() {
         var inputValue = $(".player-name-text-input").val();
         $(".player-name-text-input").val(inputValue.substring(0, inputValue.length-1));
+    }
+
+    function append_pin_digit(digit) {
+      var current_input = $(".player-name-text-input").val();
+      if (current_input.length < 12) {
+        $(".player-pin-text-input").val(  $(".player-pin-text-input").val() + digit);
+      }
+    }
+
+    function remove_pin_digit() {
+        var inputValue = $(".player-pin-text-input").val();
+        $(".player-pin-text-input").val(inputValue.substring(0, inputValue.length-1));
     }
 
     window.onload = function() {
