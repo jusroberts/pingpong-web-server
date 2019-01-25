@@ -99,3 +99,12 @@ body.reports {
   color: white;
   margin: .5rem;
 }
+
+.change-pin-link {
+  border: 5px solid yellow;
+  padding: 5px 10px;
+}
+.change-pin-link:hover {
+  background: yellow;
+  color: black;
+}

@@ -1,0 +1,13 @@
+=form_tag change_player_pin_post_path(id: @id, player_id: @player.id), class: 'change-player-pin' do
+  - if @error
+    %div.error
+      #{@error}
+  =image_tag @player.image_url, alt: @player.name, height: 200, width: 200, class: 'player-icon'
+  %div.player-name 
+    #{@player.name}
+  =label_tag "current_pin", "Current PIN", class:"pin-entry-label"
+  =password_field_tag "current_pin", nil, class:"pin-entry"
+  =label_tag "new_pin", "New PIN", class:"pin-entry-label"
+  =password_field_tag "new_pin", nil, class:"pin-entry"
+  =submit_tag "OK!", class:"submit-pin-entry"
+    

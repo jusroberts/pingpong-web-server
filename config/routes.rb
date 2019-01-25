@@ -7,6 +7,9 @@ Rails.application.routes.draw do
   get 'reports/gameHistory/:game_id' => 'reports#game', as: :game_report
   get 'reports/historyTable/:player_id_1(/:player_id_2)' => 'reports#history', as: :history_table
 
+  get 'players/:player_id/change_pin' => 'players#change_player_pin', as: :change_player_pin
+  post 'players/:player_id/change_pin' => 'players#change_player_pin_post', as: :change_player_pin_post
+
   resources :rooms do
       resources :seasons do
         get 'leaderboard' => 'seasons#leaderboard', as: :leaderboard
