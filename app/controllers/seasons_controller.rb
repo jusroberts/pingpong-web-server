@@ -68,9 +68,7 @@ class SeasonsController < ApplicationController
 		if params.key? :game_type
       game_type = params[:game_type].to_i
     end
-    if game_type == 1
-      game_type = 1
-    elsif
+    if game_type != 1
       game_type = 2
     end
     if ignore_deviation
