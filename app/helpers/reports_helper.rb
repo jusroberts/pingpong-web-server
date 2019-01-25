@@ -26,4 +26,46 @@ module ReportsHelper
 
     [player_record, player_team_names.join(' and '), opponent_team_names.join(' and ')]
   end
+
+  # @param player_id [Integer]
+  # @param records [Hash{Integer => Array<GameHistory>}]
+  def did_player_win(player_id, records)
+    player_record = records.select { |record| record.player_id == player_id }.first
+    player_record.win
+  end
+
+  def team_a_score
+    @team_a_score = 0
+  end
+
+  def team_b_score
+    @team_b_score = 0
+  end
+
+  def increment_score(team)
+    if @team_a_score == nil
+      team_a_score
+    end
+    if @team_b_score == nil
+      team_b_score
+    end
+
+    if team == "a"
+      @team_a_score = @team_a_score+1
+    else
+      @team_b_score = @team_b_score+1
+    end
+  end
+
+  def get_score(team)
+    if team == "a"
+      @team_a_score
+    else
+      @team_b_score
+    end
+  end
+
+  def get_game_link game_id
+    link_to(game_id, game_report_path(game_id))
+  end
 end

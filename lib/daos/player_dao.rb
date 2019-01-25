@@ -32,4 +32,9 @@ class PlayerDao
     end
     return_player_ratings
   end
+
+  def self.get_player(player_id)
+    Player.where('id = ?', player_id)
+    .limit(1)
+  end
 end

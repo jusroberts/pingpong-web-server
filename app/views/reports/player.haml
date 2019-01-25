@@ -11,6 +11,9 @@
             = "#{@total_wins} - #{@total_losses}"
           %h1.street-fighter.text-center.flex-item
             = (@player.rating_skill * 1000).floor
+        =link_to change_player_pin_path(@player.id) do 
+          %h1.street-fighter.text-center.flex-item.change-pin-link
+            = "Change PIN"
 - @stats.each do |type_name, stats|
   %div.row
     %div.column.small-4

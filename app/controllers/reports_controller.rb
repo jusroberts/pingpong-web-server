@@ -5,6 +5,16 @@ class ReportsController < ApplicationController
     @players = Player.all.order(id: :asc)
   end
 
+  def game
+    @report_game_id = params[:game_id]
+    @score_histories = ScoreHistoryDao::get_score_history(@report_game_id)
+    @game_histories = GameHistoryDao::get_histories_by_game_id(@report_game_id)
+    @player_ids = Array.new
+    @game_histories.each do |game_history|
+      @player_ids. << game_history.player_id
+    end
+  end
+
   def history
     primary_player_id = params[:player_id_1]
     secondary_player_id = params[:player_id_2]

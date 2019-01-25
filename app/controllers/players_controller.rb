@@ -4,7 +4,7 @@ class PlayersController < ApplicationController
   TEAM_IDS = [TEAM_A_ID, TEAM_B_ID]
 
   before_action :set_player, only: [:new_post, :confirm, :delete, :attach_image, :attach_image_post]
-  before_action :set_room_id, except: [:list_all_players]
+  before_action :set_room_id, except: [:list_all_players, :change_player_pin, :change_player_pin_post]
 
   def handle_player_hash
     # @type [String]
@@ -190,6 +190,39 @@ class PlayersController < ApplicationController
         error: "Incorrect pin!", 
         badged_player_id: params[:badged_player_id]
       )
+    end
+  end
+
+  def change_player_pin
+    player_id = params[:player_id]
+    @player = Player.find(player_id)
+    raise "No player found for id '#{player_id}'" unless @player
+
+    if params[:error]
+      @error = params[:error]
+    end
+  end
+  def change_player_pin_post
+    player_id = params[:player_id]
+    @player = Player.find(player_id)
+    raise "No player found for id '#{player_id}'" unless @player
+
+    new_pin = params[:new_pin]
+    current_pin = params[:current_pin]
+    if @player.pin != current_pin
+      redirect_to change_player_pin_path(
+        player_id: @player.id,
+        error: "Incorrect pin!"
+      )
+    elsif !new_pin || new_pin.size < 3
+      redirect_to change_player_pin_path(
+        player_id: @player.id,
+        error: "Invalid pin; your pin must be at least 3 digits long."
+      )
+    else
+      @player.pin = new_pin
+      @player.save
+      redirect_to player_report_path(player_id: @player.id)
     end
   end
 
