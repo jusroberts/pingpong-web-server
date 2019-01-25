@@ -8,7 +8,7 @@ task cleanup: :environment do
             puts "killing game after #{time - room.updated_at}"
             #game is just sitting, let's kill
             room.end_game(true)
-            uri = URI.parse("http://localhost:3000/api/rooms/#{room.id}/end?code=#{room.client_token}")
+            uri = URI.parse("http://pardot-pingpong.herokuapp.com/api/rooms/#{room.id}/end?code=#{room.client_token}")
             response = Net::HTTP.get_response(uri)
         end
     end
