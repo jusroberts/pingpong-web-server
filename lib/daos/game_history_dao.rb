@@ -17,4 +17,11 @@ class GameHistoryDao
       game_history.game_id
     end
   end
+
+  # @param game_id [integer]
+  # @return [Hash{Integer => Array<GameHistory>}]
+  def self.get_histories_by_game_id(game_id)
+    GameHistory
+        .where('game_id = ?', game_id)
+  end
 end

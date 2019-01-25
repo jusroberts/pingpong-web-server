@@ -11,11 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190124161935) do
+ActiveRecord::Schema.define(version: 20190124195520) do
 
   create_table "bathrooms", force: :cascade do |t|
-    t.string   "name"
-    t.string   "token"
+    t.string   "name",                 limit: 255
+    t.string   "token",                limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "last_heard_from_time"
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 20190124161935) do
     t.integer  "room_id"
     t.integer  "player_id"
     t.integer  "game_id"
-    t.string   "game_session_id"
+    t.string   "game_session_id",     limit: 255
     t.integer  "player_count"
     t.integer  "player_team_score"
     t.integer  "opponent_team_score"
@@ -73,9 +73,9 @@ ActiveRecord::Schema.define(version: 20190124161935) do
   end
 
   create_table "players", force: :cascade do |t|
-    t.string   "rfid_hash"
-    t.string   "name"
-    t.string   "image_url"
+    t.string   "rfid_hash",        limit: 255
+    t.string   "name",             limit: 255
+    t.string   "image_url",        limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "rating_skill",     default: 25.0
@@ -98,30 +98,27 @@ ActiveRecord::Schema.define(version: 20190124161935) do
   add_index "room_players", ["room_id"], name: "index_room_players_on_room_id"
 
   create_table "rooms", force: :cascade do |t|
-    t.string   "client_token"
+    t.string   "client_token",         limit: 255
     t.integer  "team_a_score"
     t.integer  "team_b_score"
-    t.string   "name"
+    t.string   "name",                 limit: 255
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "game"
-    t.integer  "player_count",         default: 4,  null: false
-    t.string   "game_session_id"
+    t.integer  "player_count",                     default: 4,  null: false
+    t.string   "game_session_id",      limit: 255
     t.datetime "increment_at"
     t.integer  "last_request_id"
     t.integer  "initial_serving_team", default: 0
     t.integer  "streak",               default: 0
     t.text     "streak_history",       default: ""
     t.datetime "start_time"
-    t.datetime "end_time"
   end
 
   create_table "score_histories", force: :cascade do |t|
     t.integer  "game_id"
     t.string   "team"
-    t.integer  "score_change"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at", null: false
   end
 
   create_table "season_stats", force: :cascade do |t|

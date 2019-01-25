@@ -12,13 +12,12 @@ class Room < ActiveRecord::Base
     if memorable_game?
       save_history(room)
     end
-
-    update_attributes(team_a_score: 0, team_b_score: 0, game: false)
+    update_attributes(team_a_score: 0, team_b_score: 0, streak: 0, streak_history: "")
     if quit
       room_players.delete_all
-      update_attribute(:game_session_id, nil)
+      update_attributes(game_session_id: nil, game: false)
     else
-      update_attributes(team_a_score: 0, team_b_score: 0, game: true)
+      update_attributes(team_a_score: 0, team_b_score: 0, game: true, start_time: Time.now)
       room_players.each do |room_player|
         if room_player.team == "a"
           room_player.update_attribute(:team, "b")
@@ -122,6 +121,25 @@ class Room < ActiveRecord::Base
       player_rating.deviation = player.rating_deviation
       player_rating.save
     end
+
+    # Store score history for the game
+    streak_histories = streak_history.split(",").map(&:to_i)
+    streak_histories.each{ |streak_element|
+      team = "a"
+      score_change = 1
+      if streak_element < 0
+        team = "b"
+        score_change = -1
+      end
+      # @type [ScoreHistory]
+      score_history = ScoreHistory.new(
+         game_id: game_id,
+         team: team,
+         created_at: Time.now,
+      )
+      score_history.save
+      score_history
+    }
   end
 
   # @param room_player [RoomPlayer]
@@ -134,7 +152,7 @@ class Room < ActiveRecord::Base
         game_session_id: room.game_session_id,
         player_count: room.player_count,
         win: win,
-        duration_seconds: (room.end_time - room.start_time).to_i
+        duration_seconds: (Time.now - room.start_time).to_i
     )
     if room_player.team == PlayersController::TEAM_A_ID
       game_history.player_team_score = room.team_a_score
@@ -163,18 +181,18 @@ class Room < ActiveRecord::Base
 
   # @param increment_or_decrement boolean
   # @param team String
-  def update_streak(increment_or_decrement, team)
+  def update_streak(room, increment_or_decrement, team)
     if increment_or_decrement
-      new_streak = StreakHelper.new().update_streak_increment(team, get_streak_history)
+      new_streak = StreakHelper.new().update_streak_increment(team, get_streak_history(room.streak_history))
     else
-      new_streak = StreakHelper.new().update_streak_decrement(team, get_streak_history)
+      new_streak = StreakHelper.new().update_streak_decrement(team, get_streak_history(room.streak_history))
     end
     update_attribute(:streak, StreakHelper.new().get_new_streak(new_streak))
     update_attribute(:streak_history, new_streak.join(","))
   end
 
   #@return [int]
-  def get_streak_history
+  def get_streak_history(streak_history)
     if streak_history == nil
       return []
     else

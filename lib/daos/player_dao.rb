@@ -27,4 +27,9 @@ class PlayerDao
     end
     players
   end
+
+  def self.get_player(player_id)
+    Player.where('id = ?', player_id)
+    .limit(1)
+  end
 end
