@@ -26,6 +26,7 @@ Rails.application.routes.draw do
 
       post 'game/new/players/clear' => 'rooms#players_clear_post', as: :game_players_clear_post
       get 'game/new/players/create' => 'players#new', as: :game_new_player
+      get 'game/new/players/create/cancel' => 'players#new_cancel', as: :game_new_player_cancel
       post 'game/new/players/create' => 'players#new_post', as: :game_new_player_post
       get 'game/new/players/:player_id' => 'players#confirm', as: :game_player_confirm
       delete 'game/new/players/:player_id' => 'players#delete', as: :game_player_delete

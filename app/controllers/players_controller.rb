@@ -43,6 +43,15 @@ class PlayersController < ApplicationController
     add_new_player(@id, @player)
   end
 
+  def new_cancel
+    player = Player.where(name: nil).last
+    remove_player_from_room_if_present(player)
+    if player
+      player.delete
+    end
+    redirect_to room_game_newfull_path
+  end
+
   def new_post
     raise("Failed to find player for id #{params[:player_id]}") if @player.nil?
     @player.name = params[:name]
