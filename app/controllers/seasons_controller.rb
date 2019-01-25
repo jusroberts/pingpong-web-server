@@ -63,14 +63,16 @@ class SeasonsController < ApplicationController
   end
 
   def leaderboard
-    if params[:ignore_deviation]
-      @allPlayers = PlayerDao::get_leaderboard_players(RatingManager::TRUESKILL_SIGMA, 500, @season.id)
+    season_id = @season.id
+    ignore_deviation = params.key? :ignore_deviation
+    if ignore_deviation
+      @allPlayers = PlayerDao::get_leaderboard_players(RatingManager::TRUESKILL_SIGMA, 500, season_id)
     else
-      @allPlayers = PlayerDao::get_leaderboard_players(PlayerDao::LEADERBOARD_DEVIATION_CUTOFF, 50, @season.id)
+      @allPlayers = PlayerDao::get_leaderboard_players(PlayerDao::LEADERBOARD_DEVIATION_CUTOFF, 50, season_id)
     end
     @players = []
     @allPlayers.each do |player|
-      if player && player.rating_deviation < PlayerDao::LEADERBOARD_DEVIATION_CUTOFF && !player.is_archived
+      if player && (ignore_deviation || player.rating_deviation < PlayerDao::LEADERBOARD_DEVIATION_CUTOFF) && !player.is_archived
         @players << player
       end
     end
