@@ -112,23 +112,6 @@ class Room < ActiveRecord::Base
       player_history.deviation_change = player_rating.deviation - starting_deviations[player_rating.player_id]
       player_history.save
     end
-  end
-
-  def get_player_rating(room_player, room)
-    active_season_id = room.get_active_season.id
-    game_type = room.player_count / 2 # 1: singles, 2: doubles
-    player = Player.find_by(:id => room_player.player_id)
-    player_rating = player.player_ratings.where(:season_id => active_season_id).where(:game_type => game_type).first
-    if player_rating == nil
-      player_rating = PlayerRating.new(
-        player_id: player.id,
-        season_id: active_season_id,
-        game_type: game_type,
-        skill: RatingManager::TRUESKILL_MU,
-        deviation: RatingManager::TRUESKILL_SIGMA
-      )
-      player_rating.save
-    end
 
     # Store score history for the game
     streak_histories = streak_history.split(",").map(&:to_i)
@@ -148,6 +131,23 @@ class Room < ActiveRecord::Base
       score_history.save
       score_history
     }
+  end
+
+  def get_player_rating(room_player, room)
+    active_season_id = room.get_active_season.id
+    game_type = room.player_count / 2 # 1: singles, 2: doubles
+    player = Player.find_by(:id => room_player.player_id)
+    player_rating = player.player_ratings.where(:season_id => active_season_id).where(:game_type => game_type).first
+    if player_rating == nil
+      player_rating = PlayerRating.new(
+        player_id: player.id,
+        season_id: active_season_id,
+        game_type: game_type,
+        skill: RatingManager::TRUESKILL_MU,
+        deviation: RatingManager::TRUESKILL_SIGMA
+      )
+      player_rating.save
+    end
 
     return player_rating
   end
