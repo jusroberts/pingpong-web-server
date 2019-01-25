@@ -1,5 +1,7 @@
-%h1 New season
+%div.row
+  %div.column.small-12
+    %h1.street-fighter.sublabel.text-center
+      New Season
+    = render 'form'
 
-= render 'form'
-
-= link_to 'Back', room_seasons_path
+    = link_to 'Back', room_seasons_path, class: "street-fighter font-white"

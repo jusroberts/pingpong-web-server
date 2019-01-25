@@ -3,7 +3,9 @@
     %li
       =link_to "Current Game", root_path
     %li
-      =link_to "Leaderboard", report_leaderboard_path
+      =link_to "Leaderboard", room_leaderboard_path(@room)
+    %li
+      =link_to "Seasonal Leaderboards", room_seasons_path(@room)
     %li
       =link_to "Players", report_index_path
     %li

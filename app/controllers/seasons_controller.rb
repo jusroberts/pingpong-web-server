@@ -1,5 +1,5 @@
 class SeasonsController < ApplicationController
-  before_action :set_season, only: [:show, :edit, :update, :destroy]
+  before_action :set_season, only: [:show, :edit, :update, :destroy, :leaderboard]
   before_action :set_room
 
   # GET /seasons
@@ -29,7 +29,7 @@ class SeasonsController < ApplicationController
 
     respond_to do |format|
       if @season.save
-        format.html { redirect_to [@room, @season], notice: 'Season was successfully created.' }
+        format.html { redirect_to room_seasons_url, notice: 'Season was successfully created.' }
         format.json { render :show, status: :created, location: @season }
       else
         format.html { render :new }
@@ -62,10 +62,25 @@ class SeasonsController < ApplicationController
     end
   end
 
+  def leaderboard
+    if params[:ignore_deviation]
+      @allPlayers = PlayerDao::get_leaderboard_players(RatingManager::TRUESKILL_SIGMA, 500, @season.id)
+    else
+      @allPlayers = PlayerDao::get_leaderboard_players(PlayerDao::LEADERBOARD_DEVIATION_CUTOFF, 50, @season.id)
+    end
+    @players = []
+    @allPlayers.each do |player|
+      if player && player.rating_deviation < PlayerDao::LEADERBOARD_DEVIATION_CUTOFF && !player.is_archived
+        @players << player
+      end
+    end
+    @players
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_season
-      @season = Season.find(params[:id])
+      @season = Season.find(params[:id]) rescue Season.find(params[:season_id])
     end
 
     def set_room

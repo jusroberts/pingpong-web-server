@@ -7,9 +7,11 @@ Rails.application.routes.draw do
   get 'reports/historyTable/:player_id_1(/:player_id_2)' => 'reports#history', as: :history_table
 
   resources :rooms do
-      resources :seasons
+      resources :seasons do
+        get 'leaderboard' => 'seasons#leaderboard', as: :leaderboard
+      end
       get 'controller' => 'rooms#controller'
-      get 'leaderboard' => 'rooms#leaderboard'
+      get 'leaderboard' => 'rooms#leaderboard', as: :leaderboard
       get 'game/interstitial' => 'rooms#interstitial', as: :game_interstitial
       get 'game/new' => 'rooms#game_new', as: :game_new
       post 'game/new' => 'rooms#game_new_post', as: :game_new_post

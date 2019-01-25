@@ -1,16 +1,16 @@
 = form_for [@room, @season] do |f|
   - if @season.errors.any?
     #error_explanation
-      %h2= "#{pluralize(@season.errors.count, "error")} prohibited this season from being saved:"
+      %h2.font-white= "#{pluralize(@season.errors.count, "error")} prohibited this season from being saved:"
       %ul
         - @season.errors.full_messages.each do |msg|
-          %li= msg
+          %li.font-white= msg
 
   .field
-    = f.label :name
+    = f.label :name, class: "font-white street-fighter"
     = f.text_field :name
   .field
-    = f.label :active
-    = f.check_box :active
+    = f.label :active, class: "font-white street-fighter"
+    = f.check_box :active, checked: true
   .actions
     = f.submit 'Save'

@@ -1,3 +1,18 @@
 // Place all the styles related to the seasons controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+body {
+    background: black;
+}
+*[data-href] {
+    cursor: pointer;
+}
+td a {
+    display:inline-block;
+    min-height:100%;
+    width:100%;
+    padding: 10px; /* add your padding here */
+}
+td {
+    padding:0;  
+}
