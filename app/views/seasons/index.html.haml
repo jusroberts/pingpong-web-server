@@ -14,7 +14,7 @@
     - @seasons.each do |season|
       %tr
         %td= season.name
-        %td= season.room
+        %td= season.room.id
         %td= season.active
         %td= link_to 'Show', room_season_url(@room, season)
         %td= link_to 'Edit', edit_room_season_path(@room, season)
