@@ -363,12 +363,12 @@ class RoomsController < ApplicationController
       game_type = 2
     end
     if ignore_deviation
-      @allPlayerRatingss = PlayerDao::get_leaderboard_player_ratings(season_id, game_type, RatingManager::TRUESKILL_SIGMA, 500)
+      @allPlayerRatings = PlayerDao::get_leaderboard_player_ratings(season_id, game_type, RatingManager::TRUESKILL_SIGMA, 500)
     else
-      @allPlayerRatingss = PlayerDao::get_leaderboard_player_ratings(season_id, game_type, PlayerDao::LEADERBOARD_DEVIATION_CUTOFF, 50)
+      @allPlayerRatings = PlayerDao::get_leaderboard_player_ratings(season_id, game_type, PlayerDao::LEADERBOARD_DEVIATION_CUTOFF, 50)
     end
     @player_ratings = []
-    @allPlayerRatingss.each do |player_rating|
+    @allPlayerRatings.each do |player_rating|
       if ignore_deviation || player_rating.deviation < PlayerDao::LEADERBOARD_DEVIATION_CUTOFF
         @player_ratings << player_rating
       end
