@@ -184,7 +184,12 @@ class PlayersController < ApplicationController
 
       redirect_to room_game_newfull_path
     else
-      redirect_to room_game_login_as_player_path(id: @id, player_id: @player.id, error: "Incorrect pin!")
+      redirect_to room_game_login_as_player_path(
+        id: @id, 
+        player_id: @player.id, 
+        error: "Incorrect pin!", 
+        badged_player_id: params[:badged_player_id]
+      )
     end
   end
 

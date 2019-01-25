@@ -1,5 +1,5 @@
 
-desc 'Data backfill tasks'
+desc "Auto-end any game that's been inactive for 20+ minutes"
 task cleanup: :environment do
     time = Time.new
     Room.all.each do |room|
