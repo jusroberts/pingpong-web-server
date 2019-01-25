@@ -8,9 +8,9 @@ class Room < ActiveRecord::Base
   TEAM_B_SERVING = 2
 
   # @param quit [boolean]
-  def end_game(quit, room)
+  def end_game(quit)
     if memorable_game?
-      save_history(room)
+      save_history(self)
     end
     update_attributes(team_a_score: 0, team_b_score: 0, streak: 0, streak_history: "")
     if quit

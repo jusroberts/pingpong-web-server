@@ -458,7 +458,7 @@ class RoomsController < ApplicationController
 
     def private_game_end_post
       puts("End game request received: #{request.inspect}")
-      @room.end_game(params[:quit].present?, @room)
+      @room.end_game(params[:quit].present?)
     end
 
 end
