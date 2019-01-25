@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190124195520) do
+ActiveRecord::Schema.define(version: 20190125152652) do
 
   create_table "bathrooms", force: :cascade do |t|
     t.string   "name",                 limit: 255
@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 20190124195520) do
     t.float    "deviation",  default: 8.333333333333334
     t.datetime "created_at",                             null: false
     t.datetime "updated_at",                             null: false
+    t.integer  "game_type",  default: 2
   end
 
   create_table "players", force: :cascade do |t|

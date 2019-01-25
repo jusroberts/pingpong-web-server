@@ -20,19 +20,18 @@
             %h4.street-fighter
               Deviation
       %tbody
-        - current_rank = 0
-        - @players.each do |player|
-          - current_rank += 1
+        - @player_ratings.each_with_index do |player_rating,index|
+          - player = player_rating.player
           %tr
             %td
               %h5.street-fighter
-                =current_rank
+                =index + 1
             %td
               %h5.street-fighter
                 =link_to(player.name, "/reports/player/#{player.id}", {:class => 'link-label'})
             %td
               %h5.street-fighter
-                =(player.rating_skill * 1000).floor
+                =(player_rating.skill * 1000).floor
             %td
               %h5.street-fighter
-                =player.rating_deviation
+                =player_rating.deviation
