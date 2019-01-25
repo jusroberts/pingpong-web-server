@@ -7,6 +7,7 @@
       %th Season
       %th Skill
       %th Deviation
+      %th Singles/Doubles
 
   %tbody
     - @player_ratings.each do |player_rating|
@@ -15,6 +16,7 @@
         %td= player_rating.season_id
         %td= player_rating.skill
         %td= player_rating.deviation
+        %td= player_rating.game_type
 
 %br
 

@@ -12,13 +12,12 @@ class Room < ActiveRecord::Base
     if memorable_game?
       save_history(room)
     end
-
-    update_attributes(team_a_score: 0, team_b_score: 0, game: false)
+    update_attributes(team_a_score: 0, team_b_score: 0, streak: 0, streak_history: "")
     if quit
       room_players.delete_all
-      update_attribute(:game_session_id, nil)
+      update_attributes(game_session_id: nil, game: false)
     else
-      update_attributes(team_a_score: 0, team_b_score: 0, game: true)
+      update_attributes(team_a_score: 0, team_b_score: 0, game: true, start_time: Time.now)
       room_players.each do |room_player|
         if room_player.team == "a"
           room_player.update_attribute(:team, "b")
@@ -42,40 +41,40 @@ class Room < ActiveRecord::Base
 
   def save_history(room)
     # @type [Array<RoomPlayer>]
-    team_a_players = room_players.select {|room_player| room_player.team == PlayersController::TEAM_A_ID}
+    team_a_player_ratings = room_players.select {|room_player| room_player.team == PlayersController::TEAM_A_ID}
     # @type [Array<RoomPlayer>]
-    team_b_players = room_players.select {|room_player| room_player.team == PlayersController::TEAM_B_ID}
+    team_b_player_ratings = room_players.select {|room_player| room_player.team == PlayersController::TEAM_B_ID}
 
     # We should batch this but ActiveRecord makes it a pain in the ass and I don't care that much
     # @type [Hash{Integer => GameHistory}]
     histories = {}
-    # @type [Array<Player>]
-    winning_players = []
-    # @type [Array<Player>]
-    losing_players = []
+    # @type [Array<PlayerRating>]
+    winning_player_ratings = []
+    # @type [Array<PlayerRating>]
+    losing_player_ratings = []
     if team_a_score > team_b_score
       # Yay for team A
-      team_a_players.each do |room_player|
+      team_a_player_ratings.each do |room_player|
         history = new_game_history(room, room_player, true)
         histories[room_player.player_id] = history
-        winning_players << Player.find_by(:id => room_player.player_id)
+        winning_player_ratings << get_player_rating(room_player, room)
       end
-      team_b_players.each do |room_player|
+      team_b_player_ratings.each do |room_player|
         history = new_game_history(room, room_player, false)
         histories[room_player.player_id] = history
-        losing_players << Player.find_by(:id => room_player.player_id)
+        losing_player_ratings << get_player_rating(room_player, room)
       end
     else
-      team_a_players.each do |room_player|
+      team_a_player_ratings.each do |room_player|
         history = new_game_history(room, room_player, false)
         histories[room_player.player_id] = history
-        losing_players << Player.find_by(:id => room_player.player_id)
+        losing_player_ratings << get_player_rating(room_player, room)
       end
       # All glory to team B
-      team_b_players.each do |room_player|
+      team_b_player_ratings.each do |room_player|
         history = new_game_history(room, room_player, true)
         histories[room_player.player_id] = history
-        winning_players << Player.find_by(:id => room_player.player_id)
+        winning_player_ratings << get_player_rating(room_player, room)
       end
     end
 
@@ -89,39 +88,66 @@ class Room < ActiveRecord::Base
     starting_deviations = {}
 
     # Store starting ratings so we can calculate differential
-    players = winning_players + losing_players
-    players.each do |player|
-      starting_skills[player.id] = player.rating_skill
-      starting_deviations[player.id] = player.rating_deviation
+    player_ratings = winning_player_ratings + losing_player_ratings
+    player_ratings.each do |player_rating|
+      starting_skills[player_rating.player_id] = player_rating.skill
+      starting_deviations[player_rating.player_id] = player_rating.deviation
     end
 
     # Update skills
     margin = (team_a_score - team_b_score).abs
     manager = RatingManager.new
-    manager.process_game(winning_players, margin, losing_players, -margin)
-    winning_players.each { |player| player.save }
-    losing_players.each { |player| player.save }
+    manager.process_game(winning_player_ratings, margin, losing_player_ratings, -margin)
+    winning_player_ratings.each { |player_rating| player_rating.save }
+    losing_player_ratings.each { |player_rating| player_rating.save }
 
     # Calculate and store rating differentials
     # @type player [Player]
-    players.each do |player|
+    player_ratings.each do |player_rating|
       # @type [GameHistory]
-      player_history = histories[player.id]
-      player_history.skill_change = player.rating_skill - starting_skills[player.id]
-      player_history.deviation_change = player.rating_deviation - starting_deviations[player.id]
+      player_history = histories[player_rating.player_id]
+      player_history.skill_change = player_rating.skill - starting_skills[player_rating.player_id]
+      player_history.deviation_change = player_rating.deviation - starting_deviations[player_rating.player_id]
       player_history.save
-      active_season_id = room.get_active_season.id
-      player_rating = player.player_ratings.where(:season_id => active_season_id).first
-      if player_rating == nil
-        player_rating = PlayerRating.new(
-          player_id: player.id,
-          season_id: active_season_id
-        )
+    end
+
+    # Store score history for the game
+    streak_histories = streak_history.split(",").map(&:to_i)
+    streak_histories.each{ |streak_element|
+      team = "a"
+      score_change = 1
+      if streak_element < 0
+        team = "b"
+        score_change = -1
       end
-      player_rating.skill = player.rating_skill
-      player_rating.deviation = player.rating_deviation
+      # @type [ScoreHistory]
+      score_history = ScoreHistory.new(
+         game_id: game_id,
+         team: team,
+         created_at: Time.now,
+      )
+      score_history.save
+      score_history
+    }
+  end
+
+  def get_player_rating(room_player, room)
+    active_season_id = room.get_active_season.id
+    game_type = room.player_count / 2 # 1: singles, 2: doubles
+    player = Player.find_by(:id => room_player.player_id)
+    player_rating = player.player_ratings.where(:season_id => active_season_id).where(:game_type => game_type).first
+    if player_rating == nil
+      player_rating = PlayerRating.new(
+        player_id: player.id,
+        season_id: active_season_id,
+        game_type: game_type,
+        skill: RatingManager::TRUESKILL_MU,
+        deviation: RatingManager::TRUESKILL_SIGMA
+      )
       player_rating.save
     end
+
+    return player_rating
   end
 
   # @param room_player [RoomPlayer]
@@ -134,7 +160,7 @@ class Room < ActiveRecord::Base
         game_session_id: room.game_session_id,
         player_count: room.player_count,
         win: win,
-        duration_seconds: (room.end_time - room.start_time).to_i
+        duration_seconds: (Time.now - room.start_time).to_i
     )
     if room_player.team == PlayersController::TEAM_A_ID
       game_history.player_team_score = room.team_a_score
@@ -163,18 +189,18 @@ class Room < ActiveRecord::Base
 
   # @param increment_or_decrement boolean
   # @param team String
-  def update_streak(increment_or_decrement, team)
+  def update_streak(room, increment_or_decrement, team)
     if increment_or_decrement
-      new_streak = StreakHelper.new().update_streak_increment(team, get_streak_history)
+      new_streak = StreakHelper.new().update_streak_increment(team, get_streak_history(room.streak_history))
     else
-      new_streak = StreakHelper.new().update_streak_decrement(team, get_streak_history)
+      new_streak = StreakHelper.new().update_streak_decrement(team, get_streak_history(room.streak_history))
     end
     update_attribute(:streak, StreakHelper.new().get_new_streak(new_streak))
     update_attribute(:streak_history, new_streak.join(","))
   end
 
   #@return [int]
-  def get_streak_history
+  def get_streak_history(streak_history)
     if streak_history == nil
       return []
     else

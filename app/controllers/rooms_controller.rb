@@ -77,7 +77,6 @@ class RoomsController < ApplicationController
     end
 
     if should_reset?
-      @room.update_attributes(game: false, team_a_score: 0, team_b_score: 0, streak: 0, streak_history: "")
       private_game_end_post
       ::WebsocketRails[:"room#{@room.id}"].trigger "new_game_refresh"
       return
@@ -96,13 +95,9 @@ class RoomsController < ApplicationController
     @room.update_attribute(:increment_at, Time.now)
 
     if @room.game
-      if should_reset?
-        @room.update_attributes(team_a_score: 0, team_b_score: 0, streak: 0, streak_history: "")
-      else
-        current_score = @room.method("team_#{team}_score".to_sym).call()
-        @room.update_attribute("team_#{team}_score", current_score + 1)
-        @room.update_streak(true, team)
-      end
+      current_score = @room.method("team_#{team}_score".to_sym).call()
+      @room.update_attribute("team_#{team}_score", current_score + 1)
+      @room.update_streak(@room, true, team)
       set_room
     end
     send_scores
@@ -140,7 +135,7 @@ class RoomsController < ApplicationController
         end
         @room.update_attribute(:game, true)
         @room.update_attribute("team_#{team}_score", current_score - 1)
-        @room.update_streak(false, team)
+        @room.update_streak(@room, false, team)
       end
       set_room
     end
@@ -309,7 +304,7 @@ class RoomsController < ApplicationController
 
   def game_new_post
 
-    @room.update_attributes(game: true, team_a_score: 0, team_b_score: 0, streak: 0, streak_history: "", start_time: Time.now, end_time: nil)
+    @room.update_attributes(game: true, team_a_score: 0, team_b_score: 0, streak: 0, streak_history: "", start_time: Time.now)
 
     redirect_to :room_game_play
 
@@ -318,7 +313,6 @@ class RoomsController < ApplicationController
   end
 
   def game_end_post
-    @room.update_attributes(end_time: Time.now)
     private_game_end_post
     if params[:quit].present?
       redirect_to :room_game_interstitial
@@ -356,18 +350,24 @@ class RoomsController < ApplicationController
   def leaderboard
     season_id = @room.get_active_season.id
     ignore_deviation = params.key? :ignore_deviation
-    if ignore_deviation
-      @allPlayers = PlayerDao::get_leaderboard_players(RatingManager::TRUESKILL_SIGMA, 500, season_id)
-    else
-      @allPlayers = PlayerDao::get_leaderboard_players(PlayerDao::LEADERBOARD_DEVIATION_CUTOFF, 50, season_id)
+    if params.key? :game_type
+      game_type = params[:game_type].to_i
     end
-    @players = []
-    @allPlayers.each do |player|
-      if player && (ignore_deviation || player.rating_deviation < PlayerDao::LEADERBOARD_DEVIATION_CUTOFF) && !player.is_archived
-        @players << player
+    if game_type != 1
+      game_type = 2
+    end
+    if ignore_deviation
+      @allPlayerRatings = PlayerDao::get_leaderboard_player_ratings(season_id, game_type, RatingManager::TRUESKILL_SIGMA, 500)
+    else
+      @allPlayerRatings = PlayerDao::get_leaderboard_player_ratings(season_id, game_type, PlayerDao::LEADERBOARD_DEVIATION_CUTOFF, 50)
+    end
+    @player_ratings = []
+    @allPlayerRatings.each do |player_rating|
+      if ignore_deviation || player_rating.deviation < PlayerDao::LEADERBOARD_DEVIATION_CUTOFF
+        @player_ratings << player_rating
       end
     end
-    @players
+    @player_ratings
   end
   
   private

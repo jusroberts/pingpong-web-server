@@ -9,6 +9,9 @@
     %tr
       %th
         %h5.street-fighter
+          = 'Game'
+      %th
+        %h5.street-fighter
           = 'Player Team'
       %th
         %h5.street-fighter
@@ -37,6 +40,9 @@
       - # @type player_record [GameHistory]
       - player_record, player_team, opposing_team = team_names(player.id, records)
       %tr
+        %td
+          %h5.street-fighter
+            = raw(get_game_link(game_id))
         %td
           %h5.street-fighter
             = raw(player_team)
