@@ -1,0 +1,57 @@
+- # @type records [Hash{Integer => Array<GameHistory>}]
+- # @type player [Player]
+- player_record, team_a_names, team_b_names = team_names(@player_ids.first, @game_histories)
+- did_team_a_win = did_player_win(@player_ids.first, @game_histories)
+%table#history-table
+  %thead
+    %tr
+      %th
+        %h5.street-fighter.center
+          = 'Team A'
+      %th
+        %h5.street-fighter.center
+          = 'Team B'
+
+  %tbody.center
+    %tr
+      %td
+        %h5.street-fighter
+          = raw(team_a_names)
+      %td
+        %h5.street-fighter
+          = raw(team_b_names)
+
+%table#history-table2.center
+  %thead
+    %tr
+      %th
+        %h3.street-fighter.center
+          = "Play by play"
+  %tbody
+    %tr
+      %td
+        %h3.street-fighter
+          = "Begin!"
+    - #@type score_record [ScoreHistory]
+    - @score_histories.each_with_index do |score_record, index|
+      - increment_score(score_record.team)
+      -if index > 0 && index % 5 == 0
+        %tbody
+          %tr
+            %td
+              %h3.street-fighter
+                = "Change  Places!"
+          %tr
+            %td
+              %h4.street-fighter
+                = "Team A: " + get_score("a").to_s + " | Team B: " + get_score("b").to_s
+      %tr
+        - team_name_link = score_record.team == "a" ? team_a_names : team_b_names
+        %td
+          %h5.street-fighter
+            = raw(team_name_link) + " scores! (" + get_score(score_record.team).to_s + ")"
+    %tr
+      - winning_team = did_team_a_win ? team_a_names : team_b_names
+      %td
+        %h3.street-fighter
+          = raw(winning_team) + " wins!"

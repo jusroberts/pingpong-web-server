@@ -51,6 +51,16 @@ h1.street-fighter.sublabel {
   color: darkgoldenrod;
 }
 
+h3.street-fighter {
+  font-size: 1rem;
+  color: darkgoldenrod;
+}
+
+h4.street-fighter {
+  font-size: 1rem;
+  color: #6d4b0b;
+}
+
 h5.street-fighter {
   font-size: 1rem;
   color: white;
@@ -80,6 +90,10 @@ img.centered {
 
 body.reports {
   background-color: black;
+}
+
+.background_color_secondary {
+  background-color: white;
 }
 
 #history-table_info, .paginate_button, .ellipsis {

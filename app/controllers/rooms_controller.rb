@@ -77,7 +77,6 @@ class RoomsController < ApplicationController
     end
 
     if should_reset?
-      @room.update_attributes(game: false, team_a_score: 0, team_b_score: 0, streak: 0, streak_history: "")
       private_game_end_post
       ::WebsocketRails[:"room#{@room.id}"].trigger "new_game_refresh"
       return
@@ -96,13 +95,9 @@ class RoomsController < ApplicationController
     @room.update_attribute(:increment_at, Time.now)
 
     if @room.game
-      if should_reset?
-        @room.update_attributes(team_a_score: 0, team_b_score: 0, streak: 0, streak_history: "")
-      else
-        current_score = @room.method("team_#{team}_score".to_sym).call()
-        @room.update_attribute("team_#{team}_score", current_score + 1)
-        @room.update_streak(true, team)
-      end
+      current_score = @room.method("team_#{team}_score".to_sym).call()
+      @room.update_attribute("team_#{team}_score", current_score + 1)
+      @room.update_streak(@room, true, team)
       set_room
     end
     send_scores
@@ -140,7 +135,7 @@ class RoomsController < ApplicationController
         end
         @room.update_attribute(:game, true)
         @room.update_attribute("team_#{team}_score", current_score - 1)
-        @room.update_streak(false, team)
+        @room.update_streak(@room, false, team)
       end
       set_room
     end
@@ -303,7 +298,7 @@ class RoomsController < ApplicationController
 
   def game_new_post
 
-    @room.update_attributes(game: true, team_a_score: 0, team_b_score: 0, streak: 0, streak_history: "", start_time: Time.now, end_time: nil)
+    @room.update_attributes(game: true, team_a_score: 0, team_b_score: 0, streak: 0, streak_history: "", start_time: Time.now)
 
     redirect_to :room_game_play
 
@@ -312,7 +307,6 @@ class RoomsController < ApplicationController
   end
 
   def game_end_post
-    @room.update_attributes(end_time: Time.now)
     private_game_end_post
     if params[:quit].present?
       redirect_to :room_game_interstitial
