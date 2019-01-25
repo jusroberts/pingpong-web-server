@@ -12,7 +12,7 @@
  * @type {number} wesId
  */
 
-const wesId = 20;
+const wesId = 999999;
 
 class Utilities {
     static sleep(time) {
