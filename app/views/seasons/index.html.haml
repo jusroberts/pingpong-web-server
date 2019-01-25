@@ -34,3 +34,11 @@
               =link_to room_season_leaderboard_path(@room, season) do
                 %h5.street-fighter
                   = season.active ? "<<<<<" : ""
+:javascript
+  $('*[data-href]').on("click",function(){
+    window.location = $(this).data('href');
+    return false;
+  });
+  $("td > a").on("click",function(e){
+    e.stopPropagation();
+  });
