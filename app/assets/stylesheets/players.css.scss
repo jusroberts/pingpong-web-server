@@ -234,7 +234,7 @@ hr.players {
   padding-top: 20px;
 }
 
-.login-as-player {
+.login-as-player, .change-player-pin {
   color: white;
   font-size: 2.5em;
   display: flex;
@@ -243,51 +243,54 @@ hr.players {
   justify-content: center;
   height: 100%;
   margin: 0;
-}
 
-.login-as-player * {
-  margin: 10px;
-}
+  & * {
+    margin: 10px;
+  }
 
-.login-as-player .player-icon {
-  border: 5px solid white;
-  margin-bottom: 0px;
-}
+  .player-icon {
+    border: 5px solid white;
+    margin-bottom: 0px;
+  }
 
-.login-as-player .player-name, .login-as-player .pin-entry-label, .login-as-player .pin-entry {
-  padding-top: 20px;
-}
-.login-as-player .pin-entry-label {
-  font-size: 0.8em;
-  color: white;
-}
-.login-as-player .pin-entry {
-  width: 10em;
-  background: none;
-  border-top: none;
-  border-left: none;
-  border-right: none;
-  border-bottom-style: dashed;
-  border-width: medium;;
-  color: white;
-  letter-spacing: 0.25em;
-  text-align: center;
-}
-.login-as-player .submit-pin-entry {
-  margin-top: 20px;
-  padding: 10px;
-  border: 5px solid white;
-  background: none;
-}
+  .player-name, .pin-entry-label, .pin-entry {
+    padding-top: 20px;
+  }
 
-.login-as-player .error {
-  position: absolute;
-  top: 0;
-  left: 0;
-  text-align: center;
-  background: red;
-  line-height: 1.5em;
-  margin: 0;
-  padding: 0;
-  width: 100%;
+  .pin-entry-label {
+    font-size: 0.8em;
+    color: white;
+  }
+
+  .pin-entry {
+    width: 10em;
+    background: none;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom-style: dashed;
+    border-width: medium;;
+    color: white;
+    letter-spacing: 0.25em;
+    text-align: center;
+  }
+
+  .submit-pin-entry {
+    margin-top: 20px;
+    padding: 10px;
+    border: 5px solid white;
+    background: none;
+  }
+
+  .error {
+    position: absolute;
+    top: 0;
+    left: 0;
+    text-align: center;
+    background: red;
+    line-height: 1.5em;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
 }
