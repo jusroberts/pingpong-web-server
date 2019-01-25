@@ -102,8 +102,6 @@ class Room < ActiveRecord::Base
     losing_player_ratings.each { |player_rating| player_rating.save }
 
     # Calculate and store rating differentials
-    active_season_id = room.get_active_season.id
-    game_type = room.player_count / 2 # 1: singles, 2: doubles
     # @type player [Player]
     player_ratings.each do |player_rating|
       # @type [GameHistory]
