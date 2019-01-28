@@ -350,18 +350,24 @@ class RoomsController < ApplicationController
   def leaderboard
     season_id = @room.get_active_season.id
     ignore_deviation = params.key? :ignore_deviation
-    if ignore_deviation
-      @allPlayers = PlayerDao::get_leaderboard_players(RatingManager::TRUESKILL_SIGMA, 500, season_id)
-    else
-      @allPlayers = PlayerDao::get_leaderboard_players(PlayerDao::LEADERBOARD_DEVIATION_CUTOFF, 50, season_id)
+    if params.key? :game_type
+      game_type = params[:game_type].to_i
     end
-    @players = []
-    @allPlayers.each do |player|
-      if player && (ignore_deviation || player.rating_deviation < PlayerDao::LEADERBOARD_DEVIATION_CUTOFF) && !player.is_archived
-        @players << player
+    if game_type != 1
+      game_type = 2
+    end
+    if ignore_deviation
+      @allPlayerRatings = PlayerDao::get_leaderboard_player_ratings(season_id, game_type, RatingManager::TRUESKILL_SIGMA, 500)
+    else
+      @allPlayerRatings = PlayerDao::get_leaderboard_player_ratings(season_id, game_type, PlayerDao::LEADERBOARD_DEVIATION_CUTOFF, 50)
+    end
+    @player_ratings = []
+    @allPlayerRatings.each do |player_rating|
+      if ignore_deviation || player_rating.deviation < PlayerDao::LEADERBOARD_DEVIATION_CUTOFF
+        @player_ratings << player_rating
       end
     end
-    @players
+    @player_ratings
   end
   
   private
@@ -452,7 +458,7 @@ class RoomsController < ApplicationController
 
     def private_game_end_post
       puts("End game request received: #{request.inspect}")
-      @room.end_game(params[:quit].present?, @room)
+      @room.end_game(params[:quit].present?)
     end
 
 end

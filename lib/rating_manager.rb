@@ -25,29 +25,29 @@ class RatingManager
     @gamma = TRUESKILL_GAMMA
   end
 
-  # @param player [Player]
+  # @param player_rating [PlayerRating]
   # @return [Rating]
-  private def get_rating_for_player(player)
-    skill = player.rating_skill ? player.rating_skill : TRUESKILL_MU
-    deviation = player.rating_deviation ? player.rating_deviation : TRUESKILL_SIGMA
+  private def get_rating_for_player(player_rating)
+    skill = player_rating.skill ? player_rating.skill : TRUESKILL_MU
+    deviation = player_rating.deviation ? player_rating.deviation : TRUESKILL_SIGMA
     Rating.new(skill, deviation, 1.0)
   end
 
-  # @param team_1 [Array<Player>]
+  # @param team_1 [Array<PlayerRating>]
   # @param team_1_score_differential [Float]
-  # @param team_2 [Array<Player>]
+  # @param team_2 [Array<PlayerRating>]
   # @param team_2_score_differential [Float]
   # @return [Array<Array<Player>>]
   public def process_game(team_1, team_1_score_differential, team_2, team_2_score_differential)
     # @param team_1_ratings [Array<Rating>]
-    team_1_ratings = team_1.map do |player|
-      # @type player [Player]
-      get_rating_for_player(player)
+    team_1_ratings = team_1.map do |player_rating|
+      # @type player_rating [PlayerRating]
+      get_rating_for_player(player_rating)
     end
     # @param team_2_ratings [Array<Rating>]
-    team_2_ratings = team_2.map do |player|
-      # @type player [Player]
-      get_rating_for_player(player)
+    team_2_ratings = team_2.map do |player_rating|
+      # @type player_rating [PlayerRating]
+      get_rating_for_player(player_rating)
     end
 
     # team 1 wins by 10 points against team 2
@@ -60,20 +60,20 @@ class RatingManager
     graph.update_skills
 
     # update the player objects accordingly
-    team_1.each_with_index do |player, index|
-      # @type player [Player]
+    team_1.each_with_index do |player_rating, index|
+      # @type player_rating [PlayerRating]
       # @type rating [Rating]
       rating = team_1_ratings[index]
-      player.rating_skill = rating.mean
-      player.rating_deviation = rating.deviation
+      player_rating.skill = rating.mean
+      player_rating.deviation = rating.deviation
     end
 
-    team_2.each_with_index do |player, index|
-      # @type player [Player]
+    team_2.each_with_index do |player_rating, index|
+      # @type player_rating [PlayerRating]
       # @type rating [Rating]
       rating = team_2_ratings[index]
-      player.rating_skill = rating.mean
-      player.rating_deviation = rating.deviation
+      player_rating.skill = rating.mean
+      player_rating.deviation = rating.deviation
     end
 
     [team_1, team_2]

@@ -30,7 +30,8 @@
             =link_to "DEL", '#', class: 'keyboard-buttons delete', onclick: "remove_pin_digit()"
   %hr.players
   .submit-cancel-button-container
-    =button_tag "CANCEL", type: "button", class: 'cancel-button', onclick: "history.go(-1);"
+    =link_to room_game_new_player_cancel_path do
+      =button_tag "CANCEL", type: "button", class: 'cancel-button'
     =link_to "NEW BADGE?", room_game_lookup_player_path(id: @id, badged_player_id: @player.id), class: 'new-badge-for-existing-player-button'
     =submit_tag "OK!", class: 'submit-button'
 
