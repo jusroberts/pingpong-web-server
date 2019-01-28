@@ -18,8 +18,8 @@
             =link_to "DEL", '#', class: 'keyboard-buttons delete', onclick: "remove_character()"
     .game-column#pin-input-section
       %div#block-inline
-        =label_tag :pin, "pin:", class:"pin-text"
-        =text_field_tag :pin, "", class: "player-pin-text-input"
+        =label_tag "pin", "pin:", class:"pin-text"
+        =password_field_tag "pin", "", class: "player-pin-text-input"
         .keyboard
           .digits
             -digits.each_with_index do |digit, i|
