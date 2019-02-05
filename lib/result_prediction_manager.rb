@@ -1,9 +1,9 @@
 class ResultPredictionManager
 
-  # @param player_1 [Player]
-  # @param player_2 [Player]
-  # @param player_3 [Player]
-  # @param player_4 [Player]
+  # @param player_1 [PlayerRating]
+  # @param player_2 [PlayerRating]
+  # @param player_3 [PlayerRating]
+  # @param player_4 [PlayerRating]
   # @return [Array<Array<Player>>]
   def optimize_teams(player_1, player_2, player_3, player_4)
     lowest_score = 50
@@ -79,10 +79,10 @@ class ResultPredictionManager
     ((winning_team_start_rating - winning_team_end_rating).abs + (losing_team_start_rating - losing_team_end_rating).abs) / 2
   end
 
-  # @param team [Array<Player>]
+  # @param team [Array<PlayerRating>]
   # @return [Number]
   def get_average_rating(team)
-    total_skill = team.inject(0) { |carry, player| carry + player.rating_skill }
+    total_skill = team.inject(0) { |carry, player_rating| carry + player_rating.skill }
     total_skill / team.length
   end
 

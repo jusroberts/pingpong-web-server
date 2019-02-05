@@ -10,6 +10,7 @@
           %h1.street-fighter.text-center.flex-item
             = "#{@total_wins} - #{@total_losses}"
           %h1.street-fighter.text-center.flex-item
+            -binding.pry
             = (@player.rating_skill * 1000).floor
         =link_to change_player_pin_path(@player.id) do 
           %h1.street-fighter.text-center.flex-item.change-pin-link

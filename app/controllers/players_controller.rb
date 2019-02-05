@@ -95,9 +95,10 @@ class PlayersController < ApplicationController
 
   def predict_game
     player_ids = params[:playerIdHash]
+    room_id = params[:room_id]
 
-    team_a = player_ids[:a].map { |player_id| Player.find(player_id) }
-    team_b = player_ids[:b].map { |player_id| Player.find(player_id) }
+    team_a = player_ids[:a].map { |player_id| Player.find(player_id).get_latest_rating(room_id) }
+    team_b = player_ids[:b].map { |player_id| Player.find(player_id).get_latest_rating(room_id) }
 
     manager = ResultPredictionManager.new
     winning_team, winning_score = manager.predict_result(team_a, team_b)
@@ -120,24 +121,26 @@ class PlayersController < ApplicationController
 
   def optimize_teams
     player_ids = params[:players].split(',')
-    players = player_ids.map { |player_id| Player.find(player_id) }
+    room_id = params[:room_id]
+    season = Room.find(room_id).get_active_season
+    player_ratings = player_ids.map { |player_id| Player.find(player_id).get_latest_rating(room_id) }
 
     manager = ResultPredictionManager.new
-    team_1, team_2 = manager.optimize_teams(*players)
+    team_1, team_2 = manager.optimize_teams(*player_ratings)
 
     # Client-side will clear all existing players, so add them back on the server side
     # and fire off websocket updates
 
-    team_1.each do |player|
-      add_player_and_update_room(player)
+    team_1.each do |player_rating|
+      add_player_and_update_room(player_rating.player)
     end
-    team_2.each do |player|
-      add_player_and_update_room(player)
+    team_2.each do |player_rating|
+      add_player_and_update_room(player_rating.player)
     end
 
     playerIdHash = {
-        a: team_1.map { |player| player.id },
-        b: team_2.map { |player| player.id },
+        a: team_1.map { |player_rating| player_rating.player.id },
+        b: team_2.map { |player_rating| player_rating.player.id },
     }
 
     render :json => playerIdHash

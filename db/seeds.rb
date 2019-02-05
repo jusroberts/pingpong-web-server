@@ -13,7 +13,7 @@ if Rails.env == "development"
             rating_skill: Faker::Number.number(1),
             rating_deviation: Faker::Number.number(1),
             image_url: Faker::Avatar.image,
-            pin: Faker::Number.number(6).to_s,
+            pin: "1"#Faker::Number.number(6).to_s,
         ).save
     end
 

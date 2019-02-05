@@ -27,9 +27,9 @@ class RatingManager
 
   # @param player_rating [PlayerRating]
   # @return [Rating]
-  private def get_rating_for_player(player)
-    skill = player.rating_skill ? player.rating_skill : TRUESKILL_MU
-    deviation = player.rating_deviation ? player.rating_deviation : TRUESKILL_SIGMA
+  private def get_rating_for_player(player_rating)
+    skill = player_rating.skill ? player_rating.skill : TRUESKILL_MU
+    deviation = player_rating.deviation ? player_rating.deviation : TRUESKILL_SIGMA
     Rating.new(skill, deviation, 1.0)
   end
 
@@ -60,20 +60,20 @@ class RatingManager
     graph.update_skills
 
     # update the player objects accordingly
-    team_1.each_with_index do |player, index|
+    team_1.each_with_index do |player_rating, index|
       # @type player_rating [PlayerRating]
       # @type rating [Rating]
       rating = team_1_ratings[index]
-      player.rating_skill = rating.mean
-      player.rating_deviation = rating.deviation
+      player_rating.skill = rating.mean
+      player_rating.deviation = rating.deviation
     end
 
-    team_2.each_with_index do |player, index|
+    team_2.each_with_index do |player_rating, index|
       # @type player_rating [PlayerRating]
       # @type rating [Rating]
       rating = team_2_ratings[index]
-      player.rating_skill = rating.mean
-      player.rating_deviation = rating.deviation
+      player_rating.skill = rating.mean
+      player_rating.deviation = rating.deviation
     end
 
     [team_1, team_2]
